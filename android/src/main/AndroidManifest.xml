@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.evotor">
+
+    <uses-permission android:name="ru.evotor.devices.SCANNER_RECEIVER" />
+    <uses-permission android:name="ru.evotor.permission.receipt.printExtra.SET" />
+    <uses-permission android:name="ru.evotor.permission.receipt.print.INTERNET_RECEIPT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+        <service android:name="com.evotor.services.EventListenerService" />
+    </application>
+</manifest>
