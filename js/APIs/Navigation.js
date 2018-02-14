@@ -59,23 +59,23 @@ export default class NavigationAPI {
         return new Promise((resolve, reject) => NavigationModule.getIntent(ErrorHandler.getExecutor(Converter.getIntentReader(resolve), reject)));
     }
 
-    static startActivity(intent: Intent): Promise {
+    static startActivity(intent: Intent): Promise<void> {
         return new Promise((resolve, reject) => NavigationModule.startActivity(Converter.writeIntent(intent), ErrorHandler.getExecutor(resolve, reject)));
     }
 
-    static startActivityForResult(intent: Intent, requestCode: number): Promise {
+    static startActivityForResult(intent: Intent, requestCode: number): Promise<void> {
         return new Promise((resolve, reject) => NavigationModule.startActivityForResult(Converter.writeIntent(intent), requestCode, ErrorHandler.getExecutor(resolve, reject)));
     }
 
-    static startService(intent: Intent): Promise {
+    static startService(intent: Intent): Promise<void> {
         return new Promise((resolve, reject) => NavigationModule.startService(Converter.writeIntent(intent), ErrorHandler.getExecutor(resolve, reject)));
     }
 
-    static setResult(resultCode: number, data?: Intent): Promise {
+    static setResult(resultCode: number, data?: Intent): Promise<void> {
         return new Promise((resolve, reject) => NavigationModule.setResult(resultCode, data ? Converter.writeIntent(data) : null, ErrorHandler.getExecutor(resolve, reject)));
     }
 
-    static setIntegrationResult(result: IntegrationServiceEventResult): Promise {
+    static setIntegrationResult(result: IntegrationServiceEventResult): Promise<void> {
         let type;
         if (result.__name__ === 'BeforePositionsEditedEventResult') {
             type = 'BEFORE_POSITIONS_EDITED';
@@ -87,6 +87,8 @@ export default class NavigationAPI {
             type = 'PRINT_GROUP_REQUIRED';
         } else if (result.__name__ === 'PrintExtraRequiredEventResult') {
             type = 'PRINT_EXTRA_REQUIRED';
+        } else if (result.__name__ === 'PaymentSystemPaymentOkResult' || result.__name__ === 'PaymentSystemPaymentErrorResult') {
+            type = 'PAYMENT_SYSTEM';
         }
         return new Promise(
             (resolve, reject) => {
@@ -98,7 +100,7 @@ export default class NavigationAPI {
         );
     }
 
-    static finish(): Promise {
+    static finish(): Promise<void> {
         return new Promise((resolve, reject) => NavigationModule.finish(ErrorHandler.getExecutor(resolve, reject)));
     }
 

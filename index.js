@@ -2,6 +2,7 @@ import InventoryAPI from './js/APIs/Inventory';
 import NavigationAPI from './js/APIs/Navigation';
 import ReceiptAPI from './js/APIs/Receipt';
 import UserAPI from './js/APIs/User';
+import SessionAPI from "./js/APIs/Session";
 
 import {
     ExtraKey,
@@ -41,7 +42,7 @@ import {
     BarcodeType,
     CashDrawerEventType,
     CashOperationEventType,
-    DeviceConnectionEventType,
+    DeviceConnectionEventType, FieldType,
     IntegrationServiceEventType,
     NavigationErrorMessage,
     NavigationEventType,
@@ -73,7 +74,7 @@ import {
     IntegrationServiceEventResult,
     NavigationEventListener,
     PaymentSelectedEventListener,
-    PaymentSystemEventListener,
+    PaymentSystemEventListener, PaymentSystemEventResult,
     PositionChange,
     PositionEventListener,
     Printable,
@@ -101,12 +102,14 @@ import {
     PrintGroupRequiredEventResult,
     ReceiptDiscountEventResult
 } from "./js/DataWrappers/services/results";
+import {OpenReceiptCommandResult, SendElectronReceiptCommandResult} from "./js/DataWrappers/commands";
 
 export {
     InventoryAPI,
     NavigationAPI,
     ReceiptAPI,
     UserAPI,
+    SessionAPI,
 
     ExtraKey,
     Payment,
@@ -147,6 +150,7 @@ export {
     CashOperationEvent,
     BroadcastEvent,
     PaymentSelectedEventResult,
+    PaymentSystemEventResult,
     PrintExtraRequiredEventResult,
     PrintGroupRequiredEventResult,
     ReceiptDiscountEventResult,
@@ -155,6 +159,9 @@ export {
     PaymentSystemPaymentErrorResult,
     PositionEvent,
     ReceiptEvent,
+
+    OpenReceiptCommandResult,
+    SendElectronReceiptCommandResult,
 
     User,
     Grant,
@@ -172,6 +179,7 @@ export {
     PrintGroupType,
     ProductEventType,
     ProductType,
+    FieldType,
     ReceiptEventType,
     ReceiptType,
     ScannerEventType,

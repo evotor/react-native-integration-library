@@ -15,15 +15,15 @@ export class IntegrationCallback {
         this._eventName = eventName;
     }
 
-    onResult(result: IntegrationServiceEventResult): Promise {
+    onResult(result: IntegrationServiceEventResult): Promise<void> {
         return this._process({data: result});
     }
 
-    startActivity(intent: Intent): Promise {
+    startActivity(intent: Intent): Promise<void> {
         return this._process({intent: Converter.writeIntent(intent)});
     }
 
-    skip(): Promise {
+    skip(): Promise<void> {
         return this._process({});
     }
 

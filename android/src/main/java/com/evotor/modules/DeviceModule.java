@@ -27,8 +27,6 @@ import ru.evotor.devices.commons.services.IScalesServiceWrapper;
 public class DeviceModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext context;
-    private IPrinterServiceWrapper printerService;
-    private IScalesServiceWrapper scalesService;
 
     @Override
     public String getName() {
@@ -47,7 +45,6 @@ public class DeviceModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onPrinterServiceConnected(IPrinterServiceWrapper service) {
-                printerService = service;
                 emitConnection("PRINTER", true);
             }
 
@@ -58,7 +55,6 @@ public class DeviceModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onScalesServiceConnected(IScalesServiceWrapper service) {
-                scalesService = service;
                 emitConnection("SCALES", true);
             }
 
@@ -84,7 +80,7 @@ public class DeviceModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void print(ReadableArray printables, Callback callback) {
         try {
-            printerService.printDocument(
+            DeviceServiceConnector.getPrinterService().printDocument(
                     ru.evotor.devices.commons.Constants.DEFAULT_DEVICE_INDEX,
                     new PrinterDocument(
                             Reader.INSTANCE.readPrintables(context, printables.toArrayList())
@@ -99,7 +95,7 @@ public class DeviceModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getAllowablePixelLineLength(Callback getter) {
         try {
-            getter.invoke(printerService.getAllowablePixelLineLength(
+            getter.invoke(DeviceServiceConnector.getPrinterService().getAllowablePixelLineLength(
                     ru.evotor.devices.commons.Constants.DEFAULT_DEVICE_INDEX
             ));
         } catch (DeviceServiceException e) {
@@ -110,7 +106,7 @@ public class DeviceModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getAllowableSymbolsLineLength(Callback getter) {
         try {
-            getter.invoke(printerService.getAllowableSymbolsLineLength(
+            getter.invoke(DeviceServiceConnector.getPrinterService().getAllowableSymbolsLineLength(
                     ru.evotor.devices.commons.Constants.DEFAULT_DEVICE_INDEX
             ));
         } catch (DeviceServiceException e) {
@@ -121,7 +117,7 @@ public class DeviceModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getWeight(Callback getter) {
         try {
-            getter.invoke(Writer.INSTANCE.writeWeight(scalesService.getWeight(
+            getter.invoke(Writer.INSTANCE.writeWeight(DeviceServiceConnector.getScalesService().getWeight(
                     ru.evotor.devices.commons.Constants.DEFAULT_DEVICE_INDEX
             )));
         } catch (DeviceServiceException e) {

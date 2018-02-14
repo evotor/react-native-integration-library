@@ -14,6 +14,7 @@ import java.math.BigDecimal
 
 import ru.evotor.devices.commons.scales.Weight
 import ru.evotor.framework.Cursor
+import ru.evotor.framework.core.action.command.open_receipt_command.OpenReceiptCommandResult
 import ru.evotor.framework.core.action.command.print_receipt_command.PrintReceiptCommandResult
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
@@ -198,6 +199,12 @@ object Writer {
         val result = Arguments.createMap()
         result.putDouble("discount", discount.toDouble())
         result.putString("receiptUuid", receiptUuid)
+        return result
+    }
+
+    fun writeOpenReceiptCommandResult(source: OpenReceiptCommandResult): WritableMap {
+        val result = Arguments.createMap()
+        result.putString("receiptUuid", source.receiptUuid)
         return result
     }
 

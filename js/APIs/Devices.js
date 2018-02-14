@@ -24,7 +24,7 @@ export class DeviceServiceConnector {
 
 export class Printer {
 
-    static print(printables: Printable[]): Promise {
+    static print(printables: Printable[]): Promise<void> {
         return new Promise((resolve, reject) => DeviceModule.print(printables, ErrorHandler.getExecutor(resolve, reject)));
     }
 
