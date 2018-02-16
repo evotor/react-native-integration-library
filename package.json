@@ -1,6 +1,6 @@
 {
   "name": "evotor-integration-library",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "allows you to use evotor integration library in react native projects",
   "main": "index.js",
   "scripts": {

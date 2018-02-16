@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.evotor.services.integration.ReactIntegrationService;
-import com.facebook.react.bridge.WritableMap;
 import com.evotor.utilities.Reader;
 
 import java.util.List;
@@ -49,10 +48,10 @@ public class PrintExtraService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventWriter getEventWriter() {
-        return new EventWriter() {
+    protected EventPreWriter getEventPreWriter() {
+        return new EventPreWriter() {
             @Override
-            public WritableMap write(Bundle bundle) {
+            public Map preWrite(Bundle bundle) {
                 return null;
             }
         };

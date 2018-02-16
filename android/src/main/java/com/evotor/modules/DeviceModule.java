@@ -67,8 +67,8 @@ public class DeviceModule extends ReactContextBaseJavaModule {
     }
 
     private void emitConnection(final String device, final boolean connected) {
-        final Bundle data = new Bundle();
-        data.putBoolean("value", connected);
+        final Map<String, Boolean> data = new HashMap<>();
+        data.put("value", connected);
         EventModule.startService(context, device+"_CONNECTION_CHANGED", data);
     }
 

@@ -4,9 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.evotor.services.integration.ReactIntegrationService;
-import com.facebook.react.bridge.WritableMap;
+import com.evotor.utilities.PreWriter;
 import com.evotor.utilities.Reader;
-import com.evotor.utilities.Writer;
 
 import java.util.List;
 import java.util.Map;
@@ -51,11 +50,11 @@ public class PositionsEditService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventWriter getEventWriter() {
-        return new EventWriter() {
+    protected EventPreWriter getEventPreWriter() {
+        return new EventPreWriter() {
             @Override
-            public WritableMap write(Bundle bundle) {
-                return Writer.INSTANCE.writeChanges(BeforePositionsEditedEvent.create(bundle).getChanges());
+            public Map preWrite(Bundle bundle) {
+                return PreWriter.INSTANCE.preWriteChanges(BeforePositionsEditedEvent.create(bundle).getChanges());
             }
         };
     }

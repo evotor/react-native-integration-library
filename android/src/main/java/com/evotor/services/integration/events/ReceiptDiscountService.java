@@ -4,9 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.evotor.services.integration.ReactIntegrationService;
-import com.facebook.react.bridge.WritableMap;
+import com.evotor.utilities.PreWriter;
 import com.evotor.utilities.Reader;
-import com.evotor.utilities.Writer;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -61,15 +60,15 @@ public class ReceiptDiscountService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventWriter getEventWriter() {
-        return new EventWriter() {
+    protected EventPreWriter getEventPreWriter() {
+        return new EventPreWriter() {
             @Override
-            public WritableMap write(Bundle bundle) {
+            public Map preWrite(Bundle bundle) {
                 ReceiptDiscountEvent event = ReceiptDiscountEvent.create(bundle);
                 if (event == null) {
                     return null;
                 }
-                return Writer.INSTANCE.writeDiscount(event.getDiscount(), event.getReceiptUuid());
+                return PreWriter.INSTANCE.preWiteReceiptDiscount(event.getDiscount(), event.getReceiptUuid());
             }
         };
     }

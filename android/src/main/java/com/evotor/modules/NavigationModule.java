@@ -40,7 +40,7 @@ public class NavigationModule extends ReactContextBaseJavaModule {
                 } else {
                     result.putNull("data");
                 }
-                EventModule.startService(context, "ACTIVITY_RESULT", Arguments.toBundle(result));
+                EventModule.startService(context, "ACTIVITY_RESULT", result.toHashMap());
             }
 
             @Override

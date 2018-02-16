@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,13 +70,13 @@ public class EventModule extends ReactContextBaseJavaModule {
         return result;
     }
 
-    public static boolean startService(final Context context, final String eventName, final Bundle data) {
+    public static boolean startService(final Context context, final String eventName, final Map data) {
         Intent service = createServiceIntent(context, eventName, false);
         if(service == null) {
             return false;
         }
         if(data != null) {
-            service.putExtra("extras", data);
+            service.putExtra("extras", (Serializable) data);
         }
         context.startService(service);
         return true;

@@ -9,6 +9,9 @@ import com.evotor.services.EventListenerService;
 import com.evotor.utilities.Writer;
 import com.facebook.react.bridge.Arguments;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ru.evotor.integrations.BarcodeBroadcastReceiver;
 
 /**
@@ -18,8 +21,8 @@ import ru.evotor.integrations.BarcodeBroadcastReceiver;
 public class ReactBarcodeReceiver extends BarcodeBroadcastReceiver {
     @Override
     public void onBarcodeReceived(String s, Context context) {
-        final Bundle data = new Bundle();
-        data.putString("value", s);
+        final Map<String, String> data = new HashMap<>();
+        data.put("value", s);
         EventModule.startService(context, "BARCODE_RECEIVED", data);
     }
 }

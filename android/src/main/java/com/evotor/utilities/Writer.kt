@@ -98,107 +98,11 @@ object Writer {
         return result
     }
 
-    fun writeChanges(source: List<IPositionChange>): WritableMap {
-        val result = Arguments.createMap()
-        val changes = Arguments.createArray()
-        for (i in source.indices) {
-            val changeResult = Arguments.createMap()
-            changeResult.putString("type", source[i].getType().name)
-            val changeSource = source[i]
-            when (changeSource) {
-                is PositionAdd -> {
-                    changeResult.putMap("position", writePosition((changeSource).position))
-                }
-                is PositionEdit -> {
-                    changeResult.putMap("position", writePosition((changeSource).position))
-                }
-                is PositionRemove -> {
-                    changeResult.putString("positionUuid", (changeSource).getPositionUuid())
-                }
-            }
-            changes.pushMap(changeResult)
-        }
-        result.putArray("changes", changes)
-        return result
-    }
-
-    fun writeReceiptEvent(source: ReceiptEvent?, result: WritableMap): Boolean {
-        return if (source != null) {
-            result.putString("receiptUuid", source.receiptUuid)
-            true
-        } else {
-            false
-        }
-    }
-
-    fun writePositionEvent(source: PositionEvent?, result: WritableMap): Boolean {
-        return if (source != null) {
-            result.putString("receiptUuid", source.receiptUuid)
-            result.putMap("position", Writer.writePosition(source.position))
-            true
-        } else {
-            false
-        }
-    }
-
-    fun writePaymentSystem(paymentSystem: PaymentSystem?): WritableMap {
+    private fun writePaymentSystem(paymentSystem: PaymentSystem?): WritableMap {
         val result = Arguments.createMap()
         result.putString("paymentSystemId", paymentSystem!!.paymentSystemId)
         result.putString("paymentType", paymentSystem.paymentType.name)
         result.putString("userDescription", paymentSystem.userDescription)
-        return result
-    }
-
-    fun writePaymentSystemEvent(source: PaymentSystemEvent): WritableMap {
-        val result = Arguments.createMap()
-        val event = Arguments.createMap()
-        when (source.operationType) {
-            PaymentSystemEvent.OperationType.SELL -> writePaymentSystemSellEvent(source as PaymentSystemSellEvent, event)
-            PaymentSystemEvent.OperationType.SELL_CANCEL -> writePaymentSystemSellCancelEvent(source as PaymentSystemSellCancelEvent, event)
-            PaymentSystemEvent.OperationType.PAYBACK -> writePaymentSystemPaybackEvent(source as PaymentSystemPaybackEvent, event)
-            PaymentSystemEvent.OperationType.PAYBACK_CANCEL -> writePaymentSystemPaybackCancelEvent(source as PaymentSystemPaybackCancelEvent, event)
-            else -> null
-        }
-        result.putString("operationType", source.operationType.name)
-        result.putMap("event", event)
-        return result
-    }
-
-    private fun writePaymentSystemSellEvent(source: PaymentSystemSellEvent, result: WritableMap) {
-        result.putString("receiptUuid", source.receiptUuid)
-        result.putString("accountId", source.accoundId)
-        result.putDouble("sum", source.sum.toDouble())
-        result.putString("description", source.description)
-    }
-
-    private fun writePaymentSystemSellCancelEvent(source: PaymentSystemSellCancelEvent, result: WritableMap) {
-        result.putString("receiptUuid", source.receiptUuid)
-        result.putString("accountId", source.accountId)
-        result.putDouble("sum", source.sum.toDouble())
-        result.putString("rrn", source.rrn)
-        result.putString("description", source.description)
-    }
-
-    private fun writePaymentSystemPaybackEvent(source: PaymentSystemPaybackEvent, result: WritableMap) {
-        result.putString("receiptUuid", source.receiptUuid)
-        result.putString("accountId", source.accountId)
-        result.putDouble("sum", source.sum.toDouble())
-        result.putString("rrn", source.rrn)
-        result.putString("description", source.description)
-    }
-
-    private fun writePaymentSystemPaybackCancelEvent(source: PaymentSystemPaybackCancelEvent, result: WritableMap) {
-        result.putString("receiptUuid", source.receiptUuid)
-        result.putString("accountId", source.accountId)
-        result.putDouble("sum", source.sum.toDouble())
-        result.putString("rrn", source.rrn)
-        result.putString("description", source.description)
-    }
-
-    fun writeDiscount(discount: BigDecimal, receiptUuid: String): WritableMap {
-        val result = Arguments.createMap()
-        result.putDouble("discount", discount.toDouble())
-        result.putString("receiptUuid", receiptUuid)
         return result
     }
 
@@ -398,7 +302,7 @@ object Writer {
         return result
     }
 
-    private fun writeIntentExtras(source: Bundle?): WritableMap {
+    fun writeIntentExtras(source: Bundle?): WritableMap {
         val result = Arguments.createMap()
         for (key in source!!.keySet()) {
             writeIntentExtraObjectItem(key, source.get(key), result)
@@ -414,6 +318,7 @@ object Writer {
             is String -> result.putString(key, item as String?)
             is Map<*, *> -> result.putMap(key, writeIntentExtraObject(item))
             is List<*> -> result.putArray(key, writeIntentExtraArray(item))
+            is Bundle -> result.putMap(key, writeIntentExtras(item))
         }
     }
 
@@ -440,7 +345,7 @@ object Writer {
         return result
     }
 
-    fun writeError(type: String, message: String): WritableMap {
+    fun writeError(type: String, message: String?): WritableMap {
         val result = Arguments.createMap()
         result.putString("error", type)
         result.putString("message", message)

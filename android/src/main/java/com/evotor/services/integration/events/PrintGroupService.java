@@ -4,9 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.evotor.services.integration.ReactIntegrationService;
-import com.facebook.react.bridge.WritableMap;
+import com.evotor.utilities.PreWriter;
 import com.evotor.utilities.Reader;
-import com.evotor.utilities.Writer;
 
 import java.util.List;
 import java.util.Map;
@@ -57,15 +56,15 @@ public class PrintGroupService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventWriter getEventWriter() {
-        return new EventWriter() {
+    protected EventPreWriter getEventPreWriter() {
+        return new EventPreWriter() {
             @Override
-            public WritableMap write(Bundle bundle) {
+            public Map preWrite(Bundle bundle) {
                 PrintGroupRequiredEvent event = PrintGroupRequiredEvent.create(bundle);
                 if (event == null) {
                     return null;
                 }
-                return Writer.INSTANCE.writePaymentSystem(event.getPaymentSystem());
+                return PreWriter.INSTANCE.preWritePaymentSystem(event.getPaymentSystem());
             }
         };
     }
