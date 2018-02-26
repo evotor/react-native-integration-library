@@ -2,8 +2,8 @@ package com.evotor.modules;
 
 import android.os.Bundle;
 
-import com.evotor.utilities.Reader;
-import com.evotor.utilities.Writer;
+import com.evotor.converter.Reader;
+import com.evotor.converter.Writer;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;

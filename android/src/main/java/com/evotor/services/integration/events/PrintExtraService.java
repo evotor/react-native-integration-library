@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.evotor.services.integration.ReactIntegrationService;
-import com.evotor.utilities.Reader;
+import com.evotor.converter.Reader;
 
 import java.util.List;
 import java.util.Map;

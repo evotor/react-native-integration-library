@@ -3,7 +3,7 @@ package com.evotor.services;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
-import com.evotor.utilities.Writer;
+import com.evotor.converter.Writer;
 import com.facebook.react.HeadlessJsTaskService;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.jstasks.HeadlessJsTaskConfig;

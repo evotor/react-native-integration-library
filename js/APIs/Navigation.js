@@ -20,9 +20,7 @@ export default class NavigationAPI {
     static RESULT_OK = -1;
 
     static createIntentForSellReceiptEdit(): Intent {
-        const result = new Intent();
-        result.setAction('evotor.intent.action.edit.SELL');
-        return result;
+        return new Intent().setAction('evotor.intent.action.edit.SELL');
     }
 
     static createIntentForPaybackReceiptEdit(): Intent {
@@ -52,6 +50,26 @@ export default class NavigationAPI {
     static createIntentForCashRegisterReport(): Intent {
         const result = new Intent();
         result.setAction('evotor.intent.action.report.CASH_REGISTER');
+        return result;
+    }
+
+    static createIntentForChangeUser(): Intent {
+        const result = new Intent();
+        result.setAction('evotor.intent.action.user.CHANGE');
+        return result;
+    }
+
+    static createIntentForNewProduct(barcode?: string): Intent {
+        const result = new Intent();
+        result.setAction('evotor.intent.action.edit.PRODUCT');
+        result.putExtra('barcode', barcode);
+        return result;
+    }
+
+    static createIntentForEditProduct(productUuid?: string): Intent {
+        const result = new Intent();
+        result.setAction('evotor.intent.action.edit.PRODUCT');
+        result.putExtra('productUuid', productUuid);
         return result;
     }
 

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.evotor.services.integration.ReactIntegrationService;
-import com.evotor.utilities.PreWriter;
-import com.evotor.utilities.Reader;
+import com.evotor.converter.PreWriter;
+import com.evotor.converter.Reader;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -68,7 +68,7 @@ public class ReceiptDiscountService extends ReactIntegrationService {
                 if (event == null) {
                     return null;
                 }
-                return PreWriter.INSTANCE.preWiteReceiptDiscount(event.getDiscount(), event.getReceiptUuid());
+                return PreWriter.INSTANCE.preWriteReceiptDiscount(event.getDiscount(), event.getReceiptUuid());
             }
         };
     }

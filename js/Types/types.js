@@ -37,6 +37,9 @@ import {
     PrintGroupRequiredEventResult,
     ReceiptDiscountEventResult
 } from "../DataWrappers/services/results";
+import {Product, ProductGroup} from "../DataWrappers/inventory";
+
+export type ProductItem = Product | ProductGroup;
 
 export type PositionChange = PositionAdd | PositionEdit | PositionRemove;
 
@@ -113,6 +116,5 @@ export type Bundlable =
     SetPrintExtra |
     IntegrationServiceEventResult;
 export type Bundle = {
-    __name__: string,
     __value__: Bundlable
 }

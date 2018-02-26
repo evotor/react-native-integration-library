@@ -1,29 +1,15 @@
 package com.evotor.modules;
 
-import android.os.Bundle;
-
-import com.evotor.utilities.Reader;
-import com.evotor.utilities.Writer;
+import com.evotor.converter.Writer;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import ru.evotor.framework.Cursor;
-import ru.evotor.framework.core.IntegrationException;
-import ru.evotor.framework.core.IntegrationManagerCallback;
-import ru.evotor.framework.core.IntegrationManagerFuture;
-import ru.evotor.framework.core.action.command.open_receipt_command.OpenPaybackReceiptCommand;
-import ru.evotor.framework.core.action.command.open_receipt_command.OpenReceiptCommandResult;
-import ru.evotor.framework.core.action.command.open_receipt_command.OpenSellReceiptCommand;
-import ru.evotor.framework.core.action.command.print_receipt_command.PrintReceiptCommandResult;
-import ru.evotor.framework.core.action.command.print_receipt_command.PrintSellReceiptCommand;
 import ru.evotor.framework.receipt.Receipt;
 import ru.evotor.framework.receipt.ReceiptApi;
 

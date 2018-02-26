@@ -1,4 +1,4 @@
-package com.evotor.utilities
+package com.evotor.converter
 
 import android.content.Intent
 import android.os.Bundle
@@ -16,13 +16,6 @@ import ru.evotor.devices.commons.scales.Weight
 import ru.evotor.framework.Cursor
 import ru.evotor.framework.core.action.command.open_receipt_command.OpenReceiptCommandResult
 import ru.evotor.framework.core.action.command.print_receipt_command.PrintReceiptCommandResult
-import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange
-import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
-import ru.evotor.framework.core.action.event.receipt.changes.position.PositionEdit
-import ru.evotor.framework.core.action.event.receipt.changes.position.PositionRemove
-import ru.evotor.framework.core.action.event.receipt.payment.system.event.*
-import ru.evotor.framework.core.action.event.receipt.position_edited.PositionEvent
-import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptEvent
 import ru.evotor.framework.inventory.ProductExtra
 import ru.evotor.framework.inventory.ProductItem
 import ru.evotor.framework.inventory.field.Field
@@ -49,7 +42,7 @@ object Writer {
         result.putString("name", source.name)
         result.putString("measureName", source.measureName)
         result.putInt("measurePrecision", source.measurePrecision)
-        result.putString("taxNumber", if (source.taxNumber == null) null else source.taxNumber!!.name)
+        result.putString("taxNumber", source.taxNumber?.name)
         result.putDouble("price", source.price.toDouble())
         result.putDouble("priceWithDiscountPosition", source.priceWithDiscountPosition.toDouble())
         result.putDouble("quantity", source.quantity.toDouble())
@@ -98,9 +91,9 @@ object Writer {
         return result
     }
 
-    private fun writePaymentSystem(paymentSystem: PaymentSystem?): WritableMap {
+    private fun writePaymentSystem(paymentSystem: PaymentSystem): WritableMap {
         val result = Arguments.createMap()
-        result.putString("paymentSystemId", paymentSystem!!.paymentSystemId)
+        result.putString("paymentSystemId", paymentSystem.paymentSystemId)
         result.putString("paymentType", paymentSystem.paymentType.name)
         result.putString("userDescription", paymentSystem.userDescription)
         return result
@@ -126,11 +119,7 @@ object Writer {
         for (i in 0 until source.printDocuments.size) {
             val (printGroup, positions1, payments, changes) = source.printDocuments[i]
             val printReceiptResult = Arguments.createMap()
-            if (printGroup != null) {
-                printReceiptResult.putMap("printGroup", writePrintGroup(printGroup))
-            } else {
-                printReceiptResult.putNull("printGroup")
-            }
+            printReceiptResult.putMap("printGroup", if (printGroup == null) null else writePrintGroup(printGroup))
             val positions = Arguments.createArray()
             for (j in 0 until positions1.size) {
                 positions.pushMap(writePosition(positions1[j]))
@@ -149,7 +138,7 @@ object Writer {
         result.putString("uuid", source.uuid)
         result.putString("number", source.number)
         result.putString("type", source.type.name)
-        result.putString("date", if (source.date == null) null else source.date!!.toString())
+        result.putString("date", if (source.date == null) null else source.date.toString())
         result.putString("clientEmail", source.clientEmail)
         result.putString("clientPhone", source.clientPhone)
         result.putString("extra", source.extra)
@@ -165,9 +154,9 @@ object Writer {
         return result
     }
 
-    private fun writePrintGroup(source: PrintGroup?): WritableMap {
+    private fun writePrintGroup(source: PrintGroup): WritableMap {
         val result = Arguments.createMap()
-        result.putString("identifier", source!!.identifier)
+        result.putString("identifier", source.identifier)
         result.putString("type", source.type.name)
         result.putString("orgName", source.orgName)
         result.putString("orgInn", source.orgInn)
@@ -184,18 +173,22 @@ object Writer {
             try {
                 payment.put("uuid", key.uuid)
                 payment.put("value", key.value.toDouble())
-                payment.put("system", writePaymentSystem(key.system))
+                payment.put("system", if (key.system == null) null else writePaymentSystem(key.system!!))
                 payment.put("purposeIdentifier", key.purposeIdentifier)
                 payment.put("accountId", key.accountId)
                 payment.put("accountUserDescription", key.accountUserDescription)
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
-
-            result.putDouble(
-                    payment.toString(),
-                    source[key]!!.toDouble()
-            )
+            val value = source[key]
+            if (value != null) {
+                result.putDouble(
+                        payment.toString(),
+                        value.toDouble()
+                )
+            } else {
+                result.putNull(payment.toString())
+            }
         }
         return result
     }
@@ -214,6 +207,36 @@ object Writer {
         result.putString("parentUuid", source.parentUuid)
         result.putString("code", source.code)
         result.putString("name", source.name)
+        if (source is ProductItem.Product) {
+            result.putString("taxNumber", source.taxNumber.name)
+            result.putString("type", source.type.name)
+            result.putDouble("price", source.price.toDouble())
+            result.putDouble("quantity", source.quantity.toDouble())
+            result.putString("description", source.description)
+            result.putString("measureName", source.measureName)
+            result.putDouble("measurePrecision", source.measurePrecision.toDouble())
+            val alcoholByVolume = source.alcoholByVolume
+            if (alcoholByVolume != null) {
+                result.putDouble("alcoholByVolume", alcoholByVolume.toDouble())
+            } else {
+                result.putNull("alcoholByVolume")
+            }
+            val alcoholProductKindCode = source.alcoholProductKindCode
+            if (alcoholProductKindCode != null) {
+                result.putInt("alcoholProductKindCode", alcoholProductKindCode.toInt())
+            } else {
+                result.putNull("alcoholProductKindCode")
+            }
+            val tareVolume = source.tareVolume
+            if (tareVolume != null) {
+                result.putDouble("tareVolume", tareVolume.toDouble())
+            } else {
+                result.putNull("tareVolume")
+            }
+        } else if (source is ProductItem.ProductGroup) {
+            result.putString("taxNumber", source.taxNumber.name)
+
+        }
         return result
     }
 
@@ -287,7 +310,7 @@ object Writer {
 
     fun writeIntent(source: Intent): WritableMap {
         val result = Arguments.createMap()
-        result.putString("className", if (source.component == null) null else source.component!!.className)
+        result.putString("className", if (source.component == null) null else source.component.className)
         result.putString("packageName", source.`package`)
         result.putString("action", source.action)
         result.putMap("extras", if (source.extras == null) null else writeIntentExtras(source.extras))
@@ -302,23 +325,28 @@ object Writer {
         return result
     }
 
-    fun writeIntentExtras(source: Bundle?): WritableMap {
+    fun writeIntentExtras(source: Bundle): WritableMap {
         val result = Arguments.createMap()
-        for (key in source!!.keySet()) {
+        for (key in source.keySet()) {
             writeIntentExtraObjectItem(key, source.get(key), result)
         }
         return result
     }
 
     private fun writeIntentExtraObjectItem(key: String, item: Any?, result: WritableMap) {
-        when (item) {
-            is Boolean -> result.putBoolean(key, (item as Boolean?)!!)
-            is Int -> result.putInt(key, (item as Int?)!!)
-            is Double -> result.putDouble(key, (item as Double?)!!)
-            is String -> result.putString(key, item as String?)
-            is Map<*, *> -> result.putMap(key, writeIntentExtraObject(item))
-            is List<*> -> result.putArray(key, writeIntentExtraArray(item))
-            is Bundle -> result.putMap(key, writeIntentExtras(item))
+        if (item == null) {
+            result.putNull(key)
+        } else {
+            when (item) {
+                is Nothing -> result.putNull(key)
+                is Boolean -> result.putBoolean(key, item)
+                is Int -> result.putInt(key, item)
+                is Double -> result.putDouble(key, item)
+                is String -> result.putString(key, item)
+                is Map<*, *> -> result.putMap(key, writeIntentExtraObject(item))
+                is List<*> -> result.putArray(key, writeIntentExtraArray(item))
+                is Bundle -> result.putMap(key, writeIntentExtras(item))
+            }
         }
     }
 
@@ -334,12 +362,14 @@ object Writer {
         val result = Arguments.createArray()
         for (item in source) {
             when (item) {
+                is Nothing -> result.pushNull()
                 is Boolean -> result.pushBoolean(item)
                 is Int -> result.pushInt(item)
                 is Double -> result.pushDouble(item)
                 is String -> result.pushString(item)
                 is Map<*, *> -> result.pushMap(writeIntentExtraObject(item))
                 is List<*> -> result.pushArray(writeIntentExtraArray(item))
+                is Bundle -> result.pushMap(writeIntentExtras(item))
             }
         }
         return result
