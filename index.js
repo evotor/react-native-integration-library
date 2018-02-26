@@ -1,6 +1,6 @@
 import InventoryAPI from './js/APIs/Inventory';
 import NavigationAPI from './js/APIs/Navigation';
-import ReceiptAPI from './js/APIs/Receipt';
+import ReceiptAPI, {PositionBuilder, UuidGenerator} from './js/APIs/Receipt';
 import UserAPI from './js/APIs/User';
 import SessionAPI from "./js/APIs/Session";
 
@@ -26,7 +26,7 @@ import {
     SetPrintGroup
 } from './js/DataWrappers/receipt/changes';
 import {PrintableBarcode, PrintableImage, PrintableText, Weight} from './js/DataWrappers/devices';
-import {Field, ProductExtra, ProductItem} from './js/DataWrappers/inventory';
+import {Field, ProductExtra} from './js/DataWrappers/inventory';
 import {Intent} from './js/DataWrappers/navigation';
 import {Payment, PaymentPurpose, PaymentSystem} from './js/DataWrappers/receipt/payment';
 import {
@@ -82,6 +82,7 @@ import {
     PrintExtraRequiredEventListener,
     PrintGroupRequiredEventListener,
     ProductEventListener,
+    ProductItem,
     ReceiptDiscountEventListener,
     ReceiptEventListener,
     ScannerEventListener,
@@ -108,6 +109,8 @@ export {
     InventoryAPI,
     NavigationAPI,
     ReceiptAPI,
+    UuidGenerator,
+    PositionBuilder,
     UserAPI,
     SessionAPI,
 

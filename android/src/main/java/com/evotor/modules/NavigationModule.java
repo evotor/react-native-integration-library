@@ -11,8 +11,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
-import com.evotor.utilities.Reader;
-import com.evotor.utilities.Writer;
+import com.evotor.converter.Reader;
+import com.evotor.converter.Writer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class NavigationModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext context;
-    public static EmitEvent emitEvent;
+    private static EmitEvent emitEvent = null;
 
     public NavigationModule(final ReactApplicationContext c) {
         super(c);
@@ -107,20 +107,15 @@ public class NavigationModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void startService(final ReadableMap intent, final Callback callback) {
-        navigate(
-                intent,
-                new Starter() {
-                    @Override
-                    public void start(Intent result, boolean fromActivity) {
-                        if (fromActivity) {
-                            getCurrentActivity().startService(result);
-                        } else {
-                            context.startService(result);
-                        }
-                    }
-                },
-                callback
-        );
+        final Intent result = Reader.INSTANCE.readIntent(context, intent.toHashMap(), callback);
+        if (result != null) {
+            try {
+                context.startService(result);
+                callback.invoke();
+            } catch (SecurityException e) {
+                callback.invoke(Writer.INSTANCE.writeError("NavigationError", "TARGET_CLASS_NOT_EXPORTED"));
+            }
+        }
     }
 
     private void navigate(final ReadableMap intent, final Starter starter, final Callback callback) {
@@ -142,7 +137,7 @@ public class NavigationModule extends ReactContextBaseJavaModule {
                     callback.invoke(Writer.INSTANCE.writeError("NavigationError", "TARGET_CLASS_NOT_EXPORTED"));
                 }
             }
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             callback.invoke(Writer.INSTANCE.writeError("NoActivityError", e.getMessage()));
         }
     }

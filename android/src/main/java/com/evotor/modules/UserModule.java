@@ -4,7 +4,7 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.evotor.utilities.Writer;
+import com.evotor.converter.Writer;
 
 import java.util.HashMap;
 import java.util.List;

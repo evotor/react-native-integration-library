@@ -1,13 +1,8 @@
 package com.evotor.services.broadcast;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 
 import com.evotor.modules.EventModule;
-import com.evotor.services.EventListenerService;
-import com.evotor.utilities.Writer;
-import com.facebook.react.bridge.Arguments;
 
 import java.util.HashMap;
 import java.util.Map;

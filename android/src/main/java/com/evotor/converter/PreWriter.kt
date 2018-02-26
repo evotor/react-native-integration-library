@@ -1,8 +1,5 @@
-package com.evotor.utilities
+package com.evotor.converter
 
-import android.content.Intent
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.WritableMap
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionEdit
@@ -27,12 +24,15 @@ object PreWriter {
             val changeSource = source[i]
             when (changeSource) {
                 is PositionAdd -> {
+                    changeResult["__name__"] = "PositionAdd"
                     changeResult["position"] = Writer.writePosition((changeSource).position).toHashMap()
                 }
                 is PositionEdit -> {
+                    changeResult["__name__"] = "PositionEdit"
                     changeResult["position"] = Writer.writePosition((changeSource).position).toHashMap()
                 }
                 is PositionRemove -> {
+                    changeResult["__name__"] = "PositionRemove"
                     changeResult["positionUuid"] = (changeSource).getPositionUuid()
                 }
             }
@@ -42,16 +42,16 @@ object PreWriter {
         return result
     }
 
-    fun preWiteReceiptDiscount(discount: BigDecimal, receiptUuid: String): Map<*, *> {
+    fun preWriteReceiptDiscount(discount: BigDecimal, receiptUuid: String): Map<*, *> {
         val result = HashMap<Any, Any>()
         result["discount"] = discount.toDouble()
         result["receiptUuid"] = receiptUuid
         return result
     }
 
-    fun preWritePaymentSystem(paymentSystem: PaymentSystem?): Map<*, *> {
+    fun preWritePaymentSystem(paymentSystem: PaymentSystem): Map<*, *> {
         val result = HashMap<Any, Any>()
-        result["paymentSystemId"] = paymentSystem!!.paymentSystemId
+        result["paymentSystemId"] = paymentSystem.paymentSystemId
         result["paymentType"] = paymentSystem.paymentType.name
         result["userDescription"] = paymentSystem.userDescription
         return result
@@ -121,7 +121,7 @@ object PreWriter {
     fun preWritePositionEvent(source: PositionEvent?, result: MutableMap<Any, Any>): Boolean {
         return if (source != null) {
             result["receiptUuid"] = source.receiptUuid
-            result["position"] = Writer.writePosition(source.position)
+            result["position"] = Writer.writePosition(source.position).toHashMap()
             true
         } else {
             false

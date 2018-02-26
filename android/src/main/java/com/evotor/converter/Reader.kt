@@ -1,4 +1,4 @@
-package com.evotor.utilities
+package com.evotor.converter
 
 import android.content.ComponentName
 import android.content.Context
@@ -59,7 +59,7 @@ import ru.evotor.framework.receipt.print_extras.PrintExtraPlacePrintGroupTop
 
 object Reader {
 
-    fun readPosition(source: Map<*, *>): Position {
+    private fun readPosition(source: Map<*, *>): Position {
         val extraKeys = (source["extraKeys"] as List<*>)
                 .map {
                     ExtraKey(
@@ -218,11 +218,19 @@ object Reader {
             val item = source[i] as Map<*, *>
             val positionsSource = item["positions"] as List<*>
             val positionsResult = positionsSource.indices.map { readPosition(positionsSource[it] as Map<*, *>) }
+            var discounts: Map<String, BigDecimal>? = null
+            if(item["discounts"] != null) {
+                discounts = HashMap()
+                for (sourceKey in (item["discounts"] as Map<*, *>).keys) {
+                    discounts[sourceKey as String] = BigDecimal((item["discounts"] as Map<*, *>)[sourceKey] as Double)
+                }
+            }
             result.add(Receipt.PrintReceipt(
                     readPrintGroup(item["printGroup"] as Map<*, *>),
                     positionsResult,
                     readPayments(item["payments"] as Map<*, *>),
-                    readPayments(item["changes"] as Map<*, *>)
+                    readPayments(item["changes"] as Map<*, *>),
+                    discounts
             ))
         }
         return result
@@ -274,7 +282,7 @@ object Reader {
                 for (key in extrasSource.keys) {
                     readDefaultIntentExtra(current, key as String, extrasSource[key], extrasResult)
                 }
-                if(result.hasExtra("type")) {
+                if (result.hasExtra("type")) {
                     result.putExtra("extras", extrasResult)
                 } else {
                     result.putExtras(extrasResult)
@@ -292,7 +300,7 @@ object Reader {
 
     private fun createIntent(current: Context, className: String?, packageName: String?, action: String?, customServiceEventName: String?, callback: Callback): Intent? {
         var result: Intent? = null
-        if(customServiceEventName != null) {
+        if (customServiceEventName != null) {
             result = EventModule.createServiceIntent(current, customServiceEventName, true)
         } else {
             val manager = current.packageManager
@@ -369,7 +377,7 @@ object Reader {
     private fun readCustomIntentExtra(current: Context, item: Any?, itemReader: IntentExtraReadingFinisher) {
         if (item is Map<*, *>) {
             if (item.containsKey("__value__")) {
-                itemReader.finishReading(readEvotorExtra(
+                itemReader.finishReading(readEvotorIntentExtra(
                         current,
                         item["__value__"] as Map<*, *>
                 ))
@@ -405,7 +413,7 @@ object Reader {
         }
     }
 
-    private fun readEvotorExtra(current: Context, source: Map<*, *>): Bundle? {
+    private fun readEvotorIntentExtra(current: Context, source: Map<*, *>): Bundle? {
         return when (source["__name__"] as String) {
             "PositionAdd" -> PositionAdd(readPosition(source["position"] as Map<*, *>)).toBundle()
             "PositionEdit" -> PositionEdit(readPosition(source["position"] as Map<*, *>)).toBundle()

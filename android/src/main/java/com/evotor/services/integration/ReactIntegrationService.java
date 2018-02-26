@@ -8,9 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.evotor.modules.EventModule;
-import com.evotor.utilities.Writer;
+import com.evotor.converter.Writer;
 import com.facebook.react.bridge.Callback;
-import com.evotor.utilities.Reader;
+import com.evotor.converter.Reader;
 import com.evotor.modules.IntegrationModule;
 
 import java.util.HashMap;

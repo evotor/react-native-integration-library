@@ -7,13 +7,9 @@ package com.evotor.services.broadcast;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.evotor.modules.EventModule;
-import com.evotor.utilities.PreWriter;
-import com.facebook.react.bridge.Arguments;
-import com.evotor.utilities.Writer;
-import com.facebook.react.bridge.WritableMap;
+import com.evotor.converter.PreWriter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +20,9 @@ import ru.evotor.framework.core.action.event.cash_operations.CashOutEvent;
 import ru.evotor.framework.core.action.event.inventory.ProductCardOpenedEvent;
 import ru.evotor.framework.core.action.event.receipt.position_edited.PositionAddedEvent;
 import ru.evotor.framework.core.action.event.receipt.position_edited.PositionEditedEvent;
-import ru.evotor.framework.core.action.event.receipt.position_edited.PositionEvent;
 import ru.evotor.framework.core.action.event.receipt.position_edited.PositionRemovedEvent;
 import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClearedEvent;
 import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClosedEvent;
-import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptEvent;
 import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptOpenedEvent;
 
 public class ReactBroadcastReceiver extends BroadcastReceiver {

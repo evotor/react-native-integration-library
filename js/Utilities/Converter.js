@@ -8,6 +8,7 @@ import {
 } from "../Types/enums";
 import {CashDrawerEvent, CashOperationEvent, ProductEvent, ReceiptEvent} from "../DataWrappers/services/events";
 import {PaymentSystemEvent} from "../DataWrappers/services/results";
+import {Product, ProductGroup} from "../DataWrappers/inventory";
 
 export default class Converter {
 
@@ -25,6 +26,14 @@ export default class Converter {
                 }
             );
             getter(array);
+        }
+    }
+
+    static getProductItemReader(getter) {
+        return (productItem) => {
+            getter(productItem ? Converter.setPrototypeOf(
+                productItem, productItem.hasOwnProperty('quantity') ? Product.prototype : ProductGroup.prototype
+            ) : null);
         }
     }
 
@@ -172,13 +181,9 @@ export default class Converter {
         result.className = source.className;
         result.packageName = source.packageName;
         result.action = source.action;
-        result.replaceExtras(source.extras);
-        source.categories.forEach(
-            (item) => {
-                result.addCategory(item);
-            }
-        );
-        result.flags = source.flags;
+        result.extras = source.extras;
+        result.categories = source.categories;
+        result.flags = [source.flags];
         return result;
     }
 

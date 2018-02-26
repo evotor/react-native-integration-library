@@ -12,7 +12,7 @@ export class PositionAdd extends AbstractBundlable {
 
 export class PositionEdit extends AbstractBundlable {
     constructor(position: Position) {
-            super('PositionEdit');
+        super('PositionEdit');
         this.type = 'POSITION_EDIT';
         this.position = position;
     }
