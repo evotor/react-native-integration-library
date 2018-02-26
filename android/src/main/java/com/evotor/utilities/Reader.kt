@@ -96,6 +96,12 @@ object Reader {
         )
     }
 
+    fun readPositionAdds(source: List<*>): List<PositionAdd> {
+        return (0 until source.size).map {
+            PositionAdd(readPosition(source[it] as Map<*, *>))
+        }
+    }
+
     fun readChanges(source: List<*>): List<IPositionChange> {
         val result = ArrayList<IPositionChange>()
         source.indices
@@ -410,6 +416,8 @@ object Reader {
             "BeforePositionsEditedEventResult" -> IntegrationModule.resultReaders["BEFORE_POSITIONS_EDITED"]?.read(current, source)?.toBundle()
             "ReceiptDiscountEventResult" -> IntegrationModule.resultReaders["RECEIPT_DISCOUNT"]?.read(current, source)?.toBundle()
             "PaymentSelectedEventResult" -> IntegrationModule.resultReaders["PAYMENT_SELECTED"]?.read(current, source)?.toBundle()
+            "PaymentSystemPaymentOkResult" -> IntegrationModule.resultReaders["PAYMENT_SYSTEM"]?.read(current, source)?.toBundle()
+            "PaymentSystemPaymentErrorResult" -> IntegrationModule.resultReaders["PAYMENT_SYSTEM"]?.read(current, source)?.toBundle()
             "PrintGroupRequiredEventResult" -> IntegrationModule.resultReaders["PRINT_GROUP_REQUIRED"]?.read(current, source)?.toBundle()
             "PrintExtraRequiredEventResult" -> IntegrationModule.resultReaders["PRINT_EXTRA_REQUIRED"]?.read(current, source)?.toBundle()
             else -> null

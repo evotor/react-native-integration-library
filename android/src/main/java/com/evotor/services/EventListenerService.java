@@ -3,6 +3,7 @@ package com.evotor.services;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
+import com.evotor.utilities.Writer;
 import com.facebook.react.HeadlessJsTaskService;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.jstasks.HeadlessJsTaskConfig;
@@ -18,7 +19,7 @@ public class EventListenerService extends HeadlessJsTaskService {
     HeadlessJsTaskConfig getTaskConfig(Intent intent) {
         return new HeadlessJsTaskConfig(
                 "EventListener",
-                intent.getExtras() == null ? Arguments.createMap() : Arguments.fromBundle(intent.getExtras()),
+                intent.getExtras() == null ? Arguments.createMap() : Writer.INSTANCE.writeIntentExtras(intent.getExtras()),
                 0, // timeout for the task
                 true // optional: defines whether or not  the task is allowed in foreground. Default is false
         );

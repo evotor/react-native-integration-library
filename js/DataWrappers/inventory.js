@@ -1,3 +1,5 @@
+import {FieldType} from "../Types/enums";
+
 export class ProductItem {
     constructor(uuid: string,
                 parentUuid: string | null,
@@ -14,7 +16,7 @@ export class Field {
     constructor(name: string | null,
                 fieldUUID: string,
                 title: string | null,
-                type: string) {
+                type: FieldType) {
         this.name = name;
         this.fieldUUID = fieldUUID;
         this.title = title;

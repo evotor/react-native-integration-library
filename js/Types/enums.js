@@ -76,6 +76,11 @@ var ProductType;
     ProductType["ALCOHOL_NOT_MARKED"] = "ALCOHOL_NOT_MARKED";
     ProductType["SERVICE"] = "SERVICE";
 })(ProductType = exports.ProductType || (exports.ProductType = {}));
+var FieldType;
+(function (FieldType) {
+    FieldType["TEXT_FIELD"] = "TEXT_FIELD";
+    FieldType["DICTIONARY_FIELD"] = "DICTIONARY_FIELD";
+})(FieldType = exports.FieldType || (exports.FieldType = {}));
 /**
  * Receipt
  */

@@ -6,6 +6,7 @@ export const [
     EventModule,
     DeviceModule,
     ReceiptModule,
+    CommandModule,
     InventoryModule,
     NavigationModule,
     IntegrationModule,
@@ -14,6 +15,7 @@ export const [
     NativeModules.EventModule,
     NativeModules.DeviceModule,
     NativeModules.ReceiptModule,
+    NativeModules.CommandModule,
     NativeModules.InventoryModule,
     NativeModules.NavigationModule,
     NativeModules.IntegrationModule

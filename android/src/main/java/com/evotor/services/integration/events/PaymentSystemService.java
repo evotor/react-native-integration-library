@@ -4,8 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.evotor.services.integration.ReactIntegrationService;
-import com.facebook.react.bridge.WritableMap;
-import com.evotor.utilities.Writer;
+import com.evotor.utilities.PreWriter;
 
 import java.util.List;
 import java.util.Map;
@@ -64,15 +63,15 @@ public class PaymentSystemService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventWriter getEventWriter() {
-        return new EventWriter() {
+    protected EventPreWriter getEventPreWriter() {
+        return new EventPreWriter() {
             @Override
-            public WritableMap write(Bundle bundle) {
+            public Map preWrite(Bundle bundle) {
                 PaymentSystemEvent event = PaymentSystemEvent.Companion.create(bundle);
                 if (event == null) {
                     return null;
                 }
-                return Writer.INSTANCE.writePaymentSystemEvent(event);
+                return PreWriter.INSTANCE.preWritePaymentSystemEvent(event);
             }
         };
     }

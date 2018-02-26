@@ -80,6 +80,11 @@ export enum ProductType {
     SERVICE = "SERVICE"
 }
 
+export enum FieldType {
+    TEXT_FIELD = "TEXT_FIELD",
+    DICTIONARY_FIELD = "DICTIONARY_FIELD"
+}
+
 /**
  * Receipt
  */

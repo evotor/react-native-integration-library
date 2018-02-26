@@ -9,9 +9,7 @@ import android.support.annotation.Nullable;
 
 import com.evotor.modules.EventModule;
 import com.evotor.utilities.Writer;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
-import com.facebook.react.bridge.WritableMap;
 import com.evotor.utilities.Reader;
 import com.evotor.modules.IntegrationModule;
 
@@ -90,7 +88,7 @@ public abstract class ReactIntegrationService extends IntegrationService {
                         boolean executed = bundle != null && EventModule.startService(
                                 getApplicationContext(),
                                 getEventName(),
-                                Arguments.toBundle(getEventWriter().write(bundle))
+                                getEventPreWriter().preWrite(bundle)
                         );
                         if (!executed) {
                             try {
@@ -110,10 +108,10 @@ public abstract class ReactIntegrationService extends IntegrationService {
 
     protected abstract String getActionName();
 
-    protected abstract EventWriter getEventWriter();
+    protected abstract EventPreWriter getEventPreWriter();
 
-    public interface EventWriter {
-        WritableMap write(Bundle bundle);
+    public interface EventPreWriter {
+        Map preWrite(Bundle bundle);
     }
 
     public interface ResultReader {

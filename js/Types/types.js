@@ -26,15 +26,13 @@ import {
     CashDrawerEventType,
     CashOperationEventType,
     IntegrationServiceEventType,
-    PaymentSystemOperationType,
-    PositionEventType,
+    PaymentSystemOperationType, PositionEventType,
     ProductEventType,
     ReceiptEventType
 } from "./enums";
 import {
-    BeforePositionsEditedEventResult,
-    PaymentSelectedEventResult,
-    PaymentSystemEvent,
+    BeforePositionsEditedEventResult, PaymentSelectedEventResult, PaymentSystemEvent, PaymentSystemPaymentErrorResult,
+    PaymentSystemPaymentOkResult,
     PrintExtraRequiredEventResult,
     PrintGroupRequiredEventResult,
     ReceiptDiscountEventResult
@@ -81,10 +79,12 @@ export type IntegrationServiceEventListener =
 
 export type ServiceEventListener = CustomServiceEventListener | IntegrationServiceEventListener;
 
+export type PaymentSystemEventResult = PaymentSystemPaymentOkResult | PaymentSystemPaymentErrorResult;
 export type IntegrationServiceEventResult =
     BeforePositionsEditedEventResult |
     ReceiptDiscountEventResult |
     PaymentSelectedEventResult |
+    PaymentSystemEventResult |
     PrintGroupRequiredEventResult |
     PrintExtraRequiredEventResult;
 

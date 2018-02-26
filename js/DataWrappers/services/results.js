@@ -5,10 +5,10 @@ import {PaymentType} from "../../Types/enums";
 import {PaymentPurpose} from "../receipt/payment";
 
 export class BeforePositionsEditedEventResult extends AbstractBundlable {
-    constructor(changes: PositionChange[] | null, extra: SetExtra | null) {
+    constructor(changes?: PositionChange[] | null, extra?: SetExtra) {
         super('BeforePositionsEditedEventResult');
-        this.changes = changes;
-        this.extra = extra;
+        this.changes = changes ? changes : null;
+        this.extra = extra ? extra : null;
     }
 }
 
