@@ -3,9 +3,9 @@ package com.evotor.services.integration.events;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.evotor.converter.fromjs.ReceiptReader;
+import com.evotor.converter.tojs.ReceiptWriter;
 import com.evotor.services.integration.ReactIntegrationService;
-import com.evotor.utilities.PreWriter;
-import com.evotor.utilities.Reader;
 
 import java.util.List;
 import java.util.Map;
@@ -21,20 +21,20 @@ import ru.evotor.framework.payment.PaymentPurpose;
 
 public class PaymentSelectService extends ReactIntegrationService {
 
-    private static String eventName = "PAYMENT_SELECTED";
+    private static final String eventName = "PAYMENT_SELECTED";
 
-    public static void getResultReader(Map<String, ResultReader> target) {
+    public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
                 eventName,
-                new ResultReader() {
+                new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
-                        List<PaymentPurpose> paymentPurposes = data.get("paymentParts") == null ?
-                                null : Reader.INSTANCE.readPaymentParts((List) data.get("paymentParts"));
+                        final List<PaymentPurpose> paymentPurposes = data.get("paymentParts") == null ?
+                                null : ReceiptReader.INSTANCE.readPaymentParts((List) data.get("paymentParts"));
                         if (paymentPurposes != null) {
                             return new PaymentSelectedEventResult(
                                     data.get("extra") == null ?
-                                            null : Reader.INSTANCE.readSetExtra((Map) data.get("extra")),
+                                            null : ReceiptReader.INSTANCE.readSetExtra((Map) data.get("extra")),
                                     paymentPurposes
                             );
                         } else {
@@ -56,15 +56,15 @@ public class PaymentSelectService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventPreWriter getEventPreWriter() {
-        return new EventPreWriter() {
+    protected IntegrationEventWriter getEventWriter() {
+        return new IntegrationEventWriter() {
             @Override
-            public Map preWrite(Bundle bundle) {
-                PaymentSelectedEvent event = PaymentSelectedEvent.create(bundle);
+            public Object write(Bundle bundle) {
+                final PaymentSelectedEvent event = PaymentSelectedEvent.create(bundle);
                 if (event == null) {
                     return null;
                 }
-                return PreWriter.INSTANCE.preWritePaymentSystem(event.getPaymentSystem());
+                return ReceiptWriter.INSTANCE.writePaymentSystem(event.getPaymentSystem());
             }
         };
     }

@@ -1,61 +1,69 @@
 import React from 'react';
-import {AppRegistry} from 'react-native';
-import {EventModule} from "../NativeModules";
+import {AppRegistry, DeviceEventEmitter} from 'react-native';
+import {DeviceModule, NavigationModule} from '../NativeModules';
+import {DeviceConnectionEventType, IntegrationServiceEventType} from "../Types/compilable";
+import Converter from "./Converter";
+import {BroadcastEventType} from "../Types/inbuilt";
+
+const setListenersEnabled = (type, enabled) => {
+    if (type === `ACTIVITY_RESULT`) {
+        NavigationModule.setListenerEnabled(enabled);
+    } else if (DeviceConnectionEventType.hasOwnProperty(type)) {
+        DeviceModule.setListenerEnabled(enabled);
+    }
+};
 
 export default class EventHolder {
 
     static events = {};
 
-    static addEventListener(type, listener, isGlobal) {
-        if (!EventHolder.events.hasOwnProperty(type)) {
-            EventHolder.events[type] = [];
-            EventModule.setListenerEnabled(type, true);
+    static addEventListener(type, listener) {
+        if (!this.events.hasOwnProperty(type)) {
+            this.events[type] = [];
+            setListenersEnabled(type, true);
         }
-        let abort;
-        for (let i = 0; i < EventHolder.events[type].length; i++) {
-            if (EventHolder.events[type][i].listener === listener) {
-                abort = true;
-                break;
-            }
-        }
-        if (!abort) {
-            EventHolder.events[type].push({
-                listener: listener,
-                isGlobal: isGlobal
-            });
+        if (!this.events[type].includes(listener)) {
+            this.events[type].push(listener)
         }
     }
 
     static removeEventListener(type, listener) {
-        if (!EventHolder.events.hasOwnProperty(type)) {
+        if (!this.events.hasOwnProperty(type)) {
             return false;
         }
-        if (listener && EventHolder.events[type].length > 1) {
-            const prevLength = EventHolder.events[type].length;
-            EventHolder.events[type].filter(
-                (e) => e.listener !== listener
-            );
-            return EventHolder.events[type].length < prevLength;
-        } else {
-            EventModule.setListenerEnabled(type, false);
-            return delete EventHolder.events[type];
+        const prevLength = this.events[type].length;
+        if (listener) {
+            const removeIndex = this.events[type].indexOf(listener);
+            if (removeIndex > -1) {
+                this.events[type] = this.events[type].filter((item, i) => i !== removeIndex);
+            }
         }
+        if (!listener || this.events[type].length === 0) {
+            setListenersEnabled(type, false);
+            return delete this.events[type];
+        }
+        return prevLength > this.events[type].length;
     }
 
 }
 
-AppRegistry.registerHeadlessTask(
-    'EventListener',
-    () => async (eventData) => {
-        if (EventHolder.events.hasOwnProperty(eventData.type)) {
-            EventHolder.events[eventData.type].forEach(
-                (event) => {
-                    if (event.isGlobal || (!event.isGlobal && eventData.appIsRunning)) {
-                        event.listener(eventData.extras);
-                    }
-                }
-            );
+const executeListeners = (eventData) => {
+    if (eventData && EventHolder.events.hasOwnProperty(eventData.type)) {
+        let executor;
+        if (eventData.type === 'ACTIVITY_RESULT') {
+            executor = Converter.getActivityResultReader(eventData.extras);
+        } else if (IntegrationServiceEventType.hasOwnProperty(eventData.type)) {
+            executor = Converter.getIntegrationEventReader(eventData.type, eventData.extras);
+        } else if (typeof eventData.type === BroadcastEventType) {
+            executor = Converter.getBroadcastEventReader(eventData.type, eventData.extras);
+        } else {
+            executor = listener => listener(eventData.extras)
         }
+        EventHolder.events[eventData.type].forEach(executor);
     }
-);
+};
+
+DeviceEventEmitter.addListener('LocalEventEmission', executeListeners);
+
+AppRegistry.registerHeadlessTask('GlobalEventEmission', () => async (eventData) => executeListeners(eventData));
 

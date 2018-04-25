@@ -2,6 +2,7 @@ package com.evotor;
 
 import com.evotor.modules.EventModule;
 import com.evotor.modules.CommandModule;
+import com.evotor.modules.SessionModule;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -36,6 +37,7 @@ public class EvotorPackage implements ReactPackage {
         modules.add(new InventoryModule(reactContext));
         modules.add(new UserModule(reactContext));
         modules.add(new CommandModule(reactContext));
+        modules.add(new SessionModule(reactContext));
         modules.add(new NavigationModule(reactContext));
         modules.add(new DeviceModule(reactContext));
         modules.add(new EventModule(reactContext));

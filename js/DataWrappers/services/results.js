@@ -1,7 +1,7 @@
 import {AbstractBundlable} from "../navigation";
-import type {PositionChange} from "../../Types/types";
+import type {PositionChange} from "../../Types/inbuilt";
 import {SetExtra, SetPrintExtra, SetPrintGroup} from "../receipt/changes";
-import {PaymentType} from "../../Types/enums";
+import {PaymentType} from "../../Types/compilable";
 import {PaymentPurpose} from "../receipt/payment";
 
 export class BeforePositionsEditedEventResult extends AbstractBundlable {

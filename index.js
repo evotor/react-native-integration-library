@@ -1,6 +1,6 @@
 import InventoryAPI from './js/APIs/Inventory';
 import NavigationAPI from './js/APIs/Navigation';
-import ReceiptAPI from './js/APIs/Receipt';
+import ReceiptAPI, {PositionBuilder, UuidGenerator} from './js/APIs/Receipt';
 import UserAPI from './js/APIs/User';
 import SessionAPI from "./js/APIs/Session";
 
@@ -26,7 +26,7 @@ import {
     SetPrintGroup
 } from './js/DataWrappers/receipt/changes';
 import {PrintableBarcode, PrintableImage, PrintableText, Weight} from './js/DataWrappers/devices';
-import {Field, ProductExtra, ProductItem} from './js/DataWrappers/inventory';
+import {Field, ProductExtra} from './js/DataWrappers/inventory/extras';
 import {Intent} from './js/DataWrappers/navigation';
 import {Payment, PaymentPurpose, PaymentSystem} from './js/DataWrappers/receipt/payment';
 import {
@@ -42,7 +42,8 @@ import {
     BarcodeType,
     CashDrawerEventType,
     CashOperationEventType,
-    DeviceConnectionEventType, FieldType,
+    DeviceConnectionEventType,
+    FieldType,
     IntegrationServiceEventType,
     NavigationErrorMessage,
     NavigationEventType,
@@ -51,13 +52,14 @@ import {
     PositionEventType,
     PrintGroupType,
     ProductEventType,
+    ProductItem,
     ProductType,
     ReceiptEventType,
     ReceiptType,
     ScannerEventType,
     TaxationSystem,
     TaxNumber
-} from './js/Types/enums'
+} from './js/Types/compilable'
 import {DeviceError, IntegrationError, NavigationError, NoActivityError} from './js/DataWrappers/errors';
 import {
     ActivityResultListener,
@@ -74,7 +76,8 @@ import {
     IntegrationServiceEventResult,
     NavigationEventListener,
     PaymentSelectedEventListener,
-    PaymentSystemEventListener, PaymentSystemEventResult,
+    PaymentSystemEventListener,
+    PaymentSystemEventResult,
     PositionChange,
     PositionEventListener,
     Printable,
@@ -87,7 +90,7 @@ import {
     ScannerEventListener,
     ServiceEventListener,
     ServiceEventType,
-} from './js/Types/types';
+} from './js/Types/inbuilt';
 
 import {DeviceServiceConnector, Printer, Scales, Scanner} from './js/APIs/Devices';
 
@@ -102,12 +105,16 @@ import {
     PrintGroupRequiredEventResult,
     ReceiptDiscountEventResult
 } from "./js/DataWrappers/services/results";
-import {OpenReceiptCommandResult, SendElectronReceiptCommandResult} from "./js/DataWrappers/commands";
+import {OpenReceiptCommandResult, RegisterReceiptCommandResult} from "./js/DataWrappers/commands";
+import {Product, ProductGroup} from "./js/DataWrappers/inventory/framework";
+import ProductQuery, {ProductSortOrder} from "./js/APIs/Query/Product";
 
 export {
     InventoryAPI,
     NavigationAPI,
     ReceiptAPI,
+    UuidGenerator,
+    PositionBuilder,
     UserAPI,
     SessionAPI,
 
@@ -136,9 +143,13 @@ export {
     PrintableText,
     Weight,
 
+    Product,
+    ProductGroup,
     Field,
     ProductExtra,
     ProductItem,
+    ProductSortOrder,
+    ProductQuery,
 
     Intent,
 
@@ -161,7 +172,7 @@ export {
     ReceiptEvent,
 
     OpenReceiptCommandResult,
-    SendElectronReceiptCommandResult,
+    RegisterReceiptCommandResult,
 
     User,
     Grant,

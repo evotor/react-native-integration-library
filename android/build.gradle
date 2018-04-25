@@ -13,7 +13,7 @@ android {
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.2.31'
     repositories {
         jcenter()
     }
@@ -25,18 +25,13 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
         jcenter()
-        maven {
-            url "$rootDir/../node_modules/react-native/android"
-        }
         maven { url 'https://jitpack.io' }
-        mavenCentral()
     }
 }
 
 dependencies {
     compile "com.facebook.react:react-native:+"
-    compile 'com.github.evotor:integration-library:v0.4.14'
+    compile 'com.github.evotor:integration-library:v0.4.19'
     compile "org.jetbrains.kotlin:kotlin-stdlib"
 }

@@ -1,46 +1,60 @@
 import {ExtraKey, Position, PrintGroup, Receipt, ReceiptHeader} from "../DataWrappers/receipt/framework";
 import {Intent} from "../DataWrappers/navigation";
 import {PositionAdd, PositionEdit} from "../DataWrappers/receipt/changes";
-import {PositionEvent} from "../DataWrappers/services/events";
 import {
-    CashDrawerEventType, CashOperationEventType, PositionEventType, ProductEventType,
+    CashDrawerEvent,
+    CashOperationEvent,
+    PositionEvent,
+    ProductEvent,
+    ReceiptEvent
+} from "../DataWrappers/services/events";
+import {
+    CashDrawerEventType,
+    CashOperationEventType,
+    PositionEventType,
+    ProductEventType,
     ReceiptEventType
-} from "../Types/enums";
-import {CashDrawerEvent, CashOperationEvent, ProductEvent, ReceiptEvent} from "../DataWrappers/services/events";
+} from "../Types/compilable";
 import {PaymentSystemEvent} from "../DataWrappers/services/results";
+import {Product, ProductGroup} from "../DataWrappers/inventory/framework";
+import {IntegrationCallback} from "../APIs/Services";
 
 export default class Converter {
 
     static getInstanceReader(getter, prototype) {
-        return (instance) => {
-            getter(instance ? Converter.setPrototypeOf(instance, prototype) : null);
-        }
+        return instance => getter(instance ? Converter.setPrototypeOf(instance, prototype) : null);
+
     }
 
     static getArrayReader(getter, prototype) {
-        return (array) => {
+        return array => {
             array.forEach(
-                (item, i) => {
-                    array[i] = Converter.setPrototypeOf(item, prototype);
-                }
+                (item, i) => array[i] = Converter.setPrototypeOf(item, prototype)
             );
             getter(array);
         }
     }
 
+    static getProductItemReader(getter) {
+        return productItem => getter(
+            productItem ? Converter.setPrototypeOf(
+                productItem,
+                productItem.hasOwnProperty('quantity') ? Product.prototype : ProductGroup.prototype
+            ) : null
+        );
+    }
+
     static getPositionsReader(getter) {
-        return (positions) => {
+        return positions => {
             positions.forEach(
-                (item, i) => {
-                    positions[i] = Converter.readPosition(item);
-                }
+                (item, i) => positions[i] = Converter.readPosition(item)
             );
             getter(positions);
         }
     }
 
     static getReceiptReader(getter) {
-        return (source) => {
+        return source => {
             let result = null;
             if (source) {
                 source.printDocuments.forEach(
@@ -56,103 +70,69 @@ export default class Converter {
         }
     }
 
-    static getBeforePositionsEditedEventReader(listener, callback) {
-        return (eventData) => {
-            eventData.changes.forEach(
-                (item, i) => {
-                    switch (item.type) {
-                        case "POSITION_ADD":
-                            eventData.changes[i] = new PositionAdd(Converter.readPosition(item.position));
-                            break;
-                        case "POSITION_EDIT":
-                            eventData.changes[i] = new PositionEdit(Converter.readPosition(item.position));
-                            break;
-                        case "POSITION_REMOVE":
-                            eventData.changes[i] = new PositionEdit(item.positionUuid);
-                    }
-                }
-            );
-            listener(
-                eventData.changes,
-                callback
-            );
-        }
-    }
-
-    static getReceiptDiscountEventReader(listener, callback) {
-        return (eventData) => {
-            listener(
-                eventData.discount,
-                eventData.receiptUuid,
-                callback
-            );
-        }
-    }
-
-    static getPaymentSystemEventReader(listener, callback) {
-        return (eventData) => {
-            listener(
-                eventData.operationType,
-                Converter.setPrototypeOf(eventData.event, PaymentSystemEvent.prototype),
-                callback
-            );
-        }
-    }
-
-    static getBroadcastEventReader(type, listener) {
-        if (ProductEventType.hasOwnProperty(type)) {
-            return (eventData) => {
-                listener(Converter.setPrototypeOf(eventData, ProductEvent.prototype));
-            }
-        } else if (ReceiptEventType.hasOwnProperty(type)) {
-            return (eventData) => {
-                listener(Converter.setPrototypeOf(eventData, ReceiptEvent.prototype));
-            }
-        } else if (PositionEventType.hasOwnProperty(type)) {
-            return (eventData) => {
-                listener(Converter.setPrototypeOf(eventData, PositionEvent.prototype));
-            }
-        } else if (CashDrawerEventType.hasOwnProperty(type)) {
-            return (eventData) => {
-                listener(Converter.setPrototypeOf(eventData, CashDrawerEvent.prototype));
-            }
-        } else if (CashOperationEventType.hasOwnProperty(type)) {
-            return (eventData) => {
-                listener(Converter.setPrototypeOf(eventData, CashOperationEvent.prototype));
-            }
-        }
-    }
-
     static getIntentReader(getter) {
-        return (source) => {
-            getter(Converter.readIntent(source));
+        return source => getter(Converter.readIntent(source));
+    }
+
+    static getIntegrationEventReader(type, eventData) {
+        const callback = new IntegrationCallback(type);
+        switch (type) {
+            case 'RECEIPT_DISCOUNT':
+                return listener => listener(...eventData, callback);
+            case 'BEFORE_POSITIONS_EDITED':
+                eventData.forEach(
+                    (item, i) => {
+                        switch (item.type) {
+                            case "POSITION_ADD":
+                                eventData[i] = new PositionAdd(Converter.readPosition(item.position));
+                                break;
+                            case "POSITION_EDIT":
+                                eventData[i] = new PositionEdit(Converter.readPosition(item.position));
+                                break;
+                            case "POSITION_REMOVE":
+                                eventData[i] = new PositionEdit(item.positionUuid);
+                        }
+                    }
+                );
+                return listener => listener(eventData, callback);
+            case 'PAYMENT_SYSTEM':
+                eventData[1] = Converter.setPrototypeOf(eventData[1], PaymentSystemEvent.prototype);
+                return listener => listener(...eventData, callback);
+            case 'PRINT_EXTRA_REQUIRED':
+                return listener => listener(callback);
+            default:
+                return listener => listener(eventData, callback);
         }
     }
 
-    static getActivityResultReader(listener) {
-        return (eventData) => {
-            eventData.data = Converter.readIntent(eventData.data);
-            listener(eventData.requestCode, eventData.resultCode, eventData.data);
+    static getBroadcastEventReader(type, eventData) {
+        if (ProductEventType.hasOwnProperty(type)) {
+            eventData = Converter.setPrototypeOf(eventData, ProductEvent.prototype);
+        } else if (ReceiptEventType.hasOwnProperty(type)) {
+            eventData = Converter.setPrototypeOf(eventData, ReceiptEvent.prototype);
+        } else if (PositionEventType.hasOwnProperty(type)) {
+            eventData = Converter.setPrototypeOf(eventData, PositionEvent.prototype);
+        } else if (CashDrawerEventType.hasOwnProperty(type)) {
+            eventData = Converter.setPrototypeOf(eventData, CashDrawerEvent.prototype);
+        } else if (CashOperationEventType.hasOwnProperty(type)) {
+            eventData = Converter.setPrototypeOf(eventData, CashOperationEvent.prototype);
         }
+        return listener => listener(eventData);
+
     }
 
-    static getPrimitiveEventReader(listener) {
-        return (eventData) => {
-            listener(eventData.value);
-        }
+    static getActivityResultReader(eventData) {
+        eventData[2] = Converter.readIntent(eventData.data);
+        return listener => listener(...eventData);
     }
 
     static readPosition(source) {
         source = Converter.setPrototypeOf(source, Position.prototype);
         source.extraKeys.forEach(
-            (item, j) => {
-                source.extraKeys[j] = Converter.setPrototypeOf(item, ExtraKey.prototype);
-            }
+            (item, j) => source.extraKeys[j] = Converter.setPrototypeOf(item, ExtraKey.prototype)
         );
         source.subPositions.forEach(
-            (item, j) => {
-                source.subPositions[j] = Converter.setPrototypeOf(item, Position.prototype);
-            }
+            (item, j) => source.subPositions[j] = Converter.setPrototypeOf(item, Position.prototype)
         );
         return source;
     }
@@ -172,13 +152,9 @@ export default class Converter {
         result.className = source.className;
         result.packageName = source.packageName;
         result.action = source.action;
-        result.replaceExtras(source.extras);
-        source.categories.forEach(
-            (item) => {
-                result.addCategory(item);
-            }
-        );
-        result.flags = source.flags;
+        result.extras = source.extras;
+        result.categories = source.categories;
+        result.flags = [source.flags];
         return result;
     }
 
@@ -187,6 +163,11 @@ export default class Converter {
             (item, i) => {
                 printReceipts[i].payments = Converter.writePayments(item.payments);
                 printReceipts[i].changes = Converter.writePayments(item.changes);
+                if (item.discounts) {
+                    printReceipts[i].discounts = Array.from(item.discounts).reduce(
+                        (obj, [key, value]) => (Object.assign(obj, {[key]: value})), {}
+                    );
+                }
             }
         );
         return printReceipts;
@@ -195,9 +176,7 @@ export default class Converter {
     static writePayments(source) {
         let result = {};
         source.forEach(
-            (value, key) => {
-                result[JSON.stringify(key)] = value;
-            }
+            (value, key) => result[JSON.stringify(key)] = value
         );
         return result;
     }
@@ -211,6 +190,7 @@ export default class Converter {
             extras: source.extras,
             categories: source.categories,
             flags: source.flags,
+            convertEvotorBundles: JSON.stringify(source.extras).includes("__value__")
         }
     }
 

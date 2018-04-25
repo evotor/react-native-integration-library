@@ -1,4 +1,4 @@
-import type {Bundle} from "../Types/types";
+import type {Bundle} from "../Types/inbuilt";
 
 export class AbstractBundlable {
 
@@ -8,7 +8,6 @@ export class AbstractBundlable {
 
     toBundle(): Bundle {
         return {
-            __name__: this.__name__,
             __value__: this
         };
     }
@@ -212,52 +211,59 @@ export class Intent {
         this.flags = [];
     }
 
-    setAction(action: string): void {
+    setAction(action: string): Intent {
         this.action = action;
+        return this;
     }
 
     getAction(): string {
         return this.action;
     }
 
-    setClassName(className: string): void {
+    setClassName(className: string): Intent {
         this.className = className;
+        return this;
     }
 
     getClassName(): string {
         return this.className;
     }
 
-    setPackageName(packageName: string): void {
+    setPackageName(packageName: string): Intent {
         this.packageName = packageName;
+        return this;
     }
 
     getPackageName(): string {
         return this.packageName;
     }
 
-    setCustomServiceEventName(eventName: string): void {
+    setCustomServiceEventName(eventName: string): Intent {
         this.customServiceEventName = eventName;
+        return this;
     }
 
     getCustomServiceEventName(): string {
         return this.customServiceEventName;
     }
 
-    putExtra(key: string, extra: any): void {
+    putExtra(key: string, extra: any): Intent {
         this.extras[key] = extra;
+        return this;
     }
 
-    putExtras(extras: Object): void {
+    putExtras(extras: Object): Intent {
         this.extras = Object.assign(this.extras, extras);
+        return this;
     }
 
     removeExtra(key: string): void {
         delete this.extras[key];
     }
 
-    replaceExtras(extras: Object): void {
+    replaceExtras(extras: Object): Intent {
         this.extras = extras;
+        return this;
     }
 
     getExtra(key: string): any {
@@ -272,8 +278,9 @@ export class Intent {
         return this.extras.hasOwnProperty(key);
     }
 
-    addCategory(category: string): void {
+    addCategory(category: string): Intent {
         this.categories.push(category);
+        return this;
     }
 
     removeCategory(category: string): void {
@@ -288,12 +295,14 @@ export class Intent {
         return this.categories.includes(category);
     }
 
-    addFlags(flags: number): void {
+    addFlags(flags: number): Intent {
         this.flags.push(flags);
+        return this;
     }
 
-    setFlags(flags: number): void {
+    setFlags(flags: number): Intent {
         this.flags = [flags];
+        return this;
     }
 
     getFlags(): number {

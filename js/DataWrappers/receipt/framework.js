@@ -1,5 +1,5 @@
 import {Payment} from './payment';
-import {PrintGroupType, ProductType, ReceiptType, TaxationSystem, TaxNumber} from "../../Types/enums";
+import {PrintGroupType, ProductType, ReceiptType, TaxationSystem, TaxNumber} from "../../Types/compilable";
 
 export class ExtraKey {
     constructor(identity: string | null, appId: string | null, description: string | null) {
@@ -37,7 +37,7 @@ export class Position {
         this.measurePrecision = measurePrecision;
         this.taxNumber = taxNumber;
         this.price = price;
-        this.priceWithDiscountPositin = priceWithDiscountPosition;
+        this.priceWithDiscountPosition = priceWithDiscountPosition;
         this.quantity = quantity;
         this.barcode = barcode;
         this.mark = mark;
@@ -89,11 +89,13 @@ export class PrintReceipt {
     constructor(printGroup: PrintGroup | null,
                 positions: Position[],
                 payments: Map<Payment, number>,
-                changes: Map<Payment, number>) {
+                changes: Map<Payment, number>,
+                discounts?: Map<string, number>) {
         this.printGroup = printGroup;
         this.positions = positions;
         this.payments = payments;
         this.changes = changes;
+        this.discounts = discounts ? discounts : null;
     }
 }
 

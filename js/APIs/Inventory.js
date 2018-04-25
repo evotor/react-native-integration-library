@@ -1,6 +1,7 @@
 import {InventoryModule} from "../NativeModules";
-import {Field, ProductExtra, ProductItem} from "../DataWrappers/inventory";
+import {Field, ProductExtra} from "../DataWrappers/inventory/extras";
 import Converter from "../Utilities/Converter";
+import type {ProductItem} from "../Types/compilable";
 
 export default class InventoryAPI {
 
@@ -9,7 +10,7 @@ export default class InventoryAPI {
     }
 
     static getProductByUuid(uuid: string): Promise<ProductItem | null> {
-        return new Promise(resolve => InventoryModule.getProductByUuid(uuid, Converter.getInstanceReader(resolve, ProductItem.prototype)));
+        return new Promise(resolve => InventoryModule.getProductByUuid(uuid, Converter.getProductItemReader(resolve)));
     }
 
     static getField(fieldUuid: string): Promise<Field | null> {

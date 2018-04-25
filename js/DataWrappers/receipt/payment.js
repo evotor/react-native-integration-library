@@ -1,4 +1,4 @@
-import {PaymentType} from "../../Types/enums";
+import {PaymentType} from "../../Types/compilable";
 
 export class PaymentPurpose {
     constructor(identifier: string | null,

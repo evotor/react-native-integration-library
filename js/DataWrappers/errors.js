@@ -1,4 +1,4 @@
-import {NavigationErrorMessage} from "../Types/enums";
+import {NavigationErrorMessage} from "../Types/compilable";
 
 export class IntegrationError extends Error {
     constructor(message: string) {

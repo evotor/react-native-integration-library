@@ -3,8 +3,8 @@ package com.evotor.services.integration.events;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.evotor.converter.fromjs.ReceiptReader;
 import com.evotor.services.integration.ReactIntegrationService;
-import com.evotor.utilities.Reader;
 
 import java.util.List;
 import java.util.Map;
@@ -19,16 +19,16 @@ import ru.evotor.framework.core.action.event.receipt.print_extra.PrintExtraRequi
 
 public class PrintExtraService extends ReactIntegrationService {
 
-    private static String eventName = "PRINT_EXTRA_REQUIRED";
+    private static final String eventName = "PRINT_EXTRA_REQUIRED";
 
-    public static void getResultReader(Map<String, ResultReader> target) {
+    public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
                 eventName,
-                new ResultReader() {
+                new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
                         return new PrintExtraRequiredEventResult(
-                                data.get("extra") == null ? null : Reader.INSTANCE.readSetPrintExtras(
+                                data.get("extra") == null ? null : ReceiptReader.INSTANCE.readSetPrintExtras(
                                         context, (List) data.get("extra")
                                 )
                         );
@@ -48,10 +48,10 @@ public class PrintExtraService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventPreWriter getEventPreWriter() {
-        return new EventPreWriter() {
+    protected IntegrationEventWriter getEventWriter() {
+        return new IntegrationEventWriter() {
             @Override
-            public Map preWrite(Bundle bundle) {
+            public Object write(Bundle bundle) {
                 return null;
             }
         };

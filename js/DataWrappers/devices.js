@@ -1,4 +1,4 @@
-import {BarcodeType} from "../Types/enums";
+import {BarcodeType} from "../Types/compilable";
 
 export class PrintableText {
     constructor(text: string) {

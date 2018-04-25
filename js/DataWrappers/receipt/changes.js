@@ -1,6 +1,6 @@
 import {Position, PrintGroup} from './framework';
 import {AbstractBundlable} from "../navigation";
-import type {Printable, PrintExtraPlace} from "../../Types/types";
+import type {Printable, PrintExtraPlace} from "../../Types/inbuilt";
 
 export class PositionAdd extends AbstractBundlable {
     constructor(position: Position) {
@@ -12,7 +12,7 @@ export class PositionAdd extends AbstractBundlable {
 
 export class PositionEdit extends AbstractBundlable {
     constructor(position: Position) {
-            super('PositionEdit');
+        super('PositionEdit');
         this.type = 'POSITION_EDIT';
         this.position = position;
     }

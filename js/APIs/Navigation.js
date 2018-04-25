@@ -1,17 +1,18 @@
 import {NavigationModule} from '../NativeModules';
 import {Intent} from '../DataWrappers/navigation';
-import type {IntegrationServiceEventResult, NavigationEventListener} from '../Types/types';
-import {NavigationEventType} from '../Types/enums';
+import type {IntegrationServiceEventResult, NavigationEventListener} from '../Types/inbuilt';
+import {NavigationEventType} from '../Types/compilable';
 import {
-    PrintExtraRequiredEventResult} from '../DataWrappers/services/results';
+    BeforePositionsEditedEventResult,
+    PaymentSelectedEventResult,
+    PrintExtraRequiredEventResult,
+    PrintGroupRequiredEventResult,
+    ReceiptDiscountEventResult
+} from '../DataWrappers/services/results';
 import Converter from '../Utilities/Converter';
 import EventHolder from '../Utilities/EventHolder';
 import ErrorHandler from '../Utilities/ErrorHandler';
 import {IntegrationError} from "../DataWrappers/errors";
-import {
-    BeforePositionsEditedEventResult, PaymentSelectedEventResult, PrintGroupRequiredEventResult,
-    ReceiptDiscountEventResult
-} from "../DataWrappers/services/results";
 
 export default class NavigationAPI {
 
@@ -20,39 +21,44 @@ export default class NavigationAPI {
     static RESULT_OK = -1;
 
     static createIntentForSellReceiptEdit(): Intent {
-        const result = new Intent();
-        result.setAction('evotor.intent.action.edit.SELL');
-        return result;
+        return new Intent().setAction('evotor.intent.action.edit.SELL');
     }
 
     static createIntentForPaybackReceiptEdit(): Intent {
-        const result = new Intent();
-        result.setAction('evotor.intent.action.edit.PAYBACK');
-        return result;
+        return new Intent().setAction('evotor.intent.action.edit.PAYBACK');
     }
 
     static createIntentForSellReceiptPayment(): Intent {
-        const result = new Intent();
-        result.setAction('evotor.intent.action.payment.SELL');
-        return result;
+        return new Intent().setAction('evotor.intent.action.payment.SELL');
+
     }
 
     static createIntentForPaybackReceiptPayment(): Intent {
-        const result = new Intent();
-        result.setAction('evotor.intent.action.payment.PAYBACK');
-        return result;
+        return new Intent().setAction('evotor.intent.action.payment.PAYBACK');
     }
 
     static createIntentForCashReceiptSettings(): Intent {
-        const result = new Intent();
-        result.setAction('evotor.intent.action.settings.CASH_RECEIPT');
-        return result;
+        return new Intent().setAction('evotor.intent.action.settings.CASH_RECEIPT');
     }
 
     static createIntentForCashRegisterReport(): Intent {
-        const result = new Intent();
-        result.setAction('evotor.intent.action.report.CASH_REGISTER');
-        return result;
+        return new Intent().setAction('evotor.intent.action.report.CASH_REGISTER');
+    }
+
+    static createIntentForChangeUser(): Intent {
+        return new Intent().setAction('evotor.intent.action.user.CHANGE');
+    }
+
+    static createIntentForNewProduct(barcode?: string): Intent {
+        return new Intent().setAction('evotor.intent.action.edit.PRODUCT').putExtra('barcode', barcode);
+    }
+
+    static createIntentForEditProduct(productUuid?: string): Intent {
+        return new Intent().setAction('evotor.intent.action.edit.PRODUCT').putExtra('productUuid', productUuid);
+    }
+
+    static currentActivityIsRunning(): Promise<boolean> {
+        return new Promise(resolve => NavigationModule.currentActivityIsRunning(resolve));
     }
 
     static getIntent(): Promise<Intent> {
@@ -104,8 +110,8 @@ export default class NavigationAPI {
         return new Promise((resolve, reject) => NavigationModule.finish(ErrorHandler.getExecutor(resolve, reject)));
     }
 
-    static addEventListener(type: NavigationEventType, listener: NavigationEventListener, isGlobal: boolean = true): void {
-        EventHolder.addEventListener(type, Converter.getActivityResultReader(listener), isGlobal);
+    static addEventListener(type: NavigationEventType, listener: NavigationEventListener): void {
+        EventHolder.addEventListener(...arguments);
     }
 
     static removeEventListener(type: NavigationEventType, listener?: NavigationEventListener): boolean {

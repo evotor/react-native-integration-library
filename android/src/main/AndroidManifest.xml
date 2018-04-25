@@ -7,6 +7,6 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true">
-        <service android:name="com.evotor.services.EventListenerService" />
+        <service android:name="com.evotor.services.EventEmissionService" android:exported="true"/>
     </application>
 </manifest>

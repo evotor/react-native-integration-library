@@ -3,8 +3,8 @@ package com.evotor.services.integration.events;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.evotor.converter.tojs.EventWriter;
 import com.evotor.services.integration.ReactIntegrationService;
-import com.evotor.utilities.PreWriter;
 
 import java.util.List;
 import java.util.Map;
@@ -21,20 +21,20 @@ import ru.evotor.framework.payment.PaymentType;
 
 public class PaymentSystemService extends ReactIntegrationService {
 
-    private static String eventName = "PAYMENT_SYSTEM";
+    private static final String eventName = "PAYMENT_SYSTEM";
 
-    public static void getResultReader(Map<String, ResultReader> target) {
+    public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
                 eventName,
-                new ResultReader() {
+                new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
-                        String name = (String) data.get("__name__");
+                        final String name = (String) data.get("__name__");
                         switch (name) {
                             case "PaymentSystemPaymentOkResult":
-                                String rrn = (String) data.get("rrn");
-                                List<String> slip = data.get("slip") == null ? null : (List<String>) data.get("slip");
-                                String paymentType = (String) data.get("paymentType");
+                                final String rrn = (String) data.get("rrn");
+                                final List<String> slip = data.get("slip") == null ? null : (List<String>) data.get("slip");
+                                final String paymentType = (String) data.get("paymentType");
                                 if (rrn != null && slip != null && paymentType != null) {
                                     return new PaymentSystemPaymentOkResult(
                                             rrn, slip, (String) data.get("paymentInfo"), PaymentType.valueOf(paymentType)
@@ -63,15 +63,15 @@ public class PaymentSystemService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventPreWriter getEventPreWriter() {
-        return new EventPreWriter() {
+    protected IntegrationEventWriter getEventWriter() {
+        return new IntegrationEventWriter() {
             @Override
-            public Map preWrite(Bundle bundle) {
-                PaymentSystemEvent event = PaymentSystemEvent.Companion.create(bundle);
+            public Object write(Bundle bundle) {
+                final PaymentSystemEvent event = PaymentSystemEvent.Companion.create(bundle);
                 if (event == null) {
                     return null;
                 }
-                return PreWriter.INSTANCE.preWritePaymentSystemEvent(event);
+                return EventWriter.INSTANCE.writePaymentSystemEvent(event);
             }
         };
     }

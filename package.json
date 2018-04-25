@@ -1,17 +1,23 @@
 {
   "name": "evotor-integration-library",
-  "version": "3.2.1",
+  "version": "3.4.0",
   "description": "allows you to use evotor integration library in react native projects",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {},
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:evotor/react-native-integration-library.git"
+  },
   "keywords": [
     "evotor",
     "react-native"
   ],
   "author": "Artemiy Lunkov <a.lunkov@evotor.ru> (http://evotor.ru/)",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "abstract-query-builder": "^1.1.5",
+    "uuid": "^3.2.1"
+  }
 }

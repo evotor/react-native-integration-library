@@ -3,9 +3,9 @@ package com.evotor.services.integration.events;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.evotor.converter.fromjs.ReceiptReader;
+import com.evotor.converter.tojs.ReceiptWriter;
 import com.evotor.services.integration.ReactIntegrationService;
-import com.evotor.utilities.PreWriter;
-import com.evotor.utilities.Reader;
 
 import java.util.List;
 import java.util.Map;
@@ -20,19 +20,19 @@ import ru.evotor.framework.core.action.event.receipt.before_positions_edited.Bef
 
 public class PositionsEditService extends ReactIntegrationService {
 
-    private static String eventName = "BEFORE_POSITIONS_EDITED";
+    private static final String eventName = "BEFORE_POSITIONS_EDITED";
 
-    public static void getResultReader(Map<String, ResultReader> target) {
+    public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
                 eventName,
-                new ResultReader() {
+                new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
                         return new BeforePositionsEditedEventResult(
                                 data.get("changes") == null ?
-                                        null : Reader.INSTANCE.readChanges((List) data.get("changes")),
+                                        null : ReceiptReader.INSTANCE.readChanges((List) data.get("changes")),
                                 data.get("extra") == null ?
-                                        null : Reader.INSTANCE.readSetExtra((Map) data.get("extra"))
+                                        null : ReceiptReader.INSTANCE.readSetExtra((Map) data.get("extra"))
                         );
                     }
                 }
@@ -50,11 +50,11 @@ public class PositionsEditService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventPreWriter getEventPreWriter() {
-        return new EventPreWriter() {
+    protected IntegrationEventWriter getEventWriter() {
+        return new IntegrationEventWriter() {
             @Override
-            public Map preWrite(Bundle bundle) {
-                return PreWriter.INSTANCE.preWriteChanges(BeforePositionsEditedEvent.create(bundle).getChanges());
+            public Object write(Bundle bundle) {
+                return ReceiptWriter.INSTANCE.writeChanges(BeforePositionsEditedEvent.create(bundle).getChanges());
             }
         };
     }

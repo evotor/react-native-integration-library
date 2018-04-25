@@ -3,15 +3,16 @@ package com.evotor.services.integration.events;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.evotor.converter.fromjs.ReceiptReader;
+import com.evotor.converter.tojs.EventWriter;
 import com.evotor.services.integration.ReactIntegrationService;
-import com.evotor.utilities.PreWriter;
-import com.evotor.utilities.Reader;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import ru.evotor.IBundlable;
+import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 import ru.evotor.framework.core.action.event.receipt.discount.ReceiptDiscountEvent;
 import ru.evotor.framework.core.action.event.receipt.discount.ReceiptDiscountEventResult;
@@ -22,23 +23,23 @@ import ru.evotor.framework.core.action.event.receipt.discount.ReceiptDiscountEve
 
 public class ReceiptDiscountService extends ReactIntegrationService {
 
-    private static String eventName = "RECEIPT_DISCOUNT";
+    private static final String eventName = "RECEIPT_DISCOUNT";
 
-    public static void getResultReader(Map<String, ResultReader> target) {
+    public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
                 eventName,
-                new ResultReader() {
+                new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
-                        BigDecimal discount = data.get("discount") == null ?
-                                null : new BigDecimal((double) Math.round((Double) data.get("discount") * 1000d) / 1000d);
-                        List<IPositionChange> changes = data.get("changes") == null ?
-                                null : Reader.INSTANCE.readChanges((List) data.get("changes"));
+                        final BigDecimal discount = data.get("discount") == null ?
+                                null : MoneyCalculator.toBigDecimal((Double) data.get("discount"));
+                        final List<IPositionChange> changes = data.get("changes") == null ?
+                                null : ReceiptReader.INSTANCE.readChanges((List) data.get("changes"));
                         if (discount != null && changes != null) {
                             return new ReceiptDiscountEventResult(
                                     discount,
                                     data.get("extra") == null ?
-                                            null : Reader.INSTANCE.readSetExtra((Map) data.get("extra")),
+                                            null : ReceiptReader.INSTANCE.readSetExtra((Map) data.get("extra")),
                                     changes
                             );
                         } else {
@@ -60,15 +61,15 @@ public class ReceiptDiscountService extends ReactIntegrationService {
     }
 
     @Override
-    protected EventPreWriter getEventPreWriter() {
-        return new EventPreWriter() {
+    protected IntegrationEventWriter getEventWriter() {
+        return new IntegrationEventWriter() {
             @Override
-            public Map preWrite(Bundle bundle) {
-                ReceiptDiscountEvent event = ReceiptDiscountEvent.create(bundle);
+            public Object write(Bundle bundle) {
+                final ReceiptDiscountEvent event = ReceiptDiscountEvent.create(bundle);
                 if (event == null) {
                     return null;
                 }
-                return PreWriter.INSTANCE.preWiteReceiptDiscount(event.getDiscount(), event.getReceiptUuid());
+                return EventWriter.INSTANCE.writeReceiptDiscountEvent(event.getDiscount(), event.getReceiptUuid());
             }
         };
     }

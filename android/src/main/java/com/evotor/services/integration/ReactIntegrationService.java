@@ -6,11 +6,12 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.evotor.modules.EventModule;
-import com.evotor.utilities.Writer;
+import com.evotor.converter.tojs.ErrorWriter;
 import com.facebook.react.bridge.Callback;
-import com.evotor.utilities.Reader;
+import com.evotor.converter.fromjs.NavigationReader;
 import com.evotor.modules.IntegrationModule;
 
 import java.util.HashMap;
@@ -28,10 +29,9 @@ public abstract class ReactIntegrationService extends IntegrationService {
 
     private ActionProcessor.Callback callback;
 
-    @Nullable
     @Override
     protected Map<String, ActionProcessor> createProcessors() {
-        IntegrationModule.integrators.put(
+        IntegrationModule.Companion.getIntegrators().put(
                 getEventName(),
                 new Integrator() {
                     @Override
@@ -39,38 +39,43 @@ public abstract class ReactIntegrationService extends IntegrationService {
                         try {
                             if (result.get("data") != null) {
                                 callback.onResult(
-                                        IntegrationModule.resultReaders.get(getEventName()).read(
+                                        IntegrationModule.Companion.getResultReaders().get(getEventName()).read(
                                                 getApplicationContext(),
                                                 (Map) result.get("data")
                                         )
                                 );
+                                Log.v("ReactIntegrationService", getEventName() + ": result is applied");
                                 resultCallback.invoke();
                             } else if (result.get("intent") != null) {
-                                Intent resultIntent = Reader.INSTANCE.readIntent(
+                                final Intent intent = NavigationReader.INSTANCE.readIntent(
                                         getApplicationContext(),
                                         (Map) result.get("intent"),
                                         resultCallback
                                 );
-                                if (resultIntent != null) {
+                                if (intent != null) {
                                     try {
-                                        callback.startActivity(resultIntent);
+                                        callback.startActivity(intent);
+                                        Log.v("ReactIntegrationService", getEventName() + ": activity is started");
                                         resultCallback.invoke();
                                     } catch (SecurityException e) {
-                                        resultCallback.invoke(Writer.INSTANCE.writeError(
+                                        resultCallback.invoke(ErrorWriter.INSTANCE.writeError(
                                                 "NavigationError",
                                                 "TARGET_CLASS_NOT_EXPORTED"
                                         ));
                                         callback.skip();
+                                        Log.v("ReactIntegrationService", getEventName() + ": skipped");
                                     }
                                 } else {
                                     callback.skip();
+                                    Log.v("ReactIntegrationService", getEventName() + ": skipped");
                                 }
                             } else {
                                 callback.skip();
+                                Log.v("ReactIntegrationService", getEventName() + ": skipped");
                                 resultCallback.invoke();
                             }
                         } catch (RemoteException e) {
-                            resultCallback.invoke(Writer.INSTANCE.writeError(
+                            resultCallback.invoke(ErrorWriter.INSTANCE.writeError(
                                     "IntegrationError",
                                     e.getMessage()
                             ));
@@ -83,16 +88,21 @@ public abstract class ReactIntegrationService extends IntegrationService {
                 getActionName(),
                 new ActionProcessor() {
                     @Override
-                    public void process(@NonNull String action, @Nullable Bundle bundle, @NonNull final Callback c) {
+                    public void process(@NonNull String action,
+                                        @Nullable Bundle bundle,
+                                        @NonNull Callback c) {
                         callback = c;
-                        boolean executed = bundle != null && EventModule.startService(
-                                getApplicationContext(),
-                                getEventName(),
-                                getEventPreWriter().preWrite(bundle)
-                        );
-                        if (!executed) {
+                        if (bundle != null) {
+                            EventModule.Companion.emitGlobal(
+                                    getApplicationContext(),
+                                    getEventName(),
+                                    getEventWriter().write(bundle)
+                            );
+                            Log.v("ReactIntegrationService", getEventName() + ": event data is emitted");
+                        } else {
                             try {
                                 callback.skip();
+                                Log.v("ReactIntegrationService", getEventName() + ": skipped");
                             } catch (RemoteException e) {
                                 e.printStackTrace();
                             }
@@ -108,13 +118,13 @@ public abstract class ReactIntegrationService extends IntegrationService {
 
     protected abstract String getActionName();
 
-    protected abstract EventPreWriter getEventPreWriter();
+    protected abstract IntegrationEventWriter getEventWriter();
 
-    public interface EventPreWriter {
-        Map preWrite(Bundle bundle);
+    public interface IntegrationEventWriter {
+        Object write(Bundle bundle);
     }
 
-    public interface ResultReader {
+    public interface IntegrationResultReader {
         IBundlable read(Context context, Map data);
     }
 
