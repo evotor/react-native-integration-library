@@ -10,6 +10,8 @@ import type {
 import EventHolder from '../Utilities/EventHolder';
 import Converter from '../Utilities/Converter';
 import ErrorHandler from '../Utilities/ErrorHandler';
+import {PushNotificationReceiverEventType} from "../Types/compilable";
+import {PushNotificationReceiverEventListener} from "../Types/inbuilt";
 
 export class IntegrationCallback {
 
@@ -54,6 +56,18 @@ export class BroadcastReceiver {
     }
 
     static removeEventListener(type: BroadcastEventType, listener?: BroadcastEventListener): boolean {
+        return EventHolder.removeEventListener(...arguments);
+    }
+
+}
+
+export class PushNotificationReceiver {
+
+    static addEventListener(type: PushNotificationReceiverEventType, listener: PushNotificationReceiverEventListener): void {
+        EventHolder.addEventListener(...arguments);
+    }
+
+    static removeEventListener(type: PushNotificationReceiverEventType, listener?: PushNotificationReceiverEventListener): boolean {
         return EventHolder.removeEventListener(...arguments);
     }
 

@@ -53,7 +53,7 @@ import {
     PrintGroupType,
     ProductEventType,
     ProductItem,
-    ProductType,
+    ProductType, PushNotificationReceiverEventType,
     ReceiptEventType,
     ReceiptType,
     ScannerEventType,
@@ -84,7 +84,7 @@ import {
     PrintExtraPlace,
     PrintExtraRequiredEventListener,
     PrintGroupRequiredEventListener,
-    ProductEventListener,
+    ProductEventListener, PushNotificationReceiverEventListener,
     ReceiptDiscountEventListener,
     ReceiptEventListener,
     ScannerEventListener,
@@ -94,7 +94,7 @@ import {
 
 import {DeviceServiceConnector, Printer, Scales, Scanner} from './js/APIs/Devices';
 
-import {BroadcastReceiver, IntegrationCallback, ServiceAPI} from './js/APIs/Services';
+import {BroadcastReceiver, IntegrationCallback, PushNotificationReceiver, ServiceAPI} from './js/APIs/Services';
 import {
     BeforePositionsEditedEventResult,
     PaymentSelectedEventResult,
@@ -237,5 +237,8 @@ export {
 
     ServiceAPI,
     IntegrationCallback,
-    BroadcastReceiver
+    BroadcastReceiver,
+    PushNotificationReceiverEventType,
+    PushNotificationReceiverEventListener,
+    PushNotificationReceiver
 }

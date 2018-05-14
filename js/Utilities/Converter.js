@@ -11,6 +11,7 @@ import {
 import {
     CashDrawerEventType,
     CashOperationEventType,
+    IntegrationServiceEventType,
     PositionEventType,
     ProductEventType,
     ReceiptEventType
@@ -22,8 +23,7 @@ import {IntegrationCallback} from "../APIs/Services";
 export default class Converter {
 
     static getInstanceReader(getter, prototype) {
-        return instance => getter(instance ? Converter.setPrototypeOf(instance, prototype) : null);
-
+        return instance => getter(instance ? Converter.setPrototypeOf(instance, prototype) : null)
     }
 
     static getArrayReader(getter, prototype) {
@@ -31,8 +31,29 @@ export default class Converter {
             array.forEach(
                 (item, i) => array[i] = Converter.setPrototypeOf(item, prototype)
             );
-            getter(array);
+            getter(array)
         }
+    }
+
+    static getEventListenerReader(type, extras) {
+        if (IntegrationServiceEventType.hasOwnProperty(type)) {
+            return Converter.getIntegrationEventReader(type, extras);
+        } else if (ProductEventType.hasOwnProperty(type)) {
+            return listener => listener(Converter.setPrototypeOf(extras, ProductEvent.prototype));
+        } else if (ReceiptEventType.hasOwnProperty(type)) {
+            return listener => listener(Converter.setPrototypeOf(extras, ReceiptEvent.prototype));
+        } else if (PositionEventType.hasOwnProperty(type)) {
+            return listener => listener(Converter.setPrototypeOf(extras, PositionEvent.prototype));
+        } else if (CashDrawerEventType.hasOwnProperty(type)) {
+            return listener => listener(Converter.setPrototypeOf(extras, CashDrawerEvent.prototype));
+        } else if (CashOperationEventType.hasOwnProperty(type)) {
+            return listener => listener(Converter.setPrototypeOf(extras, CashOperationEvent.prototype));
+        } else if (type === 'PUSH_NOTIFICATION_RECEIVED') {
+            return listener => listener(...extras);
+        } else  if (type === 'ACTIVITY_RESULT') {
+            return Converter.getActivityResultReader(extras);
+        }
+        return listener => listener(extras)
     }
 
     static getProductItemReader(getter) {
@@ -41,7 +62,7 @@ export default class Converter {
                 productItem,
                 productItem.hasOwnProperty('quantity') ? Product.prototype : ProductGroup.prototype
             ) : null
-        );
+        )
     }
 
     static getPositionsReader(getter) {
@@ -64,14 +85,16 @@ export default class Converter {
                         source.printDocuments[i].changes = Converter.readPayments(item.changes);
                     }
                 );
-                result = new Receipt(Converter.setPrototypeOf(source.header, ReceiptHeader.prototype), source.printDocuments);
+                result = new Receipt(
+                    Converter.setPrototypeOf(source.header, ReceiptHeader.prototype), source.printDocuments
+                )
             }
-            getter(result);
+            getter(result)
         }
     }
 
     static getIntentReader(getter) {
-        return source => getter(Converter.readIntent(source));
+        return source => getter(Converter.readIntent(source))
     }
 
     static getIntegrationEventReader(type, eventData) {
@@ -105,25 +128,9 @@ export default class Converter {
         }
     }
 
-    static getBroadcastEventReader(type, eventData) {
-        if (ProductEventType.hasOwnProperty(type)) {
-            eventData = Converter.setPrototypeOf(eventData, ProductEvent.prototype);
-        } else if (ReceiptEventType.hasOwnProperty(type)) {
-            eventData = Converter.setPrototypeOf(eventData, ReceiptEvent.prototype);
-        } else if (PositionEventType.hasOwnProperty(type)) {
-            eventData = Converter.setPrototypeOf(eventData, PositionEvent.prototype);
-        } else if (CashDrawerEventType.hasOwnProperty(type)) {
-            eventData = Converter.setPrototypeOf(eventData, CashDrawerEvent.prototype);
-        } else if (CashOperationEventType.hasOwnProperty(type)) {
-            eventData = Converter.setPrototypeOf(eventData, CashOperationEvent.prototype);
-        }
-        return listener => listener(eventData);
-
-    }
-
     static getActivityResultReader(eventData) {
         eventData[2] = Converter.readIntent(eventData.data);
-        return listener => listener(...eventData);
+        return listener => listener(...eventData)
     }
 
     static readPosition(source) {
@@ -134,7 +141,7 @@ export default class Converter {
         source.subPositions.forEach(
             (item, j) => source.subPositions[j] = Converter.setPrototypeOf(item, Position.prototype)
         );
-        return source;
+        return source
     }
 
     static readPayments(source) {
@@ -144,7 +151,7 @@ export default class Converter {
                 result.set(JSON.parse(key), source[key])
             }
         }
-        return result;
+        return result
     }
 
     static readIntent(source) {
@@ -155,7 +162,7 @@ export default class Converter {
         result.extras = source.extras;
         result.categories = source.categories;
         result.flags = [source.flags];
-        return result;
+        return result
     }
 
     static writePrintReceipts(printReceipts) {
@@ -170,7 +177,7 @@ export default class Converter {
                 }
             }
         );
-        return printReceipts;
+        return printReceipts
     }
 
     static writePayments(source) {
@@ -178,7 +185,7 @@ export default class Converter {
         source.forEach(
             (value, key) => result[JSON.stringify(key)] = value
         );
-        return result;
+        return result
     }
 
     static writeIntent(source) {
@@ -196,7 +203,7 @@ export default class Converter {
 
     static setPrototypeOf(source, prototype) {
         source.__proto__ = prototype;
-        return source;
+        return source
     }
 
 }
