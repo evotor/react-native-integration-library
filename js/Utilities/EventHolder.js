@@ -1,3 +1,4 @@
+import React from 'react';
 import {AppRegistry, DeviceEventEmitter} from 'react-native';
 import {DeviceModule, NavigationModule} from '../NativeModules';
 import {DeviceConnectionEventType} from "../Types/compilable";
