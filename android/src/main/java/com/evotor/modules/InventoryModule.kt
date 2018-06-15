@@ -34,14 +34,16 @@ class InventoryModule(private val context: ReactApplicationContext) : ReactConte
 
     @ReactMethod
     fun getProductByUuid(uuid: String, getter: Callback) {
-        val productItem = InventoryApi.getProductByUuid(context, uuid)
-        getter.invoke(if (productItem == null) null else InventoryWriter.writeProductItem(productItem))
+        getter.invoke(InventoryApi.getProductByUuid(context, uuid)?.let {
+            InventoryWriter.writeProductItem(it)
+        })
     }
 
     @ReactMethod
     fun getField(fieldUuid: String, getter: Callback) {
-        val field = InventoryApi.getField(context, fieldUuid)
-        getter.invoke(if (field == null) null else InventoryWriter.writeField(field))
+        getter.invoke(InventoryApi.getField(context, fieldUuid)?.let {
+            InventoryWriter.writeField(it)
+        })
     }
 
     @ReactMethod

@@ -1,3 +1,7 @@
+/**
+ * Классы для работы со службами.
+ * @module services
+ */
 import {IntegrationModule} from '../NativeModules';
 import {Intent} from '../DataWrappers/navigation';
 import type {
@@ -13,60 +17,148 @@ import ErrorHandler from '../Utilities/ErrorHandler';
 import {PushNotificationReceiverEventType} from "../Types/compilable";
 import {PushNotificationReceiverEventListener} from "../Types/inbuilt";
 
+/**
+ * @class IntegrationCallback
+ * @classdesc Класс, с помощью методов которого можно обрабатывать события интеграционных служб.
+ * @hideconstructor
+ * @memberof module:services
+ */
 export class IntegrationCallback {
 
     constructor(eventName) {
         this._eventName = eventName;
+        this._process = (result) => new Promise(
+            (resolve, reject) => IntegrationModule.setIntegrationResult(
+                this._eventName, result,
+                ErrorHandler.getExecutor(resolve, reject)
+            )
+        );
     }
 
+    /**
+     * Устанавливает результат события интеграционной службы.
+     * @function module:services.IntegrationCallback#onResult
+     * @param {string} result - Результат события интеграционной службы
+     * @returns {Promise<void>}
+     * @throws [IntegrationError]{@link module:errors.IntegrationError}
+     */
     onResult(result: IntegrationServiceEventResult): Promise<void> {
         return this._process({data: result});
     }
 
+    /**
+     * Запускает интеграционную операцию.
+     * @function module:services.IntegrationCallback#startActivity
+     * @param {Intent} intent - Намерение для запуска операции
+     * @returns {Promise<void>}
+     * @throws [IntegrationError]{@link module:errors.IntegrationError} | [NavigationError]{@link module:errors.NavigationError}
+     */
     startActivity(intent: Intent): Promise<void> {
         return this._process({intent: Converter.writeIntent(intent)});
     }
 
+    /**
+     * Завершает событие интеграционной службы без применения результата.
+     * @function module:services.IntegrationCallback#skip
+     * @returns {Promise<void>}
+     * @throws [IntegrationError]{@link module:errors.IntegrationError}
+     */
     skip(): Promise<void> {
         return this._process({});
     }
 
-    _process(result) {
-        return new Promise((resolve, reject) => IntegrationModule.setIntegrationResult(this._eventName, result, ErrorHandler.getExecutor(resolve, reject)));
-    }
-
 }
 
+/**
+ * @class ServiceAPI
+ * @classdesc Класс, с помощью методов которого можно подписаться на прослушивание событий интеграционных служб, а также зарегистрировать собственную службу.
+ * @hideconstructor
+ * @memberof module:services
+ */
 export class ServiceAPI {
 
+    /**
+     * Добавляет слушатель события службы.
+     * @function module:services.ServiceAPI.addEventListener
+     * @param {ServiceEventType} type - Тип события
+     * @param {ServiceEventListener} listener - Слушатель события
+     * @returns {void}
+     */
     static addEventListener(type: ServiceEventType, listener: ServiceEventListener): void {
         EventHolder.addEventListener(...arguments);
     }
 
+    /**
+     * Удаляет слушатель события службы.
+     * @function module:services.ServiceAPI.removeEventListener
+     * @param {ServiceEventType} type - Тип события
+     * @param {?ServiceEventListener} listener - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @returns {boolean} Удалён ли слушатель
+     */
     static removeEventListener(type: ServiceEventType, listener?: ServiceEventListener): boolean {
         return EventHolder.removeEventListener(...arguments);
     }
 
 }
 
+/**
+ * @class BroadcastReceiver
+ * @classdesc Класс, с помощью методов которого можно подписаться на прослушивание широковещательных сообщений.
+ * @hideconstructor
+ * @memberof module:services
+ */
 export class BroadcastReceiver {
 
+    /**
+     * Добавляет слушатель широковещательного сообщения.
+     * @function module:services.BroadcastReceiver.addEventListener
+     * @param {BroadcastEventType} type - Тип события
+     * @param {BroadcastEventListener} listener - Слушатель события
+     * @returns {void}
+     */
     static addEventListener(type: BroadcastEventType, listener: BroadcastEventListener): void {
         EventHolder.addEventListener(...arguments);
     }
 
+    /**
+     * Удаляет слушатель широковещательного сообщения.
+     * @function module:services.BroadcastReceiver.removeEventListener
+     * @param {BroadcastEventType} type - Тип события
+     * @param {?BroadcastEventListener} listener - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @returns {boolean} Удалён ли слушатель
+     */
     static removeEventListener(type: BroadcastEventType, listener?: BroadcastEventListener): boolean {
         return EventHolder.removeEventListener(...arguments);
     }
 
 }
 
+/**
+ * @class PushNotificationReceiver
+ * @classdesc Класс, с помощью методов которого можно подписаться на прослушивание push-уведомлений.
+ * @hideconstructor
+ * @memberof module:services
+ */
 export class PushNotificationReceiver {
 
+    /**
+     * Добавляет слушатель push-уведомлений.
+     * @function module:services.PushNotificationReceiver.addEventListener
+     * @param {PushNotificationReceiverEventType} type - Тип события
+     * @param {PushNotificationReceiverEventListener} listener - Слушатель события
+     * @returns {void}
+     */
     static addEventListener(type: PushNotificationReceiverEventType, listener: PushNotificationReceiverEventListener): void {
         EventHolder.addEventListener(...arguments);
     }
 
+    /**
+     * Удаляет слушатель push-уведомлений.
+     * @function module:services.PushNotificationReceiver.removeEventListener
+     * @param {PushNotificationReceiverEventType} type - Тип события
+     * @param {?PushNotificationReceiverEventListener} listener - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @returns {boolean} Удалён ли слушатель
+     */
     static removeEventListener(type: PushNotificationReceiverEventType, listener?: PushNotificationReceiverEventListener): boolean {
         return EventHolder.removeEventListener(...arguments);
     }

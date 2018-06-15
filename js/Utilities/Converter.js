@@ -16,7 +16,7 @@ import {
     ProductEventType,
     ReceiptEventType
 } from "../Types/compilable";
-import {PaymentSystemEvent} from "../DataWrappers/services/results";
+import {PaymentSystemEvent} from "../DataWrappers/services/events";
 import {Product, ProductGroup} from "../DataWrappers/inventory/framework";
 import {IntegrationCallback} from "../APIs/Services";
 

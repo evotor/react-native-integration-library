@@ -1,6 +1,6 @@
 {
   "name": "evotor-integration-library",
-  "version": "3.4.3",
+  "version": "3.5.3",
   "description": "allows you to use evotor integration library in react native projects",
   "main": "index.js",
   "scripts": {
@@ -19,5 +19,13 @@
   "dependencies": {
     "abstract-query-builder": "^1.1.5",
     "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-react": "^6.24.1",
+    "jsdoc": "^3.5.5",
+    "jsdoc-babel": "^0.4.0"
   }
 }

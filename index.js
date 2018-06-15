@@ -30,9 +30,9 @@ import {Field, ProductExtra} from './js/DataWrappers/inventory/extras';
 import {Intent} from './js/DataWrappers/navigation';
 import {Payment, PaymentPurpose, PaymentSystem} from './js/DataWrappers/receipt/payment';
 import {
-    BroadcastEvent,
+    AbstractBroadcastEvent,
     CashDrawerEvent,
-    CashOperationEvent,
+    CashOperationEvent, PaymentSystemEvent,
     PositionEvent,
     ReceiptEvent
 } from './js/DataWrappers/services/events';
@@ -98,14 +98,13 @@ import {BroadcastReceiver, IntegrationCallback, PushNotificationReceiver, Servic
 import {
     BeforePositionsEditedEventResult,
     PaymentSelectedEventResult,
-    PaymentSystemEvent,
     PaymentSystemPaymentErrorResult,
     PaymentSystemPaymentOkResult,
     PrintExtraRequiredEventResult,
     PrintGroupRequiredEventResult,
     ReceiptDiscountEventResult
 } from "./js/DataWrappers/services/results";
-import {OpenReceiptCommandResult, RegisterReceiptCommandResult} from "./js/DataWrappers/commands";
+import {OpenReceiptCommandResult, RegisterReceiptCommandResult} from "./js/DataWrappers/receipt/commands";
 import {Product, ProductGroup} from "./js/DataWrappers/inventory/framework";
 import ProductQuery, {ProductSortOrder} from "./js/APIs/Query/Product";
 
@@ -159,7 +158,7 @@ export {
     BeforePositionsEditedEventResult,
     CashDrawerEvent,
     CashOperationEvent,
-    BroadcastEvent,
+    AbstractBroadcastEvent,
     PaymentSelectedEventResult,
     PaymentSystemEventResult,
     PrintExtraRequiredEventResult,

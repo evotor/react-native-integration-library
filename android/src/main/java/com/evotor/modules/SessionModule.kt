@@ -41,8 +41,7 @@ class SessionModule(c: ReactApplicationContext) : ReactContextBaseJavaModule(c) 
 
     @ReactMethod
     fun getLastSessionNumber(callback: Callback) {
-        val lastSessionNumber = SystemStateApi.getLastSessionNumber(context)
-        callback.invoke(lastSessionNumber?.toInt())
+        callback.invoke(SystemStateApi.getLastSessionNumber(context)?.toInt())
     }
 
     @ReactMethod

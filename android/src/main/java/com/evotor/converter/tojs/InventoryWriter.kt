@@ -62,14 +62,13 @@ object InventoryWriter {
 
     fun writeProductItems(source: Cursor<ProductItem?>?): WritableArray {
         val result = Arguments.createArray()
-        if (source != null && source.moveToFirst()) {
-            var item = source.getValue()
-            result.pushMap(if (item == null) null else writeProductItem(item))
-            while (source.moveToNext()) {
-                item = source.getValue()
-                result.pushMap(if (item == null) null else writeProductItem(item))
+        source?.use {
+            if (it.moveToFirst()) {
+                result.pushMap(it.getValue()?.let { value -> writeProductItem(value) })
+                while (it.moveToNext()) {
+                    result.pushMap(it.getValue()?.let { value -> writeProductItem(value) })
+                }
             }
-            source.close()
         }
         return result
     }

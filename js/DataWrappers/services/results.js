@@ -4,6 +4,13 @@ import {SetExtra, SetPrintExtra, SetPrintGroup} from "../receipt/changes";
 import {PaymentType} from "../../Types/compilable";
 import {PaymentPurpose} from "../receipt/payment";
 
+/**
+ * @class BeforePositionsEditedEventResult
+ * @classdesc Класс, содержащий результат события интеграционной службы при намерении изменить позиции чека.
+ * @memberOf module:services
+ * @param {?PositionChange[]} changes - Массив изменений позиций
+ * @param {?SetExtra} extra - Дополнительные поля чека
+ */
 export class BeforePositionsEditedEventResult extends AbstractBundlable {
     constructor(changes?: PositionChange[] | null, extra?: SetExtra) {
         super('BeforePositionsEditedEventResult');
@@ -12,6 +19,14 @@ export class BeforePositionsEditedEventResult extends AbstractBundlable {
     }
 }
 
+/**
+ * @class BeforePositionsEditedEventResult
+ * @classdesc Класс, содержащий результат события интеграционной службы при намерении редактирования позиций чека.
+ * @memberOf module:services
+ * @param {?SetExtra} discount - Сумма скидки
+ * @param {?SetExtra} extra - Дополнительные поля чека
+ * @param {PositionChange[]} changes - Массив изменений позиций
+ */
 export class ReceiptDiscountEventResult extends AbstractBundlable {
     constructor(discount: number, extra: SetExtra | null, changes: PositionChange[]) {
         super('ReceiptDiscountEventResult');
@@ -41,16 +56,6 @@ export class PrintExtraRequiredEventResult extends AbstractBundlable {
     constructor(extra: SetPrintExtra[]) {
         super('PrintExtraRequiredEventResult');
         this.extra = extra;
-    }
-}
-
-export class PaymentSystemEvent {
-    constructor(receiptUuid: string, accountId: string | null, sum: number, rrn: string | null, description: string | null) {
-        this.receiptUuid = receiptUuid;
-        this.accountId = accountId;
-        this.sum = sum;
-        this.rrn = rrn;
-        this.description = description;
     }
 }
 

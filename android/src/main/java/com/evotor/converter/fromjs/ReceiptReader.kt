@@ -45,15 +45,15 @@ object ReceiptReader {
                 source["name"] as String,
                 source["measureName"] as String,
                 (source["measurePrecision"] as Double).toInt(),
-                if (source["taxNumber"] == null) null else TaxNumber.valueOf(source["taxNumber"] as String),
+                source["taxNumber"]?.let { TaxNumber.valueOf(it as String) },
                 MoneyCalculator.toBigDecimal(source["price"] as Double),
                 MoneyCalculator.toBigDecimal(source["priceWithDiscountPosition"] as Double),
                 QuantityCalculator.toBigDecimal(source["quantity"] as Double),
                 source["barcode"] as String?,
                 source["mark"] as String?,
-                if (source["alcoholByVolume"] == null) null else PercentCalculator.toBigDecimal(source["alcoholByVolume"] as Double),
-                if (source["alcoholProductKindCode"] == null) null else (source["alcoholProductKindCode"] as Double).toLong(),
-                if (source["tareVolume"] == null) null else QuantityCalculator.toBigDecimal(source["tareVolume"] as Double),
+                source["alcoholByVolume"]?.let { PercentCalculator.toBigDecimal(it as Double) },
+                source["alcoholProductKindCode"]?.let { (it as Double).toLong() },
+                source["tareVolume"]?.let { QuantityCalculator.toBigDecimal(it as Double) },
                 extraKeys,
                 subPositionsResult
         )
@@ -99,7 +99,7 @@ object ReceiptReader {
 
     fun readSetPrintGroup(source: Map<*, *>): SetPrintGroup {
         return SetPrintGroup(
-                if (source["printGroup"] == null) null else readPrintGroup(source["printGroup"] as Map<*, *>),
+                source["printGroup"]?.let { readPrintGroup(it as Map<*, *>) },
                 source["paymentPurposeIds"] as List<String>,
                 source["positionUuids"] as List<String>
         )
@@ -112,7 +112,7 @@ object ReceiptReader {
                 source["orgName"] as String?,
                 source["orgInn"] as String?,
                 source["orgAddress"] as String?,
-                if (source["taxationSystem"] == null) null else TaxationSystem.valueOf(source["taxationSystem"] as String),
+                source["taxationSystem"]?.let { TaxationSystem.valueOf(it as String) },
                 source["shouldPrintReceipt"] as Boolean
         )
     }
@@ -131,9 +131,9 @@ object ReceiptReader {
         return SetExtra(result)
     }
 
-    fun readSetPrintExtras(current: Context, source: List<*>): List<SetPrintExtra?> {
-        return source.indices.map { readSetPrintExtra(current, source[it] as Map<*, *>) }
-    }
+    fun readSetPrintExtras(current: Context, source: List<*>): List<SetPrintExtra?> =
+            source.indices.map { readSetPrintExtra(current, source[it] as Map<*, *>) }
+
 
     fun readSetPrintExtra(current: Context, source: Map<*, *>): SetPrintExtra? {
         val printExtraPlaceSource: Map<*, *> = source["printExtraPlace"] as Map<*, *>
@@ -162,7 +162,7 @@ object ReceiptReader {
                 }
             }
             result.add(Receipt.PrintReceipt(
-                    if (item["printGroup"] == null) null else readPrintGroup(item["printGroup"] as Map<*, *>),
+                    item["printGroup"]?.let { readPrintGroup(it as Map<*, *>) },
                     positionsResult,
                     readPayments(item["payments"] as Map<*, *>),
                     readPayments(item["changes"] as Map<*, *>),

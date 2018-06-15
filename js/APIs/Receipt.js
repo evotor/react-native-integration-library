@@ -1,10 +1,14 @@
+/**
+ * Классы для работы с чеком.
+ * @module receipt
+ */
 import {CommandModule, ReceiptModule} from "../NativeModules";
 import {ExtraKey, Position, PrintReceipt, Receipt, ReceiptHeader} from "../DataWrappers/receipt/framework";
 import {SetExtra} from "../DataWrappers/receipt/changes";
 import {ProductType, ReceiptType, TaxNumber} from "../Types/compilable";
 import Converter from "../Utilities/Converter";
 import ErrorHandler from "../Utilities/ErrorHandler";
-import {OpenReceiptCommandResult, RegisterReceiptCommandResult} from "../DataWrappers/commands";
+import {OpenReceiptCommandResult, RegisterReceiptCommandResult} from "../DataWrappers/receipt/commands";
 import {Product} from "../DataWrappers/inventory/framework";
 import uuidv1 from 'uuid/v1';
 import uuidv3 from 'uuid/v3';
@@ -32,28 +36,83 @@ const registerReceipt = (receiptType, printReceipts, extra, phone, email, discou
     ));
 };
 
+/**
+ * @class ReceiptAPI
+ * @classdesc Класс, с помощью методов которого можно получать данные чеков и передавать их для обработки в смарт-терминал.
+ * @hideconstructor
+ * @memberof module:receipt
+ */
 export default class ReceiptAPI {
 
+    /**
+     * Получает массив позиций чека по значению штрихкода.
+     * @function module:receipt.ReceiptAPI.getPositionsByBarcode
+     * @param barcode {string} - Штрихкод
+     * @returns {Promise<module:receipt.Position[]>} Promise с массивом позиций
+     */
     static getPositionsByBarcode(barcode: string): Promise<Position[]> {
         return new Promise(resolve => ReceiptModule.getPositionsByBarcode(barcode, Converter.getPositionsReader(resolve)));
     }
 
-    static openSellReceipt(positions?: Position[] | null, extra?: SetExtra): Promise<OpenReceiptCommandResult> {
+    /**
+     * Формирует чек продажи из полученных данных. Вы можете открыть окно редактирования или оплаты чека с помощью методов класса NavigationAPI.
+     * @function module:receipt.ReceiptAPI.openSellReceipt
+     * @param {?module:receipt.Position[]} positions - Массив позиций
+     * @param {?SetExtra} extra - Дополнительные поля чека
+     * @returns {Promise<OpenReceiptCommandResult>} Promise с результатом команды открытия чека
+     * @throws {IntegrationError}
+     */
+    static openSellReceipt(positions?: Position[], extra?: SetExtra): Promise<OpenReceiptCommandResult> {
         return openReceipt(ReceiptType.SELL, ...arguments);
     }
 
-    static openPaybackReceipt(positions?: Position[] | null, extra?: SetExtra): Promise<OpenReceiptCommandResult> {
+    /**
+     * Формирует чек возврата из полученных данных. Вы можете открыть окно редактирования или оплаты чека с помощью методов класса NavigationAPI.
+     * @function module:receipt.ReceiptAPI.openPaybackReceipt
+     * @param {?module:receipt.Position[]} positions - Массив позиций
+     * @param {?SetExtra} extra - Дополнительные поля чека
+     * @returns {Promise<OpenReceiptCommandResult>} Promise с результатом команды открытия чека
+     * @throws {IntegrationError}
+     */
+    static openPaybackReceipt(positions?: Position[], extra?: SetExtra): Promise<OpenReceiptCommandResult> {
         return openReceipt(ReceiptType.PAYBACK, ...arguments);
     }
 
-    static openBuyReceipt(positions?: Position[] | null, extra?: SetExtra): Promise<OpenReceiptCommandResult> {
+    /**
+     * Формирует чек покупки из полученных данных. Вы можете открыть окно редактирования или оплаты чека с помощью методов класса NavigationAPI.
+     * @function module:receipt.ReceiptAPI.openBuyReceipt
+     * @param {?module:receipt.Position[]} positions - Массив позиций
+     * @param {?SetExtra} extra - Дополнительные поля чека
+     * @returns {Promise<OpenReceiptCommandResult>} Promise с результатом команды открытия чека
+     * @throws {IntegrationError}
+     */
+    static openBuyReceipt(positions?: Position[], extra?: SetExtra): Promise<OpenReceiptCommandResult> {
         return openReceipt(ReceiptType.BUY, ...arguments);
     }
 
-    static openBuybackReceipt(positions?: Position[] | null, extra?: SetExtra): Promise<OpenReceiptCommandResult> {
+    /**
+     * Формирует чек возврата покупки из полученных данных. Вы можете открыть окно редактирования или оплаты чека с помощью методов класса NavigationAPI.
+     * @function module:receipt.ReceiptAPI.openBuybackReceipt
+     * @param {?module:receipt.Position[]} positions - Массив позиций
+     * @param {?SetExtra} extra - Дополнительные поля чека
+     * @returns {Promise<OpenReceiptCommandResult>} Promise с результатом команды открытия чека
+     * @throws {IntegrationError}
+     */
+    static openBuybackReceipt(positions?: Position[], extra?: SetExtra): Promise<OpenReceiptCommandResult> {
         return openReceipt(ReceiptType.BUYBACK, ...arguments);
     }
 
+    /**
+     * Формирует чек продажи из полученных данных, регистрирует его в ККМ, печатает его и отправляет его на электронную почту и/или телефон.
+     * @function module:receipt.ReceiptAPI.registerSellReceipt
+     * @param {PrintReceipt[]} printReceipts - Массив данных для печати
+     * @param {?SetExtra} extra - Дополнительные поля чека
+     * @param {?string} phone - Телефон получателя
+     * @param {?string} email - Email получателя
+     * @param {?string} discount - Скидка на чек
+     * @returns {Promise<OpenReceiptCommandResult>} Promise с результатом команды регистрации чека
+     * @throws {IntegrationError}
+     */
     static registerSellReceipt(printReceipts: PrintReceipt[],
                                extra: SetExtra | null,
                                phone: string | null,
@@ -62,6 +121,17 @@ export default class ReceiptAPI {
         return registerReceipt(ReceiptType.SELL, ...arguments);
     }
 
+    /**
+     * Формирует чек возврата из полученных данных, регистрирует его в ККМ и отправляет его на электронную почту и/или телефон.
+     * @function module:receipt.ReceiptAPI.registerPaybackReceipt
+     * @param {PrintReceipt[]} printReceipts - Массив данных для печати
+     * @param {?SetExtra} extra - Дополнительные поля чека
+     * @param {?string} phone - Телефон получателя
+     * @param {?string} email - Email получателя
+     * @param {?string} discount - Скидка на чек
+     * @returns {Promise<OpenReceiptCommandResult>} Promise с результатом команды регистрации чека
+     * @throws {IntegrationError}
+     */
     static registerPaybackReceipt(printReceipts: PrintReceipt[],
                                   extra: SetExtra | null,
                                   phone: string | null,
@@ -70,46 +140,83 @@ export default class ReceiptAPI {
         return registerReceipt(ReceiptType.PAYBACK, ...arguments);
     }
 
+    /**
+     * Получает чек по типу.
+     * @function module:receipt.ReceiptAPI.getReceiptByType
+     * @param {ReceiptType} type - Тип чека
+     * @returns {Promise<?Receipt>} Promise с чеком
+     */
     static getReceiptByType(type: ReceiptType): Promise<Receipt | null> {
         return new Promise(resolve => ReceiptModule.getReceiptByType(type, Converter.getReceiptReader(resolve)));
     }
 
+    /**
+     * Получает чек по идентификатору (uuid).
+     * @function module:receipt.ReceiptAPI.getReceiptByUuid
+     * @param {string} uuid - Идентификатор (uuid) чека
+     * @returns {Promise<?Receipt>} Promise с чеком
+     */
     static getReceiptByUuid(uuid: string): Promise<Receipt | null> {
         return new Promise(resolve => ReceiptModule.getReceiptByUuid(uuid, Converter.getReceiptReader(resolve)));
     }
 
+    /**
+     * Получает массив всех заголовков чека.
+     * @function module:receipt.ReceiptAPI.getReceiptHeaders
+     * @param {ReceiptType} type - Тип чека
+     * @returns {Promise<?ReceiptHeader[]>} Promise с массивом заголовков чека
+     */
     static getReceiptHeaders(type?: ReceiptType): Promise<ReceiptHeader[] | null> {
         return new Promise(resolve => ReceiptModule.getReceiptHeaders(type ? type : null, Converter.getArrayReader(resolve, ReceiptHeader.prototype)));
     }
 
 }
 
+/**
+ * @class UuidGenerator
+ * @classdesc Класс для генерации индентификатора (uuid). Полное руководство: https://www.npmjs.com/package/uuid
+ * @hideconstructor
+ * @memberof module:receipt
+ */
 export class UuidGenerator {
 
-    /**
-     * More info: https://www.npmjs.com/package/uuid
-     */
-
+    /** @function module:receipt.UuidGenerator.v1 */
     static v1(options?: Object, buffer?: Array, offset?: number): string {
         return uuidv1(...arguments);
     }
 
+    /** @function module:receipt.UuidGenerator.v3 */
     static v3(name?: string | Array, namespace?: string | Array, buffer?: Array, offset: number): string {
         return uuidv3(...arguments);
     }
 
+    /** @function module:receipt.UuidGenerator.v4 */
     static v4(options?: Object, buffer?: Array, offset?: number): string {
         return uuidv4(...arguments);
     }
 
+    /** @function module:receipt.UuidGenerator.v5 */
     static v5(name?: string | Array, namespace?: string | Array, buffer?: Array, offset: number): string {
         return uuidv5(...arguments);
     }
 
 }
 
+/**
+ * @class PositionBuilder
+ * @classdesc Класс для создания и редактирования позиций чека.
+ * @hideconstructor
+ * @memberof module:receipt
+ */
 export class PositionBuilder {
 
+    /**
+     * Создаёт редактор новой позиции из данных указанного товара с указанным количеством.
+     * @function module:receipt.PositionBuilder.newInstance
+     * @param {Product} product - Товар
+     * @param {number} quantity - Количество
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     static newInstance(product: Product, quantity: number): PositionBuilder {
         const builder = new PositionBuilder(
             new Position(
@@ -139,11 +246,17 @@ export class PositionBuilder {
         return builder;
     }
 
+    /**
+     * Создаёт редактор новой позиции из данных указанной позиции.
+     * @function module:receipt.PositionBuilder.copyFrom
+     * @param {module:receipt.Position} position - Позиция
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     static copyFrom(position: Position): PositionBuilder {
         return new PositionBuilder(Object.assign(Converter.setPrototypeOf({}, Position.prototype), position));
     }
 
-    constructor(position: Position) {
+    constructor(position) {
         this._position = position;
         this._setAlcoParams = (mark, alcoholByVolume, alcoholProductKindCode, tareVolume) => {
             this._position.mark = mark;
@@ -153,85 +266,183 @@ export class PositionBuilder {
         }
     }
 
+    /**
+     * ХЗ ЧТО ДЕЛАЕТ
+     * @function module:receipt.PositionBuilder#toAlcoholMarked
+     * @param {string} mark - Алкогольная марка
+     * @param {number} alcoholByVolume - Процентное содержание алкоголя
+     * @param {number} alcoholProductKindCode - Спиртовой код
+     * @param {number} tareVolume - Объём тары
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     toAlcoholMarked(mark: string, alcoholByVolume: number, alcoholProductKindCode: number, tareVolume: number): PositionBuilder {
         this._position.productType = ProductType.ALCOHOL_MARKED;
         this._setAlcoParams(mark, alcoholByVolume, alcoholProductKindCode, tareVolume);
         return this;
     }
 
+    /**
+     * ХЗ ЧТО ДЕЛАЕТ
+     * @function module:receipt.PositionBuilder#toAlcoholNotMarked
+     * @param {number} alcoholByVolume - Процентное содержание алкоголя
+     * @param {number} alcoholProductKindCode - Спиртовой код
+     * @param {number} tareVolume - Объём тары
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     toAlcoholNotMarked(alcoholByVolume: number, alcoholProductKindCode: number, tareVolume: number): PositionBuilder {
         this._position.productType = ProductType.ALCOHOL_NOT_MARKED;
         this._setAlcoParams(null, alcoholByVolume, alcoholProductKindCode, tareVolume);
         return this;
     }
 
+    /**
+     * ХЗ ЧТО ДЕЛАЕТ
+     * @function module:receipt.PositionBuilder#toNormal
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     toNormal(): PositionBuilder {
         this._position.productType = ProductType.NORMAL;
         this._setAlcoParams(null, null, null, null);
         return this;
     }
 
+    /**
+     * ХЗ ЧТО ДЕЛАЕТ
+     * @function module:receipt.PositionBuilder#toService
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     toService(): PositionBuilder {
         this._position.productType = ProductType.NORMAL;
         this._setAlcoParams(null, null, null, null);
         return this;
     }
 
+    /**
+     * Устанавливает идентификатор (uuid) текущей позиции.
+     * @function module:receipt.PositionBuilder#setUuid
+     * @param {string} uuid - Идентификатор
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setUuid(uuid: string): PositionBuilder {
         this._position.uuid = uuid;
         return this;
     }
 
+    /**
+     * Устанавливает количество текущей позиции.
+     * @function module:receipt.PositionBuilder#setQuantity
+     * @param {number} quantity - Количество
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setQuantity(quantity: number): PositionBuilder {
         this._position.quantity = quantity;
         return this;
     }
 
+    /**
+     * Устанавливает цену текущей позиции.
+     * @function module:receipt.PositionBuilder#setPrice
+     * @param {number} price - Цена
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setPrice(price: number): PositionBuilder {
         this._position.price = price;
         return this;
     }
 
+    /**
+     * Устанавливает цену текущей позиции со скидкой.
+     * @function module:receipt.PositionBuilder#setPriceWithDiscountPosition
+     * @param {number} priceWithDiscountPosition - Цена со скидкой
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setPriceWithDiscountPosition(priceWithDiscountPosition: number): PositionBuilder {
         this._position.priceWithDiscountPosition = priceWithDiscountPosition;
         return this;
     }
 
+    /**
+     * Устанавливает алкогольную марку текущей позиции.
+     * @function module:receipt.PositionBuilder#setMark
+     * @param {string} mark - Марка
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setMark(mark: string): PositionBuilder {
         this._position.mark = mark;
         return this;
     }
 
+    /**
+     * Устанавливает дополнительные поля текущей позиции.
+     * @function module:receipt.PositionBuilder#setExtraKeys
+     * @param extraKeys {ExtraKey[]} - Марка
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setExtraKeys(extraKeys: ExtraKey[]): PositionBuilder {
         this._position.extraKeys = extraKeys;
         return this;
     }
 
+    /**
+     * Устанавливает единицу измерения текущей позиции.
+     * @function module:receipt.PositionBuilder#setMeasureName
+     * @param {string} measureName - Единица измерения
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setMeasureName(measureName: string): PositionBuilder {
         this._position.measureName = measureName;
         return this;
     }
 
+    /**
+     * Устанавливает точность измерения текущей позиции.
+     * @function module:receipt.PositionBuilder#setMeasurePrecision
+     * @param {number} measurePrecision - Точность измерения
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setMeasurePrecision(measurePrecision: number): PositionBuilder {
         this._position.measurePrecision = measurePrecision;
         return this;
     }
 
+    /**
+     * Устанавливает налоговый номер текущей позиции.
+     * @function module:receipt.PositionBuilder#setTaxNumber
+     * @param {TaxNumber} taxNumber - Налоговый номер
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setTaxNumber(taxNumber: TaxNumber): PositionBuilder {
         this._position.taxNumber = taxNumber;
         return this;
     }
 
+    /**
+     * Устанавливает субпозиции текущей позиции.
+     * @function module:receipt.PositionBuilder#setSubPositions
+     * @param {Position[]} subPositions - Субпозиции
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setSubPositions(subPositions: Position[]): PositionBuilder {
         this._position.subPositions = subPositions;
         return this;
     }
 
+    /**
+     * Устанавливает штрикход текущей позиции.
+     * @function module:receipt.PositionBuilder#setBarcode
+     * @param {string} barcode - Штрихкод
+     * @returns {PositionBuilder} Редактор текущей позиции
+     */
     setBarcode(barcode: string): PositionBuilder {
         this._position.barcode = barcode;
         return this;
     }
 
+    /**
+     * Завершает редактирование позиции.
+     * @function module:receipt.PositionBuilder#build
+     * @returns {module:receipt.Position} Созданная позиция
+     */
     build(): Position {
         return this._position;
     }

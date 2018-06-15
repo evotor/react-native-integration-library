@@ -14,8 +14,9 @@ export class AbstractBundlable {
 
 }
 
+/** Класс, который содержит передаваемые при навигации данные, а также направляет маршрутизатор.*/
 export class Intent {
-
+/*
     static ACTION_AIRPLANE_MODE_CHANGED = "android.intent.action.AIRPLANE_MODE";
     static ACTION_ALL_APPS = "android.intent.action.ALL_APPS";
     static ACTION_ANSWER = "android.intent.action.ANSWER";
@@ -204,113 +205,224 @@ export class Intent {
     static FLAG_RECEIVER_REGISTERED_ONLY = 1073741824;
     static FLAG_RECEIVER_REPLACE_PENDING = 536870912;
     static FLAG_RECEIVER_VISIBLE_TO_INSTANT_APPS = 2097152;
-
+*/
     constructor() {
         this.extras = {};
         this.categories = [];
         this.flags = [];
     }
 
+    /**
+     * Устанавливает действие текущего маршрута.
+     * @param {string} action - Действие
+     * @returns {Intent} Текущий Intent
+     */
     setAction(action: string): Intent {
         this.action = action;
         return this;
     }
 
+    /**
+     * Получает действие текущего маршрута.
+     * @returns {string} Действие
+     */
     getAction(): string {
         return this.action;
     }
 
+    /**
+     * Устанавливает целевой класс текущего маршрута.
+     * @param {string} className - Название класса с учётом его пакета. Например: "com.mypackage.MyActivity".
+     * @returns {Intent} Текущий Intent
+     */
     setClassName(className: string): Intent {
         this.className = className;
         return this;
     }
 
+    /**
+     * Получает целевой класс текущего маршрута.
+     * @returns {string} Название класса
+     */
     getClassName(): string {
         return this.className;
     }
 
+    /**
+     * Устанавливает целевой пакет текущего маршрута.
+     * @param {string} packageName - Название пакета
+     * @returns {Intent} Текущий Intent
+     */
     setPackageName(packageName: string): Intent {
         this.packageName = packageName;
         return this;
     }
 
+    /**
+     * Получает целевой пакет текущего маршрута.
+     * @returns {string} Название пакета
+     */
     getPackageName(): string {
         return this.packageName;
     }
 
+    /**
+     * Устанавливает название события пользовательской службы в качестве цели текущего маршрута.
+     * @param {string} eventName - Название события
+     * @returns {Intent} Текущий Intent
+     */
     setCustomServiceEventName(eventName: string): Intent {
         this.customServiceEventName = eventName;
         return this;
     }
 
+    /**
+     * Получает название события пользовательской службы текущего маршрута.
+     * @returns {string} Название события
+     */
     getCustomServiceEventName(): string {
         return this.customServiceEventName;
     }
 
+    /**
+     * Добавляет данные для передачи при навигации.
+     * @param {string} key - Ключ
+     * @param extra {*} - Значение
+     * @returns {Intent} Текущий Intent
+     */
     putExtra(key: string, extra: any): Intent {
         this.extras[key] = extra;
         return this;
     }
 
+    /**
+     * Добавляет данные для передачи при навигации.
+     * @param {Object} extras - Данные
+     * @returns {Intent} Текущий Intent
+     */
     putExtras(extras: Object): Intent {
         this.extras = Object.assign(this.extras, extras);
         return this;
     }
 
+    /**
+     * Удаляет все данные для передачи при навигации.
+     * @param {string} key - ключ
+     * @returns {void}
+     */
     removeExtra(key: string): void {
         delete this.extras[key];
     }
 
+    /**
+     * Заменяет все данные для передачи при навигации.
+     * @param {Object} extras - Данные
+     * @returns {Intent} Текущий Intent
+     */
     replaceExtras(extras: Object): Intent {
         this.extras = extras;
         return this;
     }
 
+    /**
+     * Получает данные для передачи при навигации.
+     * @param {string} key - Ключ
+     * @returns {*} Данные
+     */
     getExtra(key: string): any {
         return this.extras[key];
     }
 
+    /**
+     * Получает все данные для передачи при навигации.
+     * @returns {Object} Данные
+     */
     getExtras(): Object {
         return this.extras;
     }
 
+    /**
+     * Проверяет, содержат ли данные для передачи при навигации указанное значение.
+     * @param {string} key - Ключ
+     * @returns {boolean} Результат проверки
+     */
     hasExtra(key: string): boolean {
         return this.extras.hasOwnProperty(key);
     }
 
+    /**
+     * Добавляет категорию текущего маршрута.
+     * @param {string} category - Категория
+     * @returns {Intent} Текущий Intent
+     */
     addCategory(category: string): Intent {
         this.categories.push(category);
         return this;
     }
 
+    /**
+     * Удаляет категорию текущего маршрута.
+     * @param {string} category - Категория
+     * @returns {void}
+     */
     removeCategory(category: string): void {
         this.categories.filter(e => e !== category);
     }
 
+    /**
+     * Получает все категории текущего маршрута.
+     * @returns {string[]} Категории
+     */
     getCategories(): string[] {
         return this.categories;
     }
 
+    /**
+     * Проверяет, содержат ли категории текущего маршрута указанное значение.
+     * @param {string} category - Значение
+     * @returns {boolean} Результат проверки
+     */
     hasCategory(category: string): boolean {
         return this.categories.includes(category);
     }
 
-    addFlags(flags: number): Intent {
-        this.flags.push(flags);
+    /**
+     * Добавляет флаги текущего маршрута.
+     * @param {number} flags - Флаги
+     * @returns {Intent} Текущий Intent
+     */
+    addFlags(...flags: number): Intent {
+        this.flags.concat(flags);
         return this;
     }
 
-    setFlags(flags: number): Intent {
-        this.flags = [flags];
+    /**
+     * Устанавливает флаги текущего маршрута.
+     * @param {number} flags - Флаги
+     * @returns {Intent} Текущий Intent
+     */
+    setFlags(...flags: number): Intent {
+        this.flags = flags;
         return this;
     }
 
+    /**
+     * Получает флаги текущего маршрута.
+     * @returns {number} Флаги
+     */
     getFlags(): number {
         return this.flags;
     }
 
-    removeFlags(flags: number): void {
-        this.flags.filter(e => e !== flags);
+    /**
+     * Удаляет все флаги текущего маршрута.
+     * @param {number} flags - Флаги
+     * @returns {void}
+     */
+    removeFlags(...flags: number): void {
+        flags.forEach(
+            i => this.flags.filter(e => e !== i)
+        );
     }
 
 }

@@ -28,26 +28,23 @@ class UserModule(private val context: ReactApplicationContext) : ReactContextBas
 
     @ReactMethod
     fun getAllUsers(callback: Callback) {
-        val users = UserApi.getAllUsers(context)
-        callback.invoke(if (users == null) null else UserWriter.writeUsers(users))
+        callback.invoke(UserApi.getAllUsers(context)?.let { UserWriter.writeUsers(it) })
     }
 
     @ReactMethod
     fun getAuthenticatedUser(callback: Callback) {
-        val user = UserApi.getAuthenticatedUser(context)
-        callback.invoke(if (user == null) null else UserWriter.writeUser(user))
+        callback.invoke(UserApi.getAuthenticatedUser(context)?.let { UserWriter.writeUser(it) })
     }
 
     @ReactMethod
     fun getAllGrants(callback: Callback) {
-        val grants = UserApi.getAllGrants(context)
-        callback.invoke(if (grants == null) null else UserWriter.writeGrants(grants))
+        callback.invoke(UserApi.getAllGrants(context)?.let { UserWriter.writeGrants(it) })
     }
 
     @ReactMethod
     fun getGrantsOfAuthenticatedUser(callback: Callback) {
         val grants = UserApi.getGrantsOfAuthenticatedUser(context)
-        callback.invoke(if (grants == null) null else UserWriter.writeGrants(grants))
+        callback.invoke(UserApi.getGrantsOfAuthenticatedUser(context)?.let { UserWriter.writeGrants(it) })
     }
 
 }

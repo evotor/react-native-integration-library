@@ -1,5 +1,15 @@
 import {PaymentType} from "../../Types/compilable";
 
+/**
+ * @class PrintReceipt
+ * @classdesc Класс, содержащий данные для печати чека.
+ * @memberOf module:receipt
+ * @param {?PrintGroup} printGroup - Печатная группа
+ * @param {Position[]} positions - Массив позиций
+ * @param {Map<Payment, number>} payments - Ассоциативный массив (платёж, значение платежа)
+ * @param {Map<Payment, number>} changes - Ассоциативный массив (платёж, изменения платежа)
+ * @param {?Map<Payment, number>} discounts - Ассоциативный массив (ПАРАМЕТР, сумма скидки)
+ */
 export class PaymentPurpose {
     constructor(identifier: string | null,
                 paymentSystemId: string | null,

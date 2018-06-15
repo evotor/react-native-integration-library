@@ -14,7 +14,7 @@ import {
 import {Intent} from "../DataWrappers/navigation";
 import {
     CashDrawerEvent,
-    CashOperationEvent,
+    CashOperationEvent, PaymentSystemEvent,
     PositionEvent,
     ProductEvent,
     ReceiptEvent
@@ -31,7 +31,7 @@ import {
     ReceiptEventType
 } from "./compilable";
 import {
-    BeforePositionsEditedEventResult, PaymentSelectedEventResult, PaymentSystemEvent, PaymentSystemPaymentErrorResult,
+    BeforePositionsEditedEventResult, PaymentSelectedEventResult, PaymentSystemPaymentErrorResult,
     PaymentSystemPaymentOkResult,
     PrintExtraRequiredEventResult,
     PrintGroupRequiredEventResult,

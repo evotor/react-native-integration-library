@@ -13,10 +13,10 @@ object NavigationWriter {
 
     fun writeIntent(source: Intent): WritableMap {
         val result = Arguments.createMap()
-        result.putString("className", if (source.component == null) null else source.component.className)
+        result.putString("className", source.component?.className)
         result.putString("packageName", source.`package`)
         result.putString("action", source.action)
-        result.putMap("extras", if (source.extras == null) null else writeBundle(source.extras))
+        result.putMap("extras", source.extras?.let { writeBundle(it) })
         val categories = Arguments.createArray()
         if (source.categories != null) {
             for (item in source.categories) {

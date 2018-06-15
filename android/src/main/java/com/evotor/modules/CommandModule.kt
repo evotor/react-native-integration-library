@@ -44,8 +44,8 @@ class CommandModule(c: ReactApplicationContext) : ReactContextBaseJavaModule(c) 
 
     @ReactMethod
     fun openReceipt(receiptType: String,
-                    source: ReadableArray?,
-                    extra: ReadableMap?,
+                    positionsSource: ReadableArray?,
+                    extraSource: ReadableMap?,
                     resultCallback: Callback) {
         val callback = getIntegrationManagerCallback(
                 { result ->
@@ -59,27 +59,31 @@ class CommandModule(c: ReactApplicationContext) : ReactContextBaseJavaModule(c) 
                 },
                 resultCallback
         )
+        val positionsResult = positionsSource?.let { ReceiptReader.readPositionAdds(it.toArrayList()) }
+        val extraResult = extraSource?.let { ReceiptReader.readSetExtra(it.toHashMap()) }
         try {
             when (receiptType) {
                 "SELL" -> OpenSellReceiptCommand(
-                        if (source == null) null else ReceiptReader.readPositionAdds(source.toArrayList()),
-                        if (extra == null) null else ReceiptReader.readSetExtra(extra.toHashMap())
+                        positionsResult,
+                        extraResult
                 ).process(currentActivity!!, callback)
                 "PAYBACK" -> OpenPaybackReceiptCommand(
-                        if (source == null) null else ReceiptReader.readPositionAdds(source.toArrayList()),
-                        if (extra == null) null else ReceiptReader.readSetExtra(extra.toHashMap())
+                        positionsResult,
+                        extraResult
                 ).process(currentActivity!!, callback)
                 "BUY" -> OpenBuyReceiptCommand(
-                        if (source == null) null else ReceiptReader.readPositionAdds(source.toArrayList()),
-                        if (extra == null) null else ReceiptReader.readSetExtra(extra.toHashMap())
+                        positionsResult,
+                        extraResult
                 ).process(currentActivity!!, callback)
                 "BUYBACK" -> OpenBuybackReceiptCommand(
-                        if (source == null) null else ReceiptReader.readPositionAdds(source.toArrayList()),
-                        if (extra == null) null else ReceiptReader.readSetExtra(extra.toHashMap())
+                        positionsResult,
+                        extraResult
                 ).process(currentActivity!!, callback)
             }
-        } catch (e: Exception) {
+        } catch (e: NullPointerException) {
             resultCallback.invoke(ErrorWriter.writeError("NoActivityError", e.message))
+        } catch (e: IntegrationException) {
+            resultCallback.invoke(ErrorWriter.writeError("IntegrationError", e.message))
         }
     }
 
@@ -95,10 +99,7 @@ class CommandModule(c: ReactApplicationContext) : ReactContextBaseJavaModule(c) 
                 { result ->
                     val resultData = PrintReceiptCommandResult.create(result)
                     resultCallback.invoke(
-                            if (resultData == null)
-                                null
-                            else
-                                CommandWriter.writePrintReceiptCommandResult(resultData)
+                            resultData?.let { CommandWriter.writePrintReceiptCommandResult(it) }
                     )
                 },
                 resultCallback
@@ -107,14 +108,14 @@ class CommandModule(c: ReactApplicationContext) : ReactContextBaseJavaModule(c) 
             when (receiptType) {
                 "SELL" -> PrintSellReceiptCommand(
                         ReceiptReader.readPrintReceipts(printReceipts.toArrayList()),
-                        if (extra == null) null else ReceiptReader.readSetExtra(extra.toHashMap()),
+                        extra?.let { ReceiptReader.readSetExtra(extra.toHashMap()) },
                         phone,
                         email,
                         if (discount.isEmpty()) null else BigDecimal(discount)
                 ).process(currentActivity!!, callback)
                 "PAYBACK" -> PrintPaybackReceiptCommand(
                         ReceiptReader.readPrintReceipts(printReceipts.toArrayList()),
-                        if (extra == null) null else ReceiptReader.readSetExtra(extra.toHashMap()),
+                        extra?.let { ReceiptReader.readSetExtra(extra.toHashMap()) },
                         phone,
                         email,
                         if (discount.isEmpty()) null else BigDecimal(discount)

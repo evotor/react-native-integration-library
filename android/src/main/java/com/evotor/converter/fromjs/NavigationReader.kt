@@ -63,7 +63,7 @@ object NavigationReader {
         return result
     }
 
-    private fun createIntent(current: Context?,
+    private fun createIntent(current: Context,
                              packageName: String?,
                              className: String?,
                              action: String?,
@@ -73,7 +73,7 @@ object NavigationReader {
         if (customServiceEventName != null) {
             result = if (packageName != null) {
                 createIntentWithPackageAndClass(
-                        current!!.packageManager,
+                        current.packageManager,
                         packageName,
                         "com.navigation.EventEmissionService",
                         callback
@@ -81,14 +81,12 @@ object NavigationReader {
             } else {
                 Intent(current, EventEmissionService::class.java)
             }
-            if (result != null) {
-                result.putExtra("type", customServiceEventName)
-            }
+            result?.putExtra("type", customServiceEventName)
         } else {
             if (className != null) {
                 if (packageName != null) {
                     result = createIntentWithPackageAndClass(
-                            current!!.packageManager,
+                            current.packageManager,
                             packageName,
                             className,
                             callback
@@ -106,7 +104,7 @@ object NavigationReader {
                 }
 
             } else if (packageName != null) {
-                result = current!!.packageManager.getLaunchIntentForPackage(packageName)
+                result = current.packageManager.getLaunchIntentForPackage(packageName)
                 if (result == null) {
                     callback.invoke(ErrorWriter.writeError(
                             "NavigationError",
@@ -116,8 +114,8 @@ object NavigationReader {
             } else {
                 result = Intent()
             }
-            if (result != null && action != null) {
-                result.action = action
+            if (action != null) {
+                result?.action = action
             }
         }
         return result

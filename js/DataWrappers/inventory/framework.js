@@ -12,6 +12,25 @@ class AbstractProductItem {
     }
 }
 
+/**
+ * @class Product
+ * @classdesc Класс, содержащий данные товара.
+ * @memberOf module:inventory
+ * @param {string} uuid - Идентификатор (uuid) товара
+ * @param {?string} parentUuid - Идентификатор (uuid) родителя товара
+ * @param {?string} code - Код
+ * @param {string} name - Название
+ * @param {TaxNumber} taxNumber - Налоговая ставка
+ * @param {ProductType} type - Тип
+ * @param {number} price - Цена
+ * @param {number} quantity - Количество
+ * @param {?string} description - Описание
+ * @param {string} measureName - Единица измерения
+ * @param {number} measurePrecision - Точность измерения
+ * @param {?number} alcoholByVolume - Крепость алкогольной продукции
+ * @param {?number} alcoholProductKindCode - Код вида продукции ФСРАР
+ * @param {?number} tareVolume - Объём тары
+ */
 export class Product extends AbstractProductItem {
     constructor(uuid: string,
                 parentUuid: string | null,
@@ -41,6 +60,16 @@ export class Product extends AbstractProductItem {
     }
 }
 
+/**
+ * @class ProductGroup
+ * @classdesc Класс, содержащий данные товарной группы.
+ * @memberOf module:inventory
+ * @param {string} uuid - Идентификатор (uuid) товара
+ * @param {?string} parentUuid - Идентификатор (uuid) родителя товара
+ * @param {?string} code - Код
+ * @param {string} name - Название
+ * @param {TaxNumber} taxNumber - Налоговая ставка
+ */
 export class ProductGroup extends AbstractProductItem {
     constructor(uuid: string,
                 parentUuid: string | null,

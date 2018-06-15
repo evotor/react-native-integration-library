@@ -2,6 +2,12 @@ import {Position, PrintGroup} from './framework';
 import {AbstractBundlable} from "../navigation";
 import type {Printable, PrintExtraPlace} from "../../Types/inbuilt";
 
+/**
+ * @class PositionAdd
+ * @classdesc Класс, содержащий позицию, которая будет добавлена в чек.
+ * @memberOf module:receipt
+ * @param {module:receipt.Position} position - Позиция
+ */
 export class PositionAdd extends AbstractBundlable {
     constructor(position: Position) {
         super('PositionAdd');
@@ -10,6 +16,12 @@ export class PositionAdd extends AbstractBundlable {
     }
 }
 
+/**
+ * @class PositionEdit
+ * @classdesc Класс, содержащий позицию чека, которая будет изменена.
+ * @memberOf module:receipt
+ * @param {module:receipt.Position} position - Позиция
+ */
 export class PositionEdit extends AbstractBundlable {
     constructor(position: Position) {
         super('PositionEdit');
@@ -18,6 +30,12 @@ export class PositionEdit extends AbstractBundlable {
     }
 }
 
+/**
+ * @class PositionRemove
+ * @classdesc Класс, содержащий позицию, которая будет удалена из чека.
+ * @memberOf module:receipt
+ * @param {string} positionUuid - Идентификатор (uuid) позиции
+ */
 export class PositionRemove extends AbstractBundlable {
     constructor(positionUuid: string) {
         super('PositionRemove');
@@ -26,6 +44,12 @@ export class PositionRemove extends AbstractBundlable {
     }
 }
 
+/**
+ * @class SetExtra
+ * @classdesc Класс, содержащий дополнительные поля чека.
+ * @memberOf module:receipt
+ * @param {Object} extra - Объект с дополнительными полями
+ */
 export class SetExtra extends AbstractBundlable {
     constructor(extra: Object) {
         super('SetExtra');

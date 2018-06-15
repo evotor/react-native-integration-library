@@ -120,7 +120,7 @@ object ReceiptWriter {
         for (i in 0 until source.printDocuments.size) {
             val (printGroup, positions1, payments, changes) = source.printDocuments[i]
             val printReceiptResult = Arguments.createMap()
-            printReceiptResult.putMap("printGroup", if (printGroup == null) null else writePrintGroup(printGroup))
+            printReceiptResult.putMap("printGroup", printGroup?.let { writePrintGroup(it) })
             val positions = Arguments.createArray()
             for (j in 0 until positions1.size) {
                 positions.pushMap(writePosition(positions1[j]))
@@ -139,7 +139,7 @@ object ReceiptWriter {
         result.putString("uuid", source.uuid)
         result.putString("number", source.number)
         result.putString("type", source.type.name)
-        result.putString("date", if (source.date == null) null else source.date.toString())
+        result.putString("date", source.date?.toString())
         result.putString("clientEmail", source.clientEmail)
         result.putString("clientPhone", source.clientPhone)
         result.putString("extra", source.extra)
@@ -148,12 +148,13 @@ object ReceiptWriter {
 
     fun writeReceiptHeaders(source: Cursor<Receipt.Header?>?): WritableArray {
         val result = Arguments.createArray()
-        if (source != null && source.moveToFirst()) {
-            while (source.moveToNext()) {
-                val item = source.getValue()
-                result.pushMap(if (item == null) null else writeReceiptHeader(item))
+        source?.use {
+            if (it.moveToFirst()) {
+                result.pushMap(it.getValue()?.let { value -> writeReceiptHeader(value) })
+                while (it.moveToNext()) {
+                    result.pushMap(it.getValue()?.let { value -> writeReceiptHeader(value) })
+                }
             }
-            source.close()
         }
         return result
     }
@@ -165,7 +166,7 @@ object ReceiptWriter {
         result.putString("orgName", source.orgName)
         result.putString("orgInn", source.orgInn)
         result.putString("orgAddress", source.orgAddress)
-        result.putString("taxationSystem", source.taxationSystem.name)
+        result.putString("taxationSystem", source.taxationSystem?.name)
         result.putBoolean("shouldPrintReceipt", source.isShouldPrintReceipt)
         return result
     }
@@ -177,7 +178,7 @@ object ReceiptWriter {
             try {
                 payment.put("uuid", key.uuid)
                 payment.put("value", key.value.toDouble())
-                payment.put("system", if (key.system == null) null else writePaymentSystem(key.system!!))
+                payment.put("system", key.system?.let { writePaymentSystem(it) })
                 payment.put("purposeIdentifier", key.purposeIdentifier)
                 payment.put("accountId", key.accountId)
                 payment.put("accountUserDescription", key.accountUserDescription)

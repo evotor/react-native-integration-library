@@ -83,30 +83,30 @@ object EventWriter {
         return result
     }
 
-    fun writeReceiptEvent(source: ReceiptEvent?, result: WritableMap): Boolean {
-        return if (source != null) {
-            result.putString("receiptUuid", source.receiptUuid)
-            true
-        } else {
-            false
-        }
-    }
+    fun writeReceiptEvent(source: ReceiptEvent?, result: WritableMap): Boolean =
+            if (source != null) {
+                result.putString("receiptUuid", source.receiptUuid)
+                true
+            } else {
+                false
+            }
 
-    fun writePositionEvent(source: PositionEvent?, result: WritableMap): Boolean {
-        return if (source != null) {
-            result.putString("receiptUuid", source.receiptUuid)
-            result.putMap("position", ReceiptWriter.writePosition(source.position))
-            true
-        } else {
-            false
-        }
-    }
+
+    fun writePositionEvent(source: PositionEvent?, result: WritableMap): Boolean =
+            if (source != null) {
+                result.putString("receiptUuid", source.receiptUuid)
+                result.putMap("position", ReceiptWriter.writePosition(source.position))
+                true
+            } else {
+                false
+            }
+
 
     fun writeActivityResultEvent(requestCode: Int, resultCode: Int, data: Intent?): WritableArray {
         val result = Arguments.createArray()
         result.pushInt(requestCode)
         result.pushInt(resultCode)
-        result.pushMap(if (data == null) null else NavigationWriter.writeIntent(data))
+        result.pushMap(data?.let { NavigationWriter.writeIntent(it) })
         return result
     }
 

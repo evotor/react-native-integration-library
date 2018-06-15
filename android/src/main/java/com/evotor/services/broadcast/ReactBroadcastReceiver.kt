@@ -86,7 +86,7 @@ class ReactBroadcastReceiver : BroadcastReceiver() {
                     eventName = "CASH_DRAWER_OPEN"
                     result.putDouble("cashDrawerId", CashDrawerOpenEvent.create(intent.extras)!!.cashDrawerId.toDouble())
                 }
-                "evotor.intent.action.cashOperation.IN" -> {
+                "evotor.intent.action.cashOperation.CASH_IN" -> {
                     val cashInEvent = CashInEvent.create(intent.extras)
                     if (cashInEvent != null) {
                         eventName = "CASH_IN"
