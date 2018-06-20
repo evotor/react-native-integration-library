@@ -11,15 +11,14 @@ import ErrorHandler from '../Utilities/ErrorHandler';
 import Converter from "../Utilities/Converter";
 
 /**
- * @class DeviceServiceConnector
- * @classdesc Класс, с помощью методов которого можно обрабатывать подключение весов и принтера чеков к смарт-терминалу.
+ * @class module:devices.DeviceServiceConnector
+ * @classdesc С помощью методов класса можно обрабатывать подключение устройств (весов и принтера чеков) к смарт-терминалу.
  * @hideconstructor
- * @memberof module:devices
  */
 export class DeviceServiceConnector {
 
     /**
-     * Инициализирует подключение весов и принтера чеков к смарт-терминалу.
+     * Инициализирует подключение устройств к смарт-терминалу.
      * @function module:devices.DeviceServiceConnector.startInitConnections
      * @returns {void}
      */
@@ -28,10 +27,10 @@ export class DeviceServiceConnector {
     }
 
     /**
-     * Добавляет слушатель изменения подключения весов или принтера чеков.
+     * Добавляет слушатель изменения подключённости устройства к смарт-терминалу.
      * @function module:devices.DeviceServiceConnector.addEventListener
-     * @param {DeviceConnectionEventType} type - Тип события
-     * @param {DeviceConnectionEventListener} listener - Слушатель события
+     * @param {module:types#DeviceConnectionEventType} type - Тип события
+     * @param {module:types#DeviceConnectionEventListener} listener - Слушатель события
      * @returns {void}
      */
     static addEventListener(type: DeviceConnectionEventType, listener: DeviceConnectionEventListener): void {
@@ -39,10 +38,10 @@ export class DeviceServiceConnector {
     }
 
     /**
-     * Удаляет слушатель изменения подключения весов или принтера чеков.
+     * Удаляет слушатель изменения подключённости устройства к смарт-терминалу.
      * @function module:devices.DeviceServiceConnector.removeEventListener
-     * @param {DeviceConnectionEventType} type - Тип события
-     * @param {?DeviceConnectionEventListener} listener - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @param {module:types#DeviceConnectionEventType} type - Тип события
+     * @param {module:types#DeviceConnectionEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
      * @returns {boolean} Удалён ли слушатель
      */
     static removeEventListener(type: DeviceConnectionEventType, listener?: DeviceConnectionEventListener): boolean {
@@ -52,17 +51,16 @@ export class DeviceServiceConnector {
 }
 
 /**
- * @class Printer
- * @classdesc Класс, с помощью методов которого можно работать с принтером чеков, подключенным к смарт-терминалу.
+ * @class module:devices.Printer
+ * @classdesc С помощью методов класса можно работать с принтером чеков, подключенным к смарт-терминалу.
  * @hideconstructor
- * @memberof module:devices
  */
 export class Printer {
 
     /**
      * Вызывает команду печати указанных элементов.
      * @function module:devices.Printer.print
-     * @param {Printable[]} printables - Элементы печати
+     * @param {module:types#Printable[]} printables - Элементы печати
      * @returns {Promise<void>}
      * @throws {module:errors.DeviceError}
      */
@@ -93,10 +91,9 @@ export class Printer {
 }
 
 /**
- * @class Scales
- * @classdesc Класс, с помощью методов которого можно работать с весами, подключенными к смарт-терминалу.
+ * @class module:devices.Scales
+ * @classdesc С помощью методов класса можно работать с весами, подключенными к смарт-терминалу.
  * @hideconstructor
- * @memberof module:devices
  */
 export class Scales {
 
@@ -113,18 +110,17 @@ export class Scales {
 }
 
 /**
- * @class Scanner
- * @classdesc Класс, с помощью методов которого можно работать со сканером штрихкодов, подключенным к смарт-терминалу.
+ * @class module:devices.Scanner
+ * @classdesc С помощью методов класса можно работать со сканером штрихкодов, подключенным к смарт-терминалу.
  * @hideconstructor
- * @memberof module:devices
  */
 export class Scanner {
 
     /**
-     * Добавляет слушатель сканирования штрихкода.
+     * Добавляет слушатель события сканера штрихкодов.
      * @function module:devices.Scanner.addEventListener
-     * @param {DeviceConnectionEventType} type - Тип события
-     * @param {DeviceConnectionEventListener} listener - Слушатель события
+     * @param {module:types#ScannerEventType} type - Тип события
+     * @param {module:types#ScannerEventListener} listener - Слушатель события
      * @returns {void}
      */
     static addEventListener(type: ScannerEventType, listener: ScannerEventListener): void {
@@ -132,10 +128,10 @@ export class Scanner {
     }
 
     /**
-     * Удаляет слушатель сканирования штрихкода.
+     * Удаляет слушатель события сканера штрихкодов.
      * @function module:devices.Scanner.removeEventListener
-     * @param {DeviceConnectionEventType} type - Тип события
-     * @param {?DeviceConnectionEventListener} listener - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @param {module:types#ScannerEventType} type - Тип события
+     * @param {module:types#ScannerEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
      * @returns {boolean} Удалён ли слушатель
      */
     static removeEventListener(type: ScannerEventType, listener?: ScannerEventListener): boolean {

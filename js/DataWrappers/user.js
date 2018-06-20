@@ -1,7 +1,6 @@
 /**
- * @class User
+ * @class module:user.User
  * @classdesc Класс, содержащий данные пользователя смарт-терминала.
- * @memberOf module:user
  * @param {string} uuid - Идентификатор (uuid) пользователя
  * @param {string?} secondName - Фамилия
  * @param {string?} firstName - Имя
@@ -29,9 +28,8 @@ export class User {
 }
 
 /**
- * @class Grant
+ * @class module:user.Grant
  * @classdesc Класс, содержащий данные прав пользователей смарт-терминала.
- * @memberOf module:user
  * @param {string} title - Название права
  * @param {string} roleUuid - Идентификатор (uuid) роли
  */

@@ -5,11 +5,10 @@ import {PaymentType} from "../../Types/compilable";
 import {PaymentPurpose} from "../receipt/payment";
 
 /**
- * @class BeforePositionsEditedEventResult
- * @classdesc Класс, содержащий результат события интеграционной службы при намерении изменить позиции чека.
- * @memberOf module:services
- * @param {?PositionChange[]} changes - Массив изменений позиций
- * @param {?SetExtra} extra - Дополнительные поля чека
+ * @class module:services.BeforePositionsEditedEventResult
+ * @classdesc Класс, содержащий результат события интеграционной службы изменения позиций чека.
+ * @param {?module:types#PositionChange[]} changes - Массив изменений позиций
+ * @param {?module:receipt.SetExtra} extra - Дополнительные поля чека
  */
 export class BeforePositionsEditedEventResult extends AbstractBundlable {
     constructor(changes?: PositionChange[] | null, extra?: SetExtra) {
@@ -20,12 +19,11 @@ export class BeforePositionsEditedEventResult extends AbstractBundlable {
 }
 
 /**
- * @class BeforePositionsEditedEventResult
- * @classdesc Класс, содержащий результат события интеграционной службы при намерении редактирования позиций чека.
- * @memberOf module:services
- * @param {?SetExtra} discount - Сумма скидки
- * @param {?SetExtra} extra - Дополнительные поля чека
- * @param {PositionChange[]} changes - Массив изменений позиций
+ * @class module:services.ReceiptDiscountEventResult
+ * @classdesc Класс, содержащий результат события интеграционной службы начисления скидки на чек.
+ * @param {number} discount - Сумма скидки
+ * @param {?module:receipt.SetExtra} extra - Дополнительные поля чека
+ * @param {module:types#PositionChange[]} changes - Массив изменений позиций
  */
 export class ReceiptDiscountEventResult extends AbstractBundlable {
     constructor(discount: number, extra: SetExtra | null, changes: PositionChange[]) {
@@ -36,6 +34,12 @@ export class ReceiptDiscountEventResult extends AbstractBundlable {
     }
 }
 
+/**
+ * @class module:services.PaymentSelectedEventResult
+ * @classdesc Класс, содержащий результат события интеграционной службы разделения оплаты чека.
+ * @param {?module:receipt.SetExtra} extra - Дополнительные поля чека
+ * @param {module:receipt.PaymentPurpose[]} changes - Массив частей платежа
+ */
 export class PaymentSelectedEventResult extends AbstractBundlable {
     constructor(extra: SetExtra | null, paymentParts: PaymentPurpose[]) {
         super('PaymentSelectedEventResult');
@@ -44,6 +48,12 @@ export class PaymentSelectedEventResult extends AbstractBundlable {
     }
 }
 
+/**
+ * @class module:services.PrintGroupRequiredEventResult
+ * @classdesc Класс, содержащий результат события интеграционной службы разделения чека на печатные группы.
+ * @param {?module:receipt.SetExtra} extra - Дополнительные поля чека
+ * @param {module:receipt.SetPrintGroup[]} setPrintGroups - Массив печатных групп для разделения чека
+ */
 export class PrintGroupRequiredEventResult extends AbstractBundlable {
     constructor(extra: SetExtra | null, setPrintGroups: SetPrintGroup[]) {
         super('PrintGroupRequiredEventResult');
@@ -52,6 +62,11 @@ export class PrintGroupRequiredEventResult extends AbstractBundlable {
     }
 }
 
+/**
+ * @class module:services.PrintExtraRequiredEventResult
+ * @classdesc Класс, содержащий результат события интеграционной службы печати дополнительных элементов чека.
+ * @param {module:receipt.SetPrintExtra[]} extra - Массив дополнительных печатных элементов чека
+ */
 export class PrintExtraRequiredEventResult extends AbstractBundlable {
     constructor(extra: SetPrintExtra[]) {
         super('PrintExtraRequiredEventResult');
@@ -59,6 +74,14 @@ export class PrintExtraRequiredEventResult extends AbstractBundlable {
     }
 }
 
+/**
+ * @class module:services.PaymentSystemPaymentOkResult
+ * @classdesc Класс, содержащий успешный результат события интеграционной службы использования сторонней платёжной системы.
+ * @param {string} rrn - Идентификатор платежа
+ * @param {string[]} slip - Текст, который будет напечатан на чеке в двух экземплярах
+ * @param {?string} paymentInfo - Поле для хранения статистической информации. Приложение не заполняет это поле.
+ * @param {module:types#PaymentType} [paymentType = PaymentType.ELECTRON] - Тип платежа
+ */
 export class PaymentSystemPaymentOkResult extends AbstractBundlable {
     constructor(rrn: string, slip: string[], paymentInfo: string | null, paymentType: PaymentType = PaymentType.ELECTRON) {
         super('PaymentSystemPaymentOkResult');
@@ -69,6 +92,11 @@ export class PaymentSystemPaymentOkResult extends AbstractBundlable {
     }
 }
 
+/**
+ * @class module:services.PaymentSystemPaymentErrorResult
+ * @classdesc Класс, содержащий ошибку обработки события интеграционной службы использования сторонней платёжной системы.
+ * @param {string} [errorDescription] - Описание ошибки
+ */
 export class PaymentSystemPaymentErrorResult extends AbstractBundlable {
     constructor(errorDescription: ?string) {
         super('PaymentSystemPaymentErrorResult');

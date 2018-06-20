@@ -14,9 +14,13 @@ export class AbstractBundlable {
 
 }
 
-/** Класс, который содержит передаваемые при навигации данные, а также направляет маршрутизатор.*/
+/**
+ * @class module:navigation.Intent
+ * @classdesc Класс, который содержит передаваемые при навигации данные, а также направляет маршрутизатор.
+ * @see [Подробнее об устройстве навигации]{@link http://developer.evotor.ru/docs/tobipizda}
+ */
 export class Intent {
-/*
+
     static ACTION_AIRPLANE_MODE_CHANGED = "android.intent.action.AIRPLANE_MODE";
     static ACTION_ALL_APPS = "android.intent.action.ALL_APPS";
     static ACTION_ANSWER = "android.intent.action.ANSWER";
@@ -205,7 +209,7 @@ export class Intent {
     static FLAG_RECEIVER_REGISTERED_ONLY = 1073741824;
     static FLAG_RECEIVER_REPLACE_PENDING = 536870912;
     static FLAG_RECEIVER_VISIBLE_TO_INSTANT_APPS = 2097152;
-*/
+
     constructor() {
         this.extras = {};
         this.categories = [];
@@ -214,8 +218,9 @@ export class Intent {
 
     /**
      * Устанавливает действие текущего маршрута.
+     * @function module:navigation.Intent#setAction
      * @param {string} action - Действие
-     * @returns {Intent} Текущий Intent
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     setAction(action: string): Intent {
         this.action = action;
@@ -224,6 +229,7 @@ export class Intent {
 
     /**
      * Получает действие текущего маршрута.
+     * @function module:navigation.Intent#getAction
      * @returns {string} Действие
      */
     getAction(): string {
@@ -233,7 +239,8 @@ export class Intent {
     /**
      * Устанавливает целевой класс текущего маршрута.
      * @param {string} className - Название класса с учётом его пакета. Например: "com.mypackage.MyActivity".
-     * @returns {Intent} Текущий Intent
+     * @function module:navigation.Intent#setClassName
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     setClassName(className: string): Intent {
         this.className = className;
@@ -242,6 +249,7 @@ export class Intent {
 
     /**
      * Получает целевой класс текущего маршрута.
+     * @function module:navigation.Intent#getClassName
      * @returns {string} Название класса
      */
     getClassName(): string {
@@ -251,7 +259,8 @@ export class Intent {
     /**
      * Устанавливает целевой пакет текущего маршрута.
      * @param {string} packageName - Название пакета
-     * @returns {Intent} Текущий Intent
+     * @function module:navigation.Intent#setPackageName
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     setPackageName(packageName: string): Intent {
         this.packageName = packageName;
@@ -260,6 +269,7 @@ export class Intent {
 
     /**
      * Получает целевой пакет текущего маршрута.
+     * @function module:navigation.Intent#getPackageName
      * @returns {string} Название пакета
      */
     getPackageName(): string {
@@ -269,7 +279,8 @@ export class Intent {
     /**
      * Устанавливает название события пользовательской службы в качестве цели текущего маршрута.
      * @param {string} eventName - Название события
-     * @returns {Intent} Текущий Intent
+     * @function module:navigation.Intent#setCustomServiceEventName
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     setCustomServiceEventName(eventName: string): Intent {
         this.customServiceEventName = eventName;
@@ -278,6 +289,7 @@ export class Intent {
 
     /**
      * Получает название события пользовательской службы текущего маршрута.
+     * @function module:navigation.Intent#getCustomServiceEventName
      * @returns {string} Название события
      */
     getCustomServiceEventName(): string {
@@ -286,9 +298,10 @@ export class Intent {
 
     /**
      * Добавляет данные для передачи при навигации.
+     * @function module:navigation.Intent#putExtra
      * @param {string} key - Ключ
      * @param extra {*} - Значение
-     * @returns {Intent} Текущий Intent
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     putExtra(key: string, extra: any): Intent {
         this.extras[key] = extra;
@@ -297,8 +310,9 @@ export class Intent {
 
     /**
      * Добавляет данные для передачи при навигации.
+     * @function module:navigation.Intent#putExtras
      * @param {Object} extras - Данные
-     * @returns {Intent} Текущий Intent
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     putExtras(extras: Object): Intent {
         this.extras = Object.assign(this.extras, extras);
@@ -307,6 +321,7 @@ export class Intent {
 
     /**
      * Удаляет все данные для передачи при навигации.
+     * @function module:navigation.Intent#removeExtra
      * @param {string} key - ключ
      * @returns {void}
      */
@@ -316,8 +331,9 @@ export class Intent {
 
     /**
      * Заменяет все данные для передачи при навигации.
+     * @function module:navigation.Intent#replaceExtras
      * @param {Object} extras - Данные
-     * @returns {Intent} Текущий Intent
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     replaceExtras(extras: Object): Intent {
         this.extras = extras;
@@ -326,6 +342,7 @@ export class Intent {
 
     /**
      * Получает данные для передачи при навигации.
+     * @function module:navigation.Intent#getExtra
      * @param {string} key - Ключ
      * @returns {*} Данные
      */
@@ -335,6 +352,7 @@ export class Intent {
 
     /**
      * Получает все данные для передачи при навигации.
+     * @function module:navigation.Intent#getExtras
      * @returns {Object} Данные
      */
     getExtras(): Object {
@@ -343,6 +361,7 @@ export class Intent {
 
     /**
      * Проверяет, содержат ли данные для передачи при навигации указанное значение.
+     * @function module:navigation.Intent#hasExtra
      * @param {string} key - Ключ
      * @returns {boolean} Результат проверки
      */
@@ -352,8 +371,9 @@ export class Intent {
 
     /**
      * Добавляет категорию текущего маршрута.
+     * @function module:navigation.Intent#addCategory
      * @param {string} category - Категория
-     * @returns {Intent} Текущий Intent
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     addCategory(category: string): Intent {
         this.categories.push(category);
@@ -362,6 +382,7 @@ export class Intent {
 
     /**
      * Удаляет категорию текущего маршрута.
+     * @function module:navigation.Intent#removeCategory
      * @param {string} category - Категория
      * @returns {void}
      */
@@ -371,6 +392,7 @@ export class Intent {
 
     /**
      * Получает все категории текущего маршрута.
+     * @function module:navigation.Intent#getCategories
      * @returns {string[]} Категории
      */
     getCategories(): string[] {
@@ -379,6 +401,7 @@ export class Intent {
 
     /**
      * Проверяет, содержат ли категории текущего маршрута указанное значение.
+     * @function module:navigation.Intent#hasCategory
      * @param {string} category - Значение
      * @returns {boolean} Результат проверки
      */
@@ -388,8 +411,9 @@ export class Intent {
 
     /**
      * Добавляет флаги текущего маршрута.
+     * @function module:navigation.Intent#addFlags
      * @param {number} flags - Флаги
-     * @returns {Intent} Текущий Intent
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     addFlags(...flags: number): Intent {
         this.flags.concat(flags);
@@ -398,8 +422,9 @@ export class Intent {
 
     /**
      * Устанавливает флаги текущего маршрута.
+     * @function module:navigation.Intent#setFlags
      * @param {number} flags - Флаги
-     * @returns {Intent} Текущий Intent
+     * @returns {module:navigation.Intent} Текущий Intent
      */
     setFlags(...flags: number): Intent {
         this.flags = flags;
@@ -408,6 +433,7 @@ export class Intent {
 
     /**
      * Получает флаги текущего маршрута.
+     * @function module:navigation.Intent#getFlags
      * @returns {number} Флаги
      */
     getFlags(): number {
@@ -416,6 +442,7 @@ export class Intent {
 
     /**
      * Удаляет все флаги текущего маршрута.
+     * @function module:navigation.Intent#removeFlags
      * @param {number} flags - Флаги
      * @returns {void}
      */

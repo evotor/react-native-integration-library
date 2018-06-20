@@ -1,9 +1,27 @@
-import React from 'react';
-import {NativeModules} from 'react-native';
 import {FilterBuilder, SortOrder} from "abstract-query-builder";
-import {ProductItem, ProductType, TaxNumber} from "../../Types/compilable";
+import {InventoryModule} from "../../NativeModules";
+import {ProductItem} from "../../Types/inbuilt";
+import {ProductType, TaxNumber} from "../../Types/compilable";
 import {Product, ProductGroup} from "../../DataWrappers/inventory/framework";
 
+/**
+ * @class module:inventory.ProductSortOrder
+ * @classdesc Класс для сортировки полей в результате запроса.
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} uuid - Идентификатор (uuid) товара
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} parentUuid - Идентификатор (uuid) родителя товара
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} code - Код
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} name - Название
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} taxNumber - Налоговая ставка
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} type - Тип
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} price - Цена
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} quantity - Количество
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} description - Описание
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} measureName - Единица измерения
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} measurePrecision - Точность измерения
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} alcoholByVolume - Крепость алкогольной продукции
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} alcoholProductKindCode - Код вида продукции ФСРАР
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} tareVolume - Объём тары
+ */
 export class ProductSortOrder extends SortOrder<ProductSortOrder> {
 
     uuid = this.addFieldSorter("UUID");
@@ -27,6 +45,24 @@ export class ProductSortOrder extends SortOrder<ProductSortOrder> {
 
 }
 
+/**
+ * @class module:inventory.ProductQuery
+ * @classdesc Класс для формирования запроса на получение товарных единиц.
+ * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} uuid - Идентификатор (uuid) товара
+ * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} parentUuid - Идентификатор (uuid) родителя товара
+ * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} code - Код
+ * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} name - Название
+ * @property {FieldFilter<module:types#TaxNumber, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} taxNumber - Налоговая ставка
+ * @property {FieldFilter<module:types#ProductType, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} type - Тип
+ * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} price - Цена
+ * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} quantity - Количество
+ * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} description - Описание
+ * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} measureName - Единица измерения
+ * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} measurePrecision - Точность измерения
+ * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} alcoholByVolume - Крепость алкогольной продукции
+ * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} alcoholProductKindCode - Код вида продукции ФСРАР
+ * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} tareVolume - Объём тары
+ */
 export default class ProductQuery extends FilterBuilder<ProductQuery, ProductSortOrder, ProductItem> {
 
     uuid = this.addFieldFilter<string>("UUID");
@@ -49,7 +85,7 @@ export default class ProductQuery extends FilterBuilder<ProductQuery, ProductSor
             () => this,
             (selection, selectionArgs, sortOrderLimit) =>
                 new Promise(resolve =>
-                    NativeModules.InventoryModule.query(
+                    InventoryModule.query(
                         selection,
                         selectionArgs,
                         sortOrderLimit,

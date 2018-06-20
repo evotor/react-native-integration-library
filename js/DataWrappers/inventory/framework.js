@@ -1,10 +1,7 @@
 import {ProductType, TaxNumber} from "../../Types/compilable";
 
 class AbstractProductItem {
-    constructor(uuid: string,
-                parentUuid: string | null,
-                code: string | null,
-                name: string) {
+    constructor(uuid, parentUuid, code, name) {
         this.uuid = uuid;
         this.parentUuid = parentUuid;
         this.code = code;
@@ -13,15 +10,14 @@ class AbstractProductItem {
 }
 
 /**
- * @class Product
+ * @class module:inventory.Product
  * @classdesc Класс, содержащий данные товара.
- * @memberOf module:inventory
  * @param {string} uuid - Идентификатор (uuid) товара
  * @param {?string} parentUuid - Идентификатор (uuid) родителя товара
  * @param {?string} code - Код
  * @param {string} name - Название
- * @param {TaxNumber} taxNumber - Налоговая ставка
- * @param {ProductType} type - Тип
+ * @param {module:types#TaxNumber} taxNumber - Налоговая ставка
+ * @param {module:types#ProductType} type - Тип
  * @param {number} price - Цена
  * @param {number} quantity - Количество
  * @param {?string} description - Описание
@@ -61,14 +57,13 @@ export class Product extends AbstractProductItem {
 }
 
 /**
- * @class ProductGroup
+ * @class module:inventory.ProductGroup
  * @classdesc Класс, содержащий данные товарной группы.
- * @memberOf module:inventory
  * @param {string} uuid - Идентификатор (uuid) товара
  * @param {?string} parentUuid - Идентификатор (uuid) родителя товара
  * @param {?string} code - Код
  * @param {string} name - Название
- * @param {TaxNumber} taxNumber - Налоговая ставка
+ * @param {module:types#TaxNumber} taxNumber - Налоговая ставка
  */
 export class ProductGroup extends AbstractProductItem {
     constructor(uuid: string,

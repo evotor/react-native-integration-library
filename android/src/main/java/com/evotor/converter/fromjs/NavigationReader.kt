@@ -173,13 +173,11 @@ object NavigationReader {
             else -> readCustomIntentExtra(
                     current,
                     item,
-                    object : IntentExtraReadingFinisher {
-                        override fun finishReading(itemItem: Any?) {
-                            if (itemItem is Bundle) {
-                                extras.putBundle(key, itemItem as Bundle?)
-                            } else {
-                                extras.putSerializable(key, itemItem as Serializable?)
-                            }
+                    {
+                        if (it is Bundle) {
+                            extras.putBundle(key, it as Bundle?)
+                        } else {
+                            extras.putSerializable(key, it as Serializable?)
                         }
                     },
                     convertEvotorBundles
@@ -189,13 +187,13 @@ object NavigationReader {
 
     private fun readCustomIntentExtra(current: Context,
                                       item: Any?,
-                                      itemReader: IntentExtraReadingFinisher,
+                                      finishReading: (itemItem: Any?) -> Unit,
                                       convertEvotorBundles: Boolean) {
         when (item) {
             is Map<*, *> -> {
                 if (convertEvotorBundles) {
                     if (item.containsKey("__value__")) {
-                        itemReader.finishReading(readEvotorIntentExtra(
+                        finishReading(readEvotorIntentExtra(
                                 current,
                                 item["__value__"] as Map<*, *>
                         ))
@@ -205,18 +203,14 @@ object NavigationReader {
                             readCustomIntentExtra(
                                     current,
                                     item[itemKey],
-                                    object : IntentExtraReadingFinisher {
-                                        override fun finishReading(itemItem: Any?) {
-                                            itemMutable[itemKey] = itemItem
-                                        }
-                                    },
+                                    { itemMutable[itemKey] = it },
                                     convertEvotorBundles
                             )
                         }
-                        itemReader.finishReading(itemMutable)
+                        finishReading(itemMutable)
                     }
                 } else {
-                    itemReader.finishReading(item)
+                    finishReading(item)
                 }
             }
             is List<*> -> {
@@ -226,43 +220,34 @@ object NavigationReader {
                         readCustomIntentExtra(
                                 current,
                                 item[i],
-                                object : IntentExtraReadingFinisher {
-                                    override fun finishReading(itemItem: Any?) {
-                                        itemMutable[i] = itemItem
-                                    }
-                                },
+                                { itemMutable[i] = it },
                                 convertEvotorBundles
                         )
                     }
-                    itemReader.finishReading(itemMutable)
+                    finishReading(itemMutable)
                 } else {
-                    itemReader.finishReading(item)
+                    finishReading(item)
                 }
             }
         }
     }
 
-    private fun readEvotorIntentExtra(current: Context, source: Map<*, *>): Bundle? {
-        return when (source["__name__"] as String) {
-            "PositionAdd" -> PositionAdd(ReceiptReader.readPosition(source["position"] as Map<*, *>)).toBundle()
-            "PositionEdit" -> PositionEdit(ReceiptReader.readPosition(source["position"] as Map<*, *>)).toBundle()
-            "PositionRemove" -> PositionRemove(source["positionUuid"] as String).toBundle()
-            "SetExtra" -> ReceiptReader.readSetExtra(source).toBundle()
-            "SetPrintGroup" -> ReceiptReader.readSetPrintGroup(source).toBundle()
-            "SetPrintExtra" -> ReceiptReader.readSetPrintExtra(current, source)?.toBundle()
-            "BeforePositionsEditedEventResult" -> IntegrationModule.resultReaders["BEFORE_POSITIONS_EDITED"]?.read(current, source)?.toBundle()
-            "ReceiptDiscountEventResult" -> IntegrationModule.resultReaders["RECEIPT_DISCOUNT"]?.read(current, source)?.toBundle()
-            "PaymentSelectedEventResult" -> IntegrationModule.resultReaders["PAYMENT_SELECTED"]?.read(current, source)?.toBundle()
-            "PaymentSystemPaymentOkResult" -> IntegrationModule.resultReaders["PAYMENT_SYSTEM"]?.read(current, source)?.toBundle()
-            "PaymentSystemPaymentErrorResult" -> IntegrationModule.resultReaders["PAYMENT_SYSTEM"]?.read(current, source)?.toBundle()
-            "PrintGroupRequiredEventResult" -> IntegrationModule.resultReaders["PRINT_GROUP_REQUIRED"]?.read(current, source)?.toBundle()
-            "PrintExtraRequiredEventResult" -> IntegrationModule.resultReaders["PRINT_EXTRA_REQUIRED"]?.read(current, source)?.toBundle()
-            else -> null
-        }
-    }
-
-    private interface IntentExtraReadingFinisher {
-        fun finishReading(itemItem: Any?)
-    }
+    private fun readEvotorIntentExtra(current: Context, source: Map<*, *>): Bundle? =
+            when (source["__name__"] as String) {
+                "PositionAdd" -> PositionAdd(ReceiptReader.readPosition(source["position"] as Map<*, *>)).toBundle()
+                "PositionEdit" -> PositionEdit(ReceiptReader.readPosition(source["position"] as Map<*, *>)).toBundle()
+                "PositionRemove" -> PositionRemove(source["positionUuid"] as String).toBundle()
+                "SetExtra" -> ReceiptReader.readSetExtra(source).toBundle()
+                "SetPrintGroup" -> ReceiptReader.readSetPrintGroup(source).toBundle()
+                "SetPrintExtra" -> ReceiptReader.readSetPrintExtra(current, source)?.toBundle()
+                "BeforePositionsEditedEventResult" -> IntegrationModule.resultReaders["BEFORE_POSITIONS_EDITED"]?.read(current, source)?.toBundle()
+                "ReceiptDiscountEventResult" -> IntegrationModule.resultReaders["RECEIPT_DISCOUNT"]?.read(current, source)?.toBundle()
+                "PaymentSelectedEventResult" -> IntegrationModule.resultReaders["PAYMENT_SELECTED"]?.read(current, source)?.toBundle()
+                "PaymentSystemPaymentOkResult" -> IntegrationModule.resultReaders["PAYMENT_SYSTEM"]?.read(current, source)?.toBundle()
+                "PaymentSystemPaymentErrorResult" -> IntegrationModule.resultReaders["PAYMENT_SYSTEM"]?.read(current, source)?.toBundle()
+                "PrintGroupRequiredEventResult" -> IntegrationModule.resultReaders["PRINT_GROUP_REQUIRED"]?.read(current, source)?.toBundle()
+                "PrintExtraRequiredEventResult" -> IntegrationModule.resultReaders["PRINT_EXTRA_REQUIRED"]?.read(current, source)?.toBundle()
+                else -> null
+            }
 
 }

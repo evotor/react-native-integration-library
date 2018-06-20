@@ -7,17 +7,16 @@ import {Grant, User} from '../DataWrappers/user';
 import Converter from '../Utilities/Converter';
 
 /**
- * @class UserAPI
- * @classdesc Класс, с помощью методов которого можно получать данные пользователей смарт-терминала.
+ * @class module:user.UserAPI
+ * @classdesc С помощью методов класса можно получать данные пользователей смарт-терминала.
  * @hideconstructor
- * @memberof module:user
  */
 export default class UserAPI {
 
     /**
      * Получает список всех пользователей смарт-терминала.
      * @function module:user.UserAPI.getAllUsers
-     * @returns {Promise<User[]>} Promise с массом пользователей
+     * @returns {Promise<module:user.User[]>} Promise с массом пользователей
      */
     static getAllUsers(): Promise<User[]> {
         return new Promise(resolve => UserModule.getAllUsers(Converter.getArrayReader(resolve, User.prototype)));
@@ -26,7 +25,7 @@ export default class UserAPI {
     /**
      * Получает аутентифицированного пользователя смарт-терминала.
      * @function module:user.UserAPI.getAllUsers
-     * @returns {Promise<User | null>} Promise с пользователем
+     * @returns {Promise<?module:user.User>} Promise с пользователем
      */
     static getAuthenticatedUser(): Promise<User | null> {
         return new Promise(resolve => UserModule.getAuthenticatedUser(Converter.getInstanceReader(resolve, User.prototype)));
@@ -35,7 +34,7 @@ export default class UserAPI {
     /**
      * Получает все права.
      * @function module:user.UserAPI.getAllUsers
-     * @returns {Promise<Grant[]>} Promise с массивом прав
+     * @returns {Promise<module:user.Grant[]>} Promise с массивом прав
      */
     static getAllGrants(): Promise<Grant[]> {
         return new Promise(resolve => UserModule.getAllGrants(Converter.getInstanceReader(resolve, Grant.prototype)));
@@ -44,7 +43,7 @@ export default class UserAPI {
     /**
      * Получает права авторизованного пользователя.
      * @function module:user.UserAPI.getAllUsers
-     * @returns {Promise<Grant[]>} Promise с массивом прав
+     * @returns {Promise<module:user.Grant[]>} Promise с массивом прав
      */
     static getGrantsOfAuthenticatedUser(): Promise<Grant[]> {
         return new Promise(resolve => UserModule.getGrantsOfAuthenticatedUser(Converter.getArrayReader(resolve, Grant.prototype)));

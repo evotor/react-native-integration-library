@@ -1,14 +1,13 @@
 import {PaymentType} from "../../Types/compilable";
 
 /**
- * @class PrintReceipt
- * @classdesc Класс, содержащий данные для печати чека.
- * @memberOf module:receipt
- * @param {?PrintGroup} printGroup - Печатная группа
- * @param {Position[]} positions - Массив позиций
- * @param {Map<Payment, number>} payments - Ассоциативный массив (платёж, значение платежа)
- * @param {Map<Payment, number>} changes - Ассоциативный массив (платёж, изменения платежа)
- * @param {?Map<Payment, number>} discounts - Ассоциативный массив (ПАРАМЕТР, сумма скидки)
+ * @class module:receipt.PaymentPurpose
+ * @classdesc Класс, содержащий часть платежа чека.
+ * @param {?string} identifier - Идентификатор части платежа
+ * @param {?string} paymentSystemId - Идентификатор [платёжной системы]{@link module:receipt.PaymentSystem}
+ * @param {number} total - Сумма части платежа
+ * @param {?string} accountId - Идентификатор счёта в платёжной системе
+ * @param {?string} userMessage - Текст для отображения пользователю при завершении платежа
  */
 export class PaymentPurpose {
     constructor(identifier: string | null,
@@ -24,6 +23,13 @@ export class PaymentPurpose {
     }
 }
 
+/**
+ * @class module:receipt.PaymentSystem
+ * @classdesc Класс, содержащий данные платёжной системы.
+ * @param {module:types#PaymentType} paymentType - Тип платёжной системы
+ * @param {string} userDescription - Название для отображения пользователю
+ * @param {string} paymentSystemId - Идентификатор платёжной системы
+ */
 export class PaymentSystem {
     constructor(paymentType: PaymentType, userDescription: string, paymentSystemId: string) {
         this.paymentType = paymentType;
@@ -32,6 +38,15 @@ export class PaymentSystem {
     }
 }
 
+/**
+ * @class module:receipt.Payment
+ * @classdesc Класс, содержащий данные платежа.
+ * @param {string} uuid - Идентификатор (uuid) платежа
+ * @param {?module:receipt.PaymentSystem} system - Использованная платёжная система
+ * @param {?string} purposeIdentifier - Идентификатор [части платежа]{@link module:receipt.PaymentPurpose}
+ * @param {?string} accountId - Идентификатор аккаунта
+ * @param {?string} accountUserDescription - Описание аккаунта
+ */
 export class Payment {
     constructor(uuid: string,
                 value: number,

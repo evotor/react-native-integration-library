@@ -5,20 +5,19 @@
 import {InventoryModule} from "../NativeModules";
 import {Field, ProductExtra} from "../DataWrappers/inventory/extras";
 import Converter from "../Utilities/Converter";
-import type {ProductItem} from "../Types/compilable";
+import type {ProductItem} from "../Types/inbuilt";
 
 /**
- * @class InventoryAPI
- * @classdesc Класс, с помощью методов которого можно получать данные товаров.
+ * @class module:inventory.InventoryAPI
+ * @classdesc С помощью методов класса можно получать данные товаров.
  * @hideconstructor
- * @memberof module:inventory
  */
 export default class InventoryAPI {
 
     /**
      * Получает все штрихкоды товара по указанному идентификатору (uuid) товара.
      * @function module:inventory.InventoryAPI.getAllBarcodesForProduct
-     * @param {string} productUuid - Идентификатор (uuid) товара
+     * @param {string} productUuid - Идентификатор (uuid) [товара]{@link module:inventory.Product}
      * @returns {Promise<string[]>} Promise с массивом штрихкодов
      */
     static getAllBarcodesForProduct(productUuid: string): Promise<string[]> {
@@ -26,10 +25,10 @@ export default class InventoryAPI {
     }
 
     /**
-     * Получает товар по указанному идентификатору (uuid) товара.
+     * Получает товарную единицу по указанному идентификатору (uuid) товара.
      * @function module:inventory.InventoryAPI.getProductByUuid
      * @param {string} uuid - Идентификатор (uuid) товара
-     * @returns {Promise<?ProductItem>} Promise с товарной единицей
+     * @returns {Promise<?module:types#ProductItem>} Promise с товарной единицей
      */
     static getProductByUuid(uuid: string): Promise<ProductItem | null> {
         return new Promise(resolve => InventoryModule.getProductByUuid(uuid, Converter.getProductItemReader(resolve)));

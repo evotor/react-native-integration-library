@@ -6,10 +6,9 @@ import {CommandModule, SessionModule} from "../NativeModules";
 import ErrorHandler from "../Utilities/ErrorHandler";
 
 /**
- * @class SessionAPI
- * @classdesc Класс, с помощью методов которого можно получать данные смены и печатать отчёты.
+ * @class module:session.SessionAPI
+ * @classdesc С помощью методов класса можно получать данные смены и печатать отчёты.
  * @hideconstructor
- * @memberof module:session
  */
 export default class SessionAPI {
 
@@ -35,7 +34,7 @@ export default class SessionAPI {
      * Печатает отчёт закрытия смены.
      * @function module:session.SessionAPI.printZReport
      * @returns {Promise<void>}
-     * @throws {IntegrationError}
+     * @throws {module:errors.IntegrationError}
      */
     static printZReport(): Promise<void> {
         return new Promise((resolve, reject) => CommandModule.printZReport(ErrorHandler.getExecutor(resolve, reject)));

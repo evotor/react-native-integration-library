@@ -10,9 +10,27 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
 var abstract_query_builder_1 = require("abstract-query-builder");
+var NativeModules_1 = require("../../NativeModules");
 var framework_1 = require("../../DataWrappers/inventory/framework");
+/**
+ * @class module:inventory.ProductSortOrder
+ * @classdesc Класс для сортировки полей в результате запроса.
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} uuid - Идентификатор (uuid) товара
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} parentUuid - Идентификатор (uuid) родителя товара
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} code - Код
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} name - Название
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} taxNumber - Налоговая ставка
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} type - Тип
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} price - Цена
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} quantity - Количество
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} description - Описание
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} measureName - Единица измерения
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} measurePrecision - Точность измерения
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} alcoholByVolume - Крепость алкогольной продукции
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} alcoholProductKindCode - Код вида продукции ФСРАР
+ * @property {FieldSorter<module:inventory.ProductSortOrder>} tareVolume - Объём тары
+ */
 var ProductSortOrder = /** @class */ (function (_super) {
     __extends(ProductSortOrder, _super);
     function ProductSortOrder() {
@@ -36,12 +54,30 @@ var ProductSortOrder = /** @class */ (function (_super) {
     return ProductSortOrder;
 }(abstract_query_builder_1.SortOrder));
 exports.ProductSortOrder = ProductSortOrder;
+/**
+ * @class module:inventory.ProductQuery
+ * @classdesc Класс для формирования запроса на получение товарных единиц.
+ * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} uuid - Идентификатор (uuid) товара
+ * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} parentUuid - Идентификатор (uuid) родителя товара
+ * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} code - Код
+ * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} name - Название
+ * @property {FieldFilter<module:types#TaxNumber, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} taxNumber - Налоговая ставка
+ * @property {FieldFilter<module:types#ProductType, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} type - Тип
+ * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} price - Цена
+ * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} quantity - Количество
+ * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} description - Описание
+ * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} measureName - Единица измерения
+ * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} measurePrecision - Точность измерения
+ * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} alcoholByVolume - Крепость алкогольной продукции
+ * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} alcoholProductKindCode - Код вида продукции ФСРАР
+ * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} tareVolume - Объём тары
+ */
 var ProductQuery = /** @class */ (function (_super) {
     __extends(ProductQuery, _super);
     function ProductQuery() {
         var _this = _super.call(this, function () { return _this; }, function (selection, selectionArgs, sortOrderLimit) {
             return new Promise(function (resolve) {
-                return react_native_1.NativeModules.InventoryModule.query(selection, selectionArgs, sortOrderLimit, function (productItems) {
+                return NativeModules_1.InventoryModule.query(selection, selectionArgs, sortOrderLimit, function (productItems) {
                     productItems.forEach(function (item, i) {
                         if (item) {
                             productItems[i].__proto__ = item.hasOwnProperty('quantity') ? framework_1.Product.prototype : framework_1.ProductGroup.prototype;

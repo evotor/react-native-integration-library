@@ -59,11 +59,10 @@ object ReceiptReader {
         )
     }
 
-    fun readPositionAdds(source: List<*>): List<PositionAdd> {
-        return (0 until source.size).map {
-            PositionAdd(readPosition(source[it] as Map<*, *>))
-        }
-    }
+    fun readPositionAdds(source: List<*>): List<PositionAdd> =
+            (0 until source.size).map {
+                PositionAdd(readPosition(source[it] as Map<*, *>))
+            }
 
     fun readChanges(source: List<*>): List<IPositionChange> {
         val result = ArrayList<IPositionChange>()
@@ -79,43 +78,40 @@ object ReceiptReader {
         return result
     }
 
-    fun readPaymentParts(source: List<*>): List<PaymentPurpose> {
-        return source.indices
-                .map { source[it] as Map<*, *> }
-                .map {
-                    PaymentPurpose(
-                            it["identifier"] as String?,
-                            it["paymentSystemId"] as String?,
-                            MoneyCalculator.toBigDecimal(it["total"] as Double),
-                            it["accountId"] as String?,
-                            it["userMessage"] as String?
-                    )
-                }
-    }
+    fun readPaymentParts(source: List<*>): List<PaymentPurpose> =
+            source.indices
+                    .map { source[it] as Map<*, *> }
+                    .map {
+                        PaymentPurpose(
+                                it["identifier"] as String?,
+                                it["paymentSystemId"] as String?,
+                                MoneyCalculator.toBigDecimal(it["total"] as Double),
+                                it["accountId"] as String?,
+                                it["userMessage"] as String?
+                        )
+                    }
 
-    fun readSetPrintGroups(source: List<*>): List<SetPrintGroup> {
-        return source.indices.map { readSetPrintGroup(source[it] as Map<*, *>) }
-    }
+    fun readSetPrintGroups(source: List<*>): List<SetPrintGroup> =
+            source.indices.map { readSetPrintGroup(source[it] as Map<*, *>) }
 
-    fun readSetPrintGroup(source: Map<*, *>): SetPrintGroup {
-        return SetPrintGroup(
-                source["printGroup"]?.let { readPrintGroup(it as Map<*, *>) },
-                source["paymentPurposeIds"] as List<String>,
-                source["positionUuids"] as List<String>
-        )
-    }
+    fun readSetPrintGroup(source: Map<*, *>): SetPrintGroup =
+            SetPrintGroup(
+                    source["printGroup"]?.let { readPrintGroup(it as Map<*, *>) },
+                    source["paymentPurposeIds"] as List<String>,
+                    source["positionUuids"] as List<String>
+            )
 
-    private fun readPrintGroup(source: Map<*, *>): PrintGroup {
-        return PrintGroup(
-                source["identifier"] as String?,
-                PrintGroup.Type.valueOf(source["type"] as String),
-                source["orgName"] as String?,
-                source["orgInn"] as String?,
-                source["orgAddress"] as String?,
-                source["taxationSystem"]?.let { TaxationSystem.valueOf(it as String) },
-                source["shouldPrintReceipt"] as Boolean
-        )
-    }
+    private fun readPrintGroup(source: Map<*, *>): PrintGroup =
+            PrintGroup(
+                    source["identifier"] as String?,
+                    PrintGroup.Type.valueOf(source["type"] as String),
+                    source["orgName"] as String?,
+                    source["orgInn"] as String?,
+                    source["orgAddress"] as String?,
+                    source["taxationSystem"]?.let { TaxationSystem.valueOf(it as String) },
+                    source["shouldPrintReceipt"] as Boolean
+            )
+
 
     fun readSetExtra(source: Map<*, *>): SetExtra {
         val result = JSONObject()
@@ -138,7 +134,7 @@ object ReceiptReader {
     fun readSetPrintExtra(current: Context, source: Map<*, *>): SetPrintExtra? {
         val printExtraPlaceSource: Map<*, *> = source["printExtraPlace"] as Map<*, *>
         var printPlaceResult: PrintExtraPlace? = null
-        when (printExtraPlaceSource["printExtraPlaceType"] as String) {
+        when (printExtraPlaceSource["type"] as String) {
             "PrintExtraPlacePrintGroupTop" -> printPlaceResult = PrintExtraPlacePrintGroupTop(printExtraPlaceSource["printGroupId"] as String?)
             "PrintExtraPlacePrintGroupHeader" -> printPlaceResult = PrintExtraPlacePrintGroupHeader(printExtraPlaceSource["printGroupId"] as String?)
             "PrintExtraPlacePrintGroupSummary" -> printPlaceResult = PrintExtraPlacePrintGroupSummary(printExtraPlaceSource["printGroupId"] as String?)

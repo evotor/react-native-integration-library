@@ -7,11 +7,10 @@ export class AbstractBroadcastEvent {
 }
 
 /**
- * @class ProductEvent
+ * @class module:services.ProductEvent
  * @classdesc Класс, содержащий данные широковещательного сообщения о товароучётном событии.
- * @memberOf module:services
  * @param {string} action - Действие
- * @param {string} productUuid - Идентификатор (uuid) товара
+ * @param {string} productUuid - Идентификатор (uuid) [товара]{@link module:inventory.Product}
  */
 export class ProductEvent extends AbstractBroadcastEvent {
     constructor(action: string, productUuid: string) {
@@ -21,9 +20,8 @@ export class ProductEvent extends AbstractBroadcastEvent {
 }
 
 /**
- * @class ReceiptEvent
- * @classdesc Класс, содержащий данные широковещательного сообщения о событии при формировании чека.
- * @memberOf module:services
+ * @class module:services.ReceiptEvent
+ * @classdesc Класс, содержащий данные широковещательного сообщения о событии чека.
  * @param {string} action - Действие
  * @param {string} receiptUuid - Идентификатор (uuid) изменённого чека
  */
@@ -35,12 +33,11 @@ export class ReceiptEvent extends AbstractBroadcastEvent {
 }
 
 /**
- * @class PositionEvent
+ * @class module:services.PositionEvent
  * @classdesc Класс, содержащий данные широковещательного сообщения о событии изменения позиции чека.
- * @memberOf module:services
  * @param {string} action - Действие
  * @param {string} receiptUuid - Идентификатор (uuid) чека, содержащего позицию
- * @param {Position} position - Изменённая позиция
+ * @param {module:receipt.Position} position - Изменённая позиция
  */
 export class PositionEvent extends AbstractBroadcastEvent {
     constructor(action: string, receiptUuid: string, position: Position) {
@@ -51,9 +48,8 @@ export class PositionEvent extends AbstractBroadcastEvent {
 }
 
 /**
- * @class CashDrawerEvent
+ * @class module:services.CashDrawerEvent
  * @classdesc Класс, содержащий данные широковещательного сообщения о событии денежного ящика, подключённого к смарт-терминалу.
- * @memberOf module:services
  * @param {string} action - Действие
  * @param {number} cashDrawerId - Идентификатор денежного ящика
  */
@@ -65,9 +61,8 @@ export class CashDrawerEvent extends AbstractBroadcastEvent {
 }
 
 /**
- * @class CashOperationEvent
+ * @class module:services.CashOperationEvent
  * @classdesc Класс, содержащий данные широковещательного сообщения о событии денежной операции.
- * @memberOf module:services
  * @param {string} action - Действие
  * @param {number} total - Сумма операции
  * @param {string} documentUuid - Идентификатор (uuid) документа операции
@@ -81,9 +76,8 @@ export class CashOperationEvent extends AbstractBroadcastEvent {
 }
 
 /**
- * @class PaymentSystemEvent
+ * @class module:services.PaymentSystemEvent
  * @classdesc Класс, содержащий данные события интеграционной службы при использовании собственной платёжной системы.
- * @memberOf module:services
  * @param {string} receiptUuid - Идентификатор (uuid) чека
  * @param {?string} accountId - Счёт (учётная запись) в платёжной системе
  * @param {number} sum - Сумма платежа

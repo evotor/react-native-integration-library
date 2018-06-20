@@ -1,9 +1,8 @@
 import {BarcodeType} from "../Types/compilable";
 
 /**
- * @class PrintableText
+ * @class module:devices.PrintableText
  * @classdesc Класс, содержащий текст для печати на принтере чеков.
- * @memberOf module:devices
  * @param {string} text - Текст для печати
  */
 export class PrintableText {
@@ -14,11 +13,10 @@ export class PrintableText {
 }
 
 /**
- * @class PrintableBarcode
+ * @class module:devices.PrintableBarcode
  * @classdesc Класс, содержащий данные штрихкода для печати на принтере чеков.
- * @memberOf module:devices
  * @param {string} barcodeValue - Значение штрихкода
- * @param {BarcodeType} barcodeType - Тип штрихкода
+ * @param {module:types#BarcodeType} barcodeType - Тип штрихкода
  */
 export class PrintableBarcode {
     constructor(barcodeValue: string, barcodeType: BarcodeType) {
@@ -29,9 +27,8 @@ export class PrintableBarcode {
 }
 
 /**
- * @class PrintableImage
+ * @class module:devices.PrintableImage
  * @classdesc Класс, содержащий данные картинки для печати на принтере чеков.
- * @memberOf module:devices
  * @param {string} uri - Путь к ресурсу с изображением. Например: "android.resource://com.revotor/drawable/ic_launcher".
  */
 export class PrintableImage {
@@ -42,9 +39,8 @@ export class PrintableImage {
 }
 
 /**
- * @class Weight
+ * @class module:devices.Weight
  * @classdesc Класс, содержащий данные о весе товара на весах, подключённых к смарт-терминалу.
- * @memberOf module:devices
  * @param {string} weightInGrams - Вес товара в граммах
  * @param {boolean} supportStable - Поддерживали ли весы флаг стабильности при последнем взвешивании
  * @param {boolean} stable - Было ли стабильным последнее взвешивание
