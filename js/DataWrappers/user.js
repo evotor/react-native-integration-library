@@ -4,6 +4,7 @@
  * @param {string} uuid - Идентификатор (uuid) пользователя
  * @param {string?} secondName - Фамилия
  * @param {string?} firstName - Имя
+ * @param {string?} inn - ИНН
  * @param {string?} phone - Телефон
  * @param {string?} pin - Пин-код
  * @param {string} roleUuid - Идентификатор (uuid) роли
@@ -13,13 +14,15 @@ export class User {
     constructor(uuid: string,
                 secondName: string | null,
                 firstName: string | null,
+                inn: string | null,
                 phone: string | null,
                 pin: string | null,
                 roleUuid: string,
                 roleTitle: string) {
-        this.uid = uuid;
+        this.uuid = uuid;
         this.secondName = secondName;
         this.firstName = firstName;
+        this.inn = inn;
         this.phone = phone;
         this.pin = pin;
         this.roleUuid = roleUuid;

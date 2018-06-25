@@ -3,7 +3,7 @@ package com.evotor.services.integration.events;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.evotor.converter.tojs.EventWriter;
+import com.evotor.converter.to.js.EventWriter;
 import com.evotor.services.integration.ReactIntegrationService;
 
 import java.util.List;

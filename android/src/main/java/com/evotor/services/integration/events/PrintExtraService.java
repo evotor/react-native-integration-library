@@ -3,7 +3,7 @@ package com.evotor.services.integration.events;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.evotor.converter.fromjs.ReceiptReader;
+import com.evotor.converter.from.js.ReceiptReader;
 import com.evotor.services.integration.ReactIntegrationService;
 
 import java.util.List;

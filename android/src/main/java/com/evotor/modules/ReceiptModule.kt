@@ -1,6 +1,6 @@
 package com.evotor.modules
 
-import com.evotor.converter.tojs.ReceiptWriter
+import com.evotor.converter.to.js.ReceiptWriter
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule

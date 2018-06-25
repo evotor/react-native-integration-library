@@ -29,8 +29,8 @@ export class DeviceServiceConnector {
     /**
      * Добавляет слушатель изменения подключённости устройства к смарт-терминалу.
      * @function module:devices.DeviceServiceConnector.addEventListener
-     * @param {module:types#DeviceConnectionEventType} type - Тип события
-     * @param {module:types#DeviceConnectionEventListener} listener - Слушатель события
+     * @param {module:devices#DeviceConnectionEventType} type - Тип события
+     * @param {module:devices#DeviceConnectionEventListener} listener - Слушатель события
      * @returns {void}
      */
     static addEventListener(type: DeviceConnectionEventType, listener: DeviceConnectionEventListener): void {
@@ -40,8 +40,8 @@ export class DeviceServiceConnector {
     /**
      * Удаляет слушатель изменения подключённости устройства к смарт-терминалу.
      * @function module:devices.DeviceServiceConnector.removeEventListener
-     * @param {module:types#DeviceConnectionEventType} type - Тип события
-     * @param {module:types#DeviceConnectionEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @param {module:devices#DeviceConnectionEventType} type - Тип события
+     * @param {module:devices#DeviceConnectionEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
      * @returns {boolean} Удалён ли слушатель
      */
     static removeEventListener(type: DeviceConnectionEventType, listener?: DeviceConnectionEventListener): boolean {
@@ -60,7 +60,7 @@ export class Printer {
     /**
      * Вызывает команду печати указанных элементов.
      * @function module:devices.Printer.print
-     * @param {module:types#Printable[]} printables - Элементы печати
+     * @param {module:devices#Printable[]} printables - Элементы печати
      * @returns {Promise<void>}
      * @throws {module:errors.DeviceError}
      */
@@ -119,8 +119,8 @@ export class Scanner {
     /**
      * Добавляет слушатель события сканера штрихкодов.
      * @function module:devices.Scanner.addEventListener
-     * @param {module:types#ScannerEventType} type - Тип события
-     * @param {module:types#ScannerEventListener} listener - Слушатель события
+     * @param {module:devices#ScannerEventType} type - Тип события
+     * @param {module:devices#ScannerEventListener} listener - Слушатель события
      * @returns {void}
      */
     static addEventListener(type: ScannerEventType, listener: ScannerEventListener): void {
@@ -130,8 +130,8 @@ export class Scanner {
     /**
      * Удаляет слушатель события сканера штрихкодов.
      * @function module:devices.Scanner.removeEventListener
-     * @param {module:types#ScannerEventType} type - Тип события
-     * @param {module:types#ScannerEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @param {module:devices#ScannerEventType} type - Тип события
+     * @param {module:devices#ScannerEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
      * @returns {boolean} Удалён ли слушатель
      */
     static removeEventListener(type: ScannerEventType, listener?: ScannerEventListener): boolean {

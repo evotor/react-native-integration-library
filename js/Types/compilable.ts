@@ -6,7 +6,7 @@ import {Product} from "../DataWrappers/inventory/framework";
  * @enum {string} DeviceConnectionEventType
  * @property {string} PRINTER_CONNECTION_CHANGED - Принтер чеков подключён/отключён
  * @property {string} SCALES_CONNECTION_CHANGED - Весы подключены/отключены
- * @memberOf module:types#
+ * @memberOf module:devices#
  */
 export enum DeviceConnectionEventType {
     PRINTER_CONNECTION_CHANGED = "PRINTER_CONNECTION_CHANGED",
@@ -17,7 +17,7 @@ export enum DeviceConnectionEventType {
  * Перечисление типов событий сканера штрихкодов.
  * @enum {string} ScannerEventType
  * @property {string} BARCODE_RECEIVED - Получен отсканированный штрихкод
- * @memberOf module:types#
+ * @memberOf module:devices#
  */
 export enum ScannerEventType {
     BARCODE_RECEIVED = "BARCODE_RECEIVED"
@@ -28,7 +28,7 @@ export enum ScannerEventType {
  * @enum {string} NavigationEventType
  * @property {string} ACTIVITY_RESULT - Получен результат операции
  * @property {string} BACK_PRESSED - Нажата кнопка "Назад"
- * @memberOf module:types#
+ * @memberOf module:navigation#
  */
 export enum NavigationEventType {
     ACTIVITY_RESULT = "ACTIVITY_RESULT",
@@ -44,7 +44,7 @@ export enum NavigationEventType {
  * @property {string} PAYMENT_SYSTEM - Использование сторонних платёжных систем
  * @property {string} PRINT_GROUP_REQUIRED - Разделение чека на печатные группы
  * @property {string} PRINT_EXTRA_REQUIRED - Печать дополнительных элементов чека
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 export enum IntegrationServiceEventType {
     BEFORE_POSITIONS_EDITED = "BEFORE_POSITIONS_EDITED",
@@ -59,7 +59,7 @@ export enum IntegrationServiceEventType {
  * Перечисление типов широковещательных сообщений о товароучётных событиях.
  * @enum {string} ProductEventType
  * @property {string} PRODUCT_CARD_OPEN - Открыта карточка товара
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 export enum ProductEventType {
     PRODUCT_CARD_OPEN = "PRODUCT_CARD_OPEN"
@@ -74,7 +74,7 @@ export enum ProductEventType {
  * @property {string} PAYBACK_RECEIPT_CLEARED - Очищен чек возврата
  * @property {string} SELL_RECEIPT_CLOSED - Закрыт чек продажи
  * @property {string} PAYBACK_RECEIPT_CLOSED - Закрыт чек возврата
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 export enum ReceiptEventType {
     SELL_RECEIPT_OPENED = "SELL_RECEIPT_OPENED",
@@ -94,7 +94,7 @@ export enum ReceiptEventType {
  * @property {string} PAYBACK_RECEIPT_POSITION_EDITED - Отредактирована позиция в чеке возврата
  * @property {string} SELL_RECEIPT_POSITION_REMOVED - Удалена позиция из чека продажи
  * @property {string} PAYBACK_RECEIPT_POSITION_REMOVED - Удалена позиция из чека возврата
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 export enum PositionEventType {
     SELL_RECEIPT_POSITION_ADDED = "SELL_RECEIPT_POSITION_ADDED",
@@ -109,7 +109,7 @@ export enum PositionEventType {
  * Перечисление типов широковещательных сообщений о событиях денежного ящика, подключённого к смарт-терминалу.
  * @enum {string} CashDrawerEventType
  * @property {string} CASH_DRAWER_OPEN - Открыт денежный ящик
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 export enum CashDrawerEventType {
     CASH_DRAWER_OPEN = "CASH_DRAWER_OPEN"
@@ -120,7 +120,7 @@ export enum CashDrawerEventType {
  * @enum {string} CashOperationEventType
  * @property {string} CASH_IN - Внесение наличных
  * @property {string} CASH_OUT - Изъятие наличных
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 export enum CashOperationEventType {
     CASH_IN = "CASH_IN",
@@ -131,7 +131,7 @@ export enum CashOperationEventType {
  * Перечисление типов событий приёмника push-уведомлений.
  * @enum {string} PushNotificationReceiverEventType
  * @property {string} PUSH_NOTIFICATION_RECEIVED - Получено push-уведомление
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 export enum PushNotificationReceiverEventType {
     PUSH_NOTIFICATION_RECEIVED = "PUSH_NOTIFICATION_RECEIVED"
@@ -143,7 +143,7 @@ export enum PushNotificationReceiverEventType {
  * @property {string} TARGET_CLASS_NOT_FOUND - Не найден целевой класс
  * @property {string} TARGET_PACKAGE_NOT_FOUND - Не найден целевой пакет
  * @property {string} TARGET_CLASS_NOT_EXPORTED - Целевой класс не экспортирован
- * @memberOf module:types#
+ * @memberOf module:errors#
  */
 export enum NavigationErrorMessage {
     TARGET_CLASS_NOT_FOUND = "TARGET_CLASS_NOT_FOUND",
@@ -166,7 +166,7 @@ export enum FieldType {
 /**
  * Перечисление типов чека.
  * @enum {string} ReceiptType
- * @memberOf module:types#
+ * @memberOf module:receipt#
  * @property {string} SELL - Чек продажи
  * @property {string} PAYBACK - Чек возврата
  * @property {string} BUY - Чек покупки
@@ -206,7 +206,7 @@ export enum PrintGroupType {
 /**
  * Перечисление типов платёжной системы.
  * @enum {string} PaymentType
- * @memberOf module:types#
+ * @memberOf module:receipt#
  * @property {string} CASH - Наличные
  * @property {string} ELECTRON - Электронные платежи
  * @property {string} UNKNOWN - Другое
@@ -220,7 +220,7 @@ export enum PaymentType {
 /**
  * Перечисление типов платёжной операции.
  * @enum {string} PaymentSystemOperationType
- * @memberOf module:types#
+ * @memberOf module:services#
  * @property {string} SELL - Продажа
  * @property {string} SELL_CANCEL - Отмена продажи
  * @property {string} PAYBACK - Возврат

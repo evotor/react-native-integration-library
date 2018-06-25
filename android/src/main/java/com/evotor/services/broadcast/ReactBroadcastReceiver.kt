@@ -8,7 +8,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 
-import com.evotor.converter.tojs.EventWriter
+import com.evotor.converter.to.js.EventWriter
 import com.evotor.modules.EventModule
 import com.facebook.react.bridge.Arguments
 

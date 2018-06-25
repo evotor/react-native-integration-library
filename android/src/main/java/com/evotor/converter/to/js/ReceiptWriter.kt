@@ -1,4 +1,4 @@
-package com.evotor.converter.tojs
+package com.evotor.converter.to.js
 
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableArray
@@ -89,11 +89,11 @@ object ReceiptWriter {
             when (changeSource) {
                 is PositionAdd -> {
                     changeResult.putString("__name__", "PositionAdd")
-                    changeResult.putMap("position", ReceiptWriter.writePosition((changeSource).position))
+                    changeResult.putMap("position", writePosition((changeSource).position))
                 }
                 is PositionEdit -> {
                     changeResult.putString("__name__", "PositionEdit")
-                    changeResult.putMap("position", ReceiptWriter.writePosition((changeSource).position))
+                    changeResult.putMap("position", writePosition((changeSource).position))
                 }
                 is PositionRemove -> {
                     changeResult.putString("__name__", "PositionRemove")

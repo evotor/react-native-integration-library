@@ -16,8 +16,8 @@ class AbstractProductItem {
  * @param {?string} parentUuid - Идентификатор (uuid) родителя товара
  * @param {?string} code - Код
  * @param {string} name - Название
- * @param {module:types#TaxNumber} taxNumber - Налоговая ставка
- * @param {module:types#ProductType} type - Тип
+ * @param {module:inventory#TaxNumber} taxNumber - Налоговая ставка
+ * @param {module:inventory#ProductType} type - Тип
  * @param {number} price - Цена
  * @param {number} quantity - Количество
  * @param {?string} description - Описание
@@ -63,7 +63,7 @@ export class Product extends AbstractProductItem {
  * @param {?string} parentUuid - Идентификатор (uuid) родителя товара
  * @param {?string} code - Код
  * @param {string} name - Название
- * @param {module:types#TaxNumber} taxNumber - Налоговая ставка
+ * @param {module:inventory#TaxNumber} taxNumber - Налоговая ставка
  */
 export class ProductGroup extends AbstractProductItem {
     constructor(uuid: string,

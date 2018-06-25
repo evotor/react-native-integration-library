@@ -142,7 +142,7 @@ export default class ReceiptAPI {
     /**
      * Получает чек по типу.
      * @function module:receipt.ReceiptAPI.getReceiptByType
-     * @param {module:types#ReceiptType} type - Тип чека
+     * @param {module:receipt#ReceiptType} type - Тип чека
      * @returns {Promise<?module:receipt.Receipt>} Promise с чеком
      */
     static getReceiptByType(type: ReceiptType): Promise<Receipt | null> {
@@ -162,7 +162,7 @@ export default class ReceiptAPI {
     /**
      * Получает массив всех заголовков чека.
      * @function module:receipt.ReceiptAPI.getReceiptHeaders
-     * @param {module:types#ReceiptType} type - Тип чека
+     * @param {module:receipt#ReceiptType} type - Тип чека
      * @returns {Promise<?module:receipt.ReceiptHeader[]>} Promise с массивом заголовков чека
      */
     static getReceiptHeaders(type?: ReceiptType): Promise<ReceiptHeader[] | null> {
@@ -172,10 +172,9 @@ export default class ReceiptAPI {
 }
 
 /**
- * @class UuidGenerator
+ * @class module:receipt.UuidGenerator
  * @classdesc Класс для генерации индентификатора (uuid). Полное руководство: https://www.npmjs.com/package/uuid
  * @hideconstructor
- * @memberof module:receipt
  */
 export class UuidGenerator {
 
@@ -202,10 +201,9 @@ export class UuidGenerator {
 }
 
 /**
- * @class PositionBuilder
+ * @class module:receipt.PositionBuilder
  * @classdesc Класс для создания и редактирования позиций чека.
  * @hideconstructor
- * @memberof module:receipt
  */
 export class PositionBuilder {
 
@@ -239,7 +237,9 @@ export class PositionBuilder {
                 []
             )
         );
-        builder.setTaxNumber(product.taxNumber)._setAlcoParams(null, product.alcoholByVolume, product.alcoholProductKindCode, product.tareVolume);
+        builder
+            .setTaxNumber(product.taxNumber)
+            ._setAlcoParams(null, product.alcoholByVolume, product.alcoholProductKindCode, product.tareVolume);
         builder._position.productType = product.type;
         builder._position.productCode = product.code;
         return builder;

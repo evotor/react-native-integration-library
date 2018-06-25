@@ -1,4 +1,4 @@
-package com.evotor.converter.fromjs
+package com.evotor.converter.from.js
 
 import android.content.Context
 import android.net.Uri

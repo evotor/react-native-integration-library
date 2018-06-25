@@ -1,4 +1,4 @@
-package com.evotor.converter.tojs
+package com.evotor.converter.to.js
 
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
@@ -9,6 +9,7 @@ import ru.evotor.framework.core.action.command.print_receipt_command.PrintReceip
  * Created by a.lunkov on 16.03.2018.
  */
 object CommandWriter {
+
     fun writeOpenReceiptCommandResult(source: OpenReceiptCommandResult): WritableMap {
         val result = Arguments.createMap()
         result.putString("receiptUuid", source.receiptUuid)

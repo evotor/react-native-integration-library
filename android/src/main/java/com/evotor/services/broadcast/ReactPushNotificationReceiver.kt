@@ -2,7 +2,7 @@ package com.evotor.services.broadcast
 
 import android.content.Context
 import android.os.Bundle
-import com.evotor.converter.tojs.EventWriter
+import com.evotor.converter.to.js.EventWriter
 import com.evotor.modules.EventModule
 import ru.evotor.pushNotifications.PushNotificationReceiver
 

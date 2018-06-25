@@ -28,7 +28,7 @@ export default class InventoryAPI {
      * Получает товарную единицу по указанному идентификатору (uuid) товара.
      * @function module:inventory.InventoryAPI.getProductByUuid
      * @param {string} uuid - Идентификатор (uuid) товара
-     * @returns {Promise<?module:types#ProductItem>} Promise с товарной единицей
+     * @returns {Promise<?module:inventory#ProductItem>} Promise с товарной единицей
      */
     static getProductByUuid(uuid: string): Promise<ProductItem | null> {
         return new Promise(resolve => InventoryModule.getProductByUuid(uuid, Converter.getProductItemReader(resolve)));

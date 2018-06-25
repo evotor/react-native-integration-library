@@ -74,8 +74,8 @@ export class SetPrintGroup extends AbstractBundlable {
 /**
  * @class module:receipt.SetPrintExtra
  * @classdesc Класс, содержащий дополнительные печатные элементы чека.
- * @param {module:types.PrintExtraPlace} printExtraPlace - Расположение печатных элементов в чеке
- * @param {module:types.Printable[]} printables - Массив печатных элементов
+ * @param {module:receipt.PrintExtraPlace} printExtraPlace - Расположение печатных элементов в чеке
+ * @param {module:devices.Printable[]} printables - Массив печатных элементов
  */
 export class SetPrintExtra extends AbstractBundlable {
     constructor(printExtraPlace: PrintExtraPlace,

@@ -1,4 +1,4 @@
-package com.evotor.converter.tojs
+package com.evotor.converter.to.js
 
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableArray

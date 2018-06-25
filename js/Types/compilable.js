@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @enum {string} DeviceConnectionEventType
  * @property {string} PRINTER_CONNECTION_CHANGED - Принтер чеков подключён/отключён
  * @property {string} SCALES_CONNECTION_CHANGED - Весы подключены/отключены
- * @memberOf module:types#
+ * @memberOf module:devices#
  */
 var DeviceConnectionEventType;
 (function (DeviceConnectionEventType) {
@@ -16,7 +16,7 @@ var DeviceConnectionEventType;
  * Перечисление типов событий сканера штрихкодов.
  * @enum {string} ScannerEventType
  * @property {string} BARCODE_RECEIVED - Получен отсканированный штрихкод
- * @memberOf module:types#
+ * @memberOf module:devices#
  */
 var ScannerEventType;
 (function (ScannerEventType) {
@@ -27,7 +27,7 @@ var ScannerEventType;
  * @enum {string} NavigationEventType
  * @property {string} ACTIVITY_RESULT - Получен результат операции
  * @property {string} BACK_PRESSED - Нажата кнопка "Назад"
- * @memberOf module:types#
+ * @memberOf module:navigation#
  */
 var NavigationEventType;
 (function (NavigationEventType) {
@@ -43,7 +43,7 @@ var NavigationEventType;
  * @property {string} PAYMENT_SYSTEM - Использование сторонних платёжных систем
  * @property {string} PRINT_GROUP_REQUIRED - Разделение чека на печатные группы
  * @property {string} PRINT_EXTRA_REQUIRED - Печать дополнительных элементов чека
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 var IntegrationServiceEventType;
 (function (IntegrationServiceEventType) {
@@ -58,7 +58,7 @@ var IntegrationServiceEventType;
  * Перечисление типов широковещательных сообщений о товароучётных событиях.
  * @enum {string} ProductEventType
  * @property {string} PRODUCT_CARD_OPEN - Открыта карточка товара
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 var ProductEventType;
 (function (ProductEventType) {
@@ -73,7 +73,7 @@ var ProductEventType;
  * @property {string} PAYBACK_RECEIPT_CLEARED - Очищен чек возврата
  * @property {string} SELL_RECEIPT_CLOSED - Закрыт чек продажи
  * @property {string} PAYBACK_RECEIPT_CLOSED - Закрыт чек возврата
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 var ReceiptEventType;
 (function (ReceiptEventType) {
@@ -93,7 +93,7 @@ var ReceiptEventType;
  * @property {string} PAYBACK_RECEIPT_POSITION_EDITED - Отредактирована позиция в чеке возврата
  * @property {string} SELL_RECEIPT_POSITION_REMOVED - Удалена позиция из чека продажи
  * @property {string} PAYBACK_RECEIPT_POSITION_REMOVED - Удалена позиция из чека возврата
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 var PositionEventType;
 (function (PositionEventType) {
@@ -108,7 +108,7 @@ var PositionEventType;
  * Перечисление типов широковещательных сообщений о событиях денежного ящика, подключённого к смарт-терминалу.
  * @enum {string} CashDrawerEventType
  * @property {string} CASH_DRAWER_OPEN - Открыт денежный ящик
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 var CashDrawerEventType;
 (function (CashDrawerEventType) {
@@ -119,7 +119,7 @@ var CashDrawerEventType;
  * @enum {string} CashOperationEventType
  * @property {string} CASH_IN - Внесение наличных
  * @property {string} CASH_OUT - Изъятие наличных
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 var CashOperationEventType;
 (function (CashOperationEventType) {
@@ -130,7 +130,7 @@ var CashOperationEventType;
  * Перечисление типов событий приёмника push-уведомлений.
  * @enum {string} PushNotificationReceiverEventType
  * @property {string} PUSH_NOTIFICATION_RECEIVED - Получено push-уведомление
- * @memberOf module:types#
+ * @memberOf module:services#
  */
 var PushNotificationReceiverEventType;
 (function (PushNotificationReceiverEventType) {
@@ -142,7 +142,7 @@ var PushNotificationReceiverEventType;
  * @property {string} TARGET_CLASS_NOT_FOUND - Не найден целевой класс
  * @property {string} TARGET_PACKAGE_NOT_FOUND - Не найден целевой пакет
  * @property {string} TARGET_CLASS_NOT_EXPORTED - Целевой класс не экспортирован
- * @memberOf module:types#
+ * @memberOf module:errors#
  */
 var NavigationErrorMessage;
 (function (NavigationErrorMessage) {
@@ -165,7 +165,7 @@ var FieldType;
 /**
  * Перечисление типов чека.
  * @enum {string} ReceiptType
- * @memberOf module:types#
+ * @memberOf module:receipt#
  * @property {string} SELL - Чек продажи
  * @property {string} PAYBACK - Чек возврата
  * @property {string} BUY - Чек покупки
@@ -205,7 +205,7 @@ var PrintGroupType;
 /**
  * Перечисление типов платёжной системы.
  * @enum {string} PaymentType
- * @memberOf module:types#
+ * @memberOf module:receipt#
  * @property {string} CASH - Наличные
  * @property {string} ELECTRON - Электронные платежи
  * @property {string} UNKNOWN - Другое
@@ -219,7 +219,7 @@ var PaymentType;
 /**
  * Перечисление типов платёжной операции.
  * @enum {string} PaymentSystemOperationType
- * @memberOf module:types#
+ * @memberOf module:services#
  * @property {string} SELL - Продажа
  * @property {string} SELL_CANCEL - Отмена продажи
  * @property {string} PAYBACK - Возврат

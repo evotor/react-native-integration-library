@@ -181,7 +181,7 @@ export default class NavigationAPI {
     /**
      * Устанавливает результат события интеграционной службы, из которой была запущена текущая интеграционная операция. Важно, чтобы текущая операция была унаследована от ReactIntegrationActivity.
      * @function module:navigation.NavigationAPI.setIntegrationResult
-     * @param {module:types#IntegrationServiceEventResult} result - Результат
+     * @param {module:services#IntegrationServiceEventResult} result - Результат
      * @returns {Promise<void>}
      * @throws {module:errors.NavigationError | module:errors.NoActivityError | module:errors.IntegrationError}
      */
@@ -223,8 +223,8 @@ export default class NavigationAPI {
     /**
      * Добавляет слушатель навигационного события.
      * @function module:navigation.NavigationAPI.addEventListener
-     * @param {module:types#NavigationEventType} type - Тип события
-     * @param {module:types#NavigationEventListener} listener - Слушатель события
+     * @param {module:navigation#NavigationEventType} type - Тип события
+     * @param {module:navigation#NavigationEventListener} listener - Слушатель события
      * @returns {void}
      */
     static addEventListener(type: NavigationEventType, listener: NavigationEventListener): void {
@@ -234,8 +234,8 @@ export default class NavigationAPI {
     /**
      * Удаляет слушатель навигационного события.
      * @function module:navigation.NavigationAPI.removeEventListener
-     * @param {module:types#NavigationEventType} type - Тип события
-     * @param {module:types#NavigationEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @param {module:navigation#NavigationEventType} type - Тип события
+     * @param {module:navigation#NavigationEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
      * @returns {boolean} Удалён ли слушатель
      */
     static removeEventListener(type: NavigationEventType, listener?: NavigationEventListener): boolean {

@@ -1,13 +1,13 @@
 package com.evotor.modules
 
-import com.evotor.converter.fromjs.DeviceReader
-import com.evotor.converter.tojs.DeviceWriter
+import com.evotor.converter.from.js.DeviceReader
+import com.evotor.converter.to.js.DeviceWriter
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
-import com.evotor.converter.tojs.ErrorWriter
+import com.evotor.converter.to.js.ErrorWriter
 
 import java.util.HashMap
 

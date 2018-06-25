@@ -1,11 +1,11 @@
-package com.evotor.converter.fromjs
+package com.evotor.converter.from.js
 
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import com.evotor.converter.tojs.ErrorWriter
+import com.evotor.converter.to.js.ErrorWriter
 
 import com.evotor.modules.IntegrationModule
 import com.evotor.services.EventEmissionService

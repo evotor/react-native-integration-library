@@ -13,7 +13,7 @@ android {
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.2.50'
     repositories {
         jcenter()
     }
@@ -32,6 +32,6 @@ allprojects {
 
 dependencies {
     compile "com.facebook.react:react-native:+"
-    compile 'com.github.evotor:integration-library:v0.4.20'
+    compile 'com.github.evotor:integration-library:8f50ee770e'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

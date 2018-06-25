@@ -18,7 +18,7 @@ export class IntegrationError extends Error {
 /** Ошибка навигации. Может возникнуть при попытке запуска операции или службы.*/
 export class NavigationError extends Error {
     /**
-     * @param {module:types#NavigationErrorMessage} message - Сообщение
+     * @param {module:errors#NavigationErrorMessage} message - Сообщение
      */
     constructor(message: NavigationErrorMessage) {
         super(message);

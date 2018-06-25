@@ -1,4 +1,4 @@
-package com.evotor.converter.tojs
+package com.evotor.converter.to.js
 
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableArray
@@ -31,13 +31,18 @@ object UserWriter {
         return result
     }
 
+
+    fun writeGrant(source: Grant): WritableMap {
+        val result = Arguments.createMap()
+        result.putString("title", source.title)
+        result.putString("roleUuid", source.roleUuid)
+        return result
+    }
+
     fun writeGrants(source: List<Grant>): WritableArray {
         val result = Arguments.createArray()
         for (i in source.indices) {
-            val item = Arguments.createMap()
-            item.putString("title", source[i].title)
-            item.putString("roleUuid", source[i].roleUuid)
-            result.pushMap(item)
+            result.pushMap(writeGrant(source[i]))
         }
         return result
     }

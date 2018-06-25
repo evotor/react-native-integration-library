@@ -26,7 +26,7 @@ export class PaymentPurpose {
 /**
  * @class module:receipt.PaymentSystem
  * @classdesc Класс, содержащий данные платёжной системы.
- * @param {module:types#PaymentType} paymentType - Тип платёжной системы
+ * @param {module:receipt#PaymentType} paymentType - Тип платёжной системы
  * @param {string} userDescription - Название для отображения пользователю
  * @param {string} paymentSystemId - Идентификатор платёжной системы
  */

@@ -320,9 +320,9 @@ export class Intent {
     }
 
     /**
-     * Удаляет все данные для передачи при навигации.
+     * Удаляет данные для передачи при навигации.
      * @function module:navigation.Intent#removeExtra
-     * @param {string} key - ключ
+     * @param {string} key - Ключ
      * @returns {void}
      */
     removeExtra(key: string): void {

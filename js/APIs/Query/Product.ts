@@ -1,8 +1,8 @@
 import {FilterBuilder, SortOrder} from "abstract-query-builder";
-import {InventoryModule} from "../../NativeModules";
 import {ProductItem} from "../../Types/inbuilt";
 import {ProductType, TaxNumber} from "../../Types/compilable";
 import {Product, ProductGroup} from "../../DataWrappers/inventory/framework";
+import executor from "./executor";
 
 /**
  * @class module:inventory.ProductSortOrder
@@ -48,20 +48,20 @@ export class ProductSortOrder extends SortOrder<ProductSortOrder> {
 /**
  * @class module:inventory.ProductQuery
  * @classdesc Класс для формирования запроса на получение товарных единиц.
- * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} uuid - Идентификатор (uuid) товара
- * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} parentUuid - Идентификатор (uuid) родителя товара
- * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} code - Код
- * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} name - Название
- * @property {FieldFilter<module:types#TaxNumber, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} taxNumber - Налоговая ставка
- * @property {FieldFilter<module:types#ProductType, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} type - Тип
- * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} price - Цена
- * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} quantity - Количество
- * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} description - Описание
- * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} measureName - Единица измерения
- * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} measurePrecision - Точность измерения
- * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} alcoholByVolume - Крепость алкогольной продукции
- * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} alcoholProductKindCode - Код вида продукции ФСРАР
- * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:types#ProductItem>} tareVolume - Объём тары
+ * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} uuid - Идентификатор (uuid) товара
+ * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} parentUuid - Идентификатор (uuid) родителя товара
+ * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} code - Код
+ * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} name - Название
+ * @property {FieldFilter<module:inventory#TaxNumber, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} taxNumber - Налоговая ставка
+ * @property {FieldFilter<module:inventory#ProductType, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} type - Тип
+ * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} price - Цена
+ * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} quantity - Количество
+ * @property {FieldFilter<?string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} description - Описание
+ * @property {FieldFilter<string, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} measureName - Единица измерения
+ * @property {FieldFilter<number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} measurePrecision - Точность измерения
+ * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} alcoholByVolume - Крепость алкогольной продукции
+ * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} alcoholProductKindCode - Код вида продукции ФСРАР
+ * @property {FieldFilter<?number, module:inventory.ProductQuery, module:inventory.ProductSortOrder, module:inventory#ProductItem>} tareVolume - Объём тары
  */
 export default class ProductQuery extends FilterBuilder<ProductQuery, ProductSortOrder, ProductItem> {
 
@@ -83,24 +83,15 @@ export default class ProductQuery extends FilterBuilder<ProductQuery, ProductSor
     constructor() {
         super(
             () => this,
-            (selection, selectionArgs, sortOrderLimit) =>
-                new Promise(resolve =>
-                    InventoryModule.query(
-                        selection,
-                        selectionArgs,
-                        sortOrderLimit,
-                        (productItems) => {
-                            productItems.forEach(
-                                (item, i) => {
-                                    if (item) {
-                                        productItems[i].__proto__ = item.hasOwnProperty('quantity') ? Product.prototype : ProductGroup.prototype;
-                                    }
-                                }
-                            );
-                            resolve(productItems);
-                        }
-                    )
-                )
+            executor(
+                "ProductItem",
+                (item) => {
+                    if (item.hasOwnProperty('quantity')) {
+                       return Product.prototype
+                    }
+                    return ProductGroup.prototype
+                }
+            )
         );
     }
 

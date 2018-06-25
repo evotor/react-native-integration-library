@@ -108,6 +108,7 @@ import {
 import {OpenReceiptCommandResult, RegisterReceiptCommandResult} from "./js/DataWrappers/receipt/commands";
 import {Product, ProductGroup} from "./js/DataWrappers/inventory/framework";
 import ProductQuery, {ProductSortOrder} from "./js/APIs/Query/Product";
+import UserQuery, {UserSortOrder, GrantQuery, GrantSortOrder} from "./js/APIs/Query/User";
 
 export {
     InventoryAPI,
@@ -150,6 +151,10 @@ export {
     ProductItem,
     ProductSortOrder,
     ProductQuery,
+    UserSortOrder,
+    UserQuery,
+    GrantSortOrder,
+    GrantQuery,
 
     Intent,
 

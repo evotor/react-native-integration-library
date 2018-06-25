@@ -4,13 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 
-import com.evotor.converter.fromjs.NavigationReader
-import com.evotor.converter.tojs.EventWriter
+import com.evotor.converter.from.js.NavigationReader
+import com.evotor.converter.to.js.EventWriter
 import com.evotor.services.EventEmissionService
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 

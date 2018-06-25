@@ -1,9 +1,9 @@
-import React from 'react';
 import {NativeModules} from 'react-native';
 
 export const [
     UserModule,
     EventModule,
+    QueryModule,
     DeviceModule,
     ReceiptModule,
     CommandModule,
@@ -14,6 +14,7 @@ export const [
 ] = [
     NativeModules.UserModule,
     NativeModules.EventModule,
+    NativeModules.QueryModule,
     NativeModules.DeviceModule,
     NativeModules.ReceiptModule,
     NativeModules.CommandModule,

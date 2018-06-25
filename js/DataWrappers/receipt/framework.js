@@ -22,11 +22,11 @@ export class ExtraKey {
  * @param {?string} uuid - Идентификатор (uuid) позиции
  * @param {?string} productUuid - Идентификатор (uuid) товара
  * @param {?string} productCode - Код товара
- * @param {module:types#ProductType} productType - Тип товара
+ * @param {module:inventory#ProductType} productType - Тип товара
  * @param {string} name - Наименование товара
  * @param {string} measureName - Единица измерения товара
  * @param {number} measurePrecision - Точность измерения единиц товара
- * @param {module:types#TaxNumber} taxNumber - Налоговая ставка
+ * @param {module:inventory#TaxNumber} taxNumber - Налоговая ставка
  * @param {number} price - Цена товара
  * @param {number} priceWithDiscountPosition - Цена позиции с учётом скидки
  * @param {number} quantity - Количество добавленного товара
@@ -83,7 +83,7 @@ export class Position {
  * @classdesc Класс, содержащий данные заголовка чека.
  * @param {string} uuid - Идентификатор (uuid)
  * @param {?string} number - Номер
- * @param {module:types#ReceiptType} type - Тип чека
+ * @param {module:receipt#ReceiptType} type - Тип чека
  * @param {?string} date - Дата составления
  * @param {?string} clientEmail - Email получателя
  * @param {?string} clientPhone - Телефон получателя
@@ -111,11 +111,11 @@ export class ReceiptHeader {
  * @class module:receipt.PrintGroup
  * @classdesc Класс, содержащий данные печатной группы чека.
  * @param {?string} identifier - Идентификатор
- * @param {?module:types#PrintGroupType} type - Тип печатной группы
+ * @param {?module:inventory#PrintGroupType} type - Тип печатной группы
  * @param {?string} orgName - Название организации
  * @param {?string} orgInn - ИНН организации
  * @param {?string} orgAddress - Адрес организации
- * @param {?module:types#TaxationSystem} taxationSystem - Система налогообложения
+ * @param {?module:inventory#TaxationSystem} taxationSystem - Система налогообложения
  * @param {?boolean} shouldPrintReceipt - Нужно ли печатать текущую печатную группу на чеке
  */
 export class PrintGroup {

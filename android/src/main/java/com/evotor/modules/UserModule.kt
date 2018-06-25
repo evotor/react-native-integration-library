@@ -1,6 +1,6 @@
 package com.evotor.modules
 
-import com.evotor.converter.tojs.UserWriter
+import com.evotor.converter.to.js.UserWriter
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -8,8 +8,6 @@ import com.facebook.react.bridge.ReactMethod
 
 import java.util.HashMap
 
-import ru.evotor.framework.users.Grant
-import ru.evotor.framework.users.User
 import ru.evotor.framework.users.UserApi
 
 /**
@@ -43,7 +41,6 @@ class UserModule(private val context: ReactApplicationContext) : ReactContextBas
 
     @ReactMethod
     fun getGrantsOfAuthenticatedUser(callback: Callback) {
-        val grants = UserApi.getGrantsOfAuthenticatedUser(context)
         callback.invoke(UserApi.getGrantsOfAuthenticatedUser(context)?.let { UserWriter.writeGrants(it) })
     }
 

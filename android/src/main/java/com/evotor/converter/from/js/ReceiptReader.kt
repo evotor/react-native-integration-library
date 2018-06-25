@@ -1,4 +1,4 @@
-package com.evotor.converter.fromjs
+package com.evotor.converter.from.js
 
 import android.content.Context
 import org.json.JSONException
@@ -177,17 +177,17 @@ object ReceiptReader {
                 result[Payment(
                         payment.getString("uuid"),
                         MoneyCalculator.toBigDecimal(payment.getDouble("value")),
-                        if (paymentSystem != null)
+                        paymentSystem?.let {
                             PaymentSystem(
-                                    PaymentType.valueOf(paymentSystem.getString("paymentType")),
-                                    paymentSystem.getString("userDescription"),
-                                    paymentSystem.getString("paymentSystemId")
+                                    PaymentType.valueOf(it.getString("paymentType")),
+                                    it.getString("userDescription"),
+                                    it.getString("paymentSystemId")
                             )
-                        else
-                            null,
+                        },
                         payment.getString("purposeIdentifier"),
                         payment.getString("accountId"),
-                        payment.getString("accountUserDescription")
+                        payment.getString("accountUserDescription"),
+                        payment.getString("identifier")
                 )] = MoneyCalculator.toBigDecimal(source[key] as Double)
             } catch (e: JSONException) {
                 e.printStackTrace()

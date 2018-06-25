@@ -9,9 +9,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.evotor.modules.EventModule;
-import com.evotor.converter.tojs.ErrorWriter;
+import com.evotor.converter.to.js.ErrorWriter;
 import com.facebook.react.bridge.Callback;
-import com.evotor.converter.fromjs.NavigationReader;
+import com.evotor.converter.from.js.NavigationReader;
 import com.evotor.modules.IntegrationModule;
 
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public abstract class ReactIntegrationService extends IntegrationService {
                                                 (Map) result.get("data")
                                         )
                                 );
-                                Log.v("ReactIntegrationService", getEventName() + ": result is applied");
+                                Log.i("ReactIntegrationService", getEventName() + ": result is applied");
                                 resultCallback.invoke();
                             } else if (result.get("intent") != null) {
                                 final Intent intent = NavigationReader.INSTANCE.readIntent(
@@ -55,7 +55,7 @@ public abstract class ReactIntegrationService extends IntegrationService {
                                 if (intent != null) {
                                     try {
                                         callback.startActivity(intent);
-                                        Log.v("ReactIntegrationService", getEventName() + ": activity is started");
+                                        Log.i("ReactIntegrationService", getEventName() + ": activity is started");
                                         resultCallback.invoke();
                                     } catch (SecurityException e) {
                                         resultCallback.invoke(ErrorWriter.INSTANCE.writeError(
@@ -63,15 +63,15 @@ public abstract class ReactIntegrationService extends IntegrationService {
                                                 "TARGET_CLASS_NOT_EXPORTED"
                                         ));
                                         callback.skip();
-                                        Log.v("ReactIntegrationService", getEventName() + ": skipped");
+                                        Log.i("ReactIntegrationService", getEventName() + ": skipped");
                                     }
                                 } else {
                                     callback.skip();
-                                    Log.v("ReactIntegrationService", getEventName() + ": skipped");
+                                    Log.i("ReactIntegrationService", getEventName() + ": skipped");
                                 }
                             } else {
                                 callback.skip();
-                                Log.v("ReactIntegrationService", getEventName() + ": skipped");
+                                Log.i("ReactIntegrationService", getEventName() + ": skipped");
                                 resultCallback.invoke();
                             }
                         } catch (RemoteException e) {
@@ -98,11 +98,11 @@ public abstract class ReactIntegrationService extends IntegrationService {
                                     getEventName(),
                                     getEventWriter().write(bundle)
                             );
-                            Log.v("ReactIntegrationService", getEventName() + ": event data is emitted");
+                            Log.i("ReactIntegrationService", getEventName() + ": event data is emitted");
                         } else {
                             try {
                                 callback.skip();
-                                Log.v("ReactIntegrationService", getEventName() + ": skipped");
+                                Log.i("ReactIntegrationService", getEventName() + ": skipped");
                             } catch (RemoteException e) {
                                 e.printStackTrace();
                             }

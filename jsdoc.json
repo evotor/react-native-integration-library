@@ -1,0 +1,43 @@
+{
+  "plugins": ["node_modules/jsdoc-babel"],
+  "babel": {
+    "plugins": ["transform-flow-strip-types", "transform-class-properties"]
+  },
+  "recurseDepth": 10,
+  "source": {
+    "include": [
+      "js/APIs/Receipt.js",
+      "js/APIs/User.js",
+      "js/APIs/Devices.js",
+      "js/APIs/Inventory.js",
+      "js/APIs/Query/Product.js",
+      "js/APIs/Session.js",
+      "js/APIs/Services.js",
+      "js/APIs/Navigation.js",
+      "js/DataWrappers/receipt/framework.js",
+      "js/DataWrappers/receipt/commands.js",
+      "js/DataWrappers/receipt/changes.js",
+      "js/DataWrappers/receipt/payment.js",
+      "js/DataWrappers/user.js",
+      "js/DataWrappers/devices.js",
+      "js/DataWrappers/inventory/framework.js",
+      "js/DataWrappers/navigation.js",
+      "js/DataWrappers/services/events.js",
+      "js/DataWrappers/services/results.js",
+      "js/DataWrappers/errors.js",
+      "js/Types/compilable.js",
+      "js/Types/inbuilt.js"
+    ],
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "sourceType": "module",
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc","closure"]
+  },
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
+  }
+}

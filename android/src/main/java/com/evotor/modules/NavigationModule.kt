@@ -5,16 +5,16 @@ import android.content.Context
 import android.content.Intent
 
 import com.evotor.activities.ReactIntegrationActivity
-import com.evotor.converter.tojs.EventWriter
-import com.evotor.converter.tojs.NavigationWriter
+import com.evotor.converter.to.js.EventWriter
+import com.evotor.converter.to.js.NavigationWriter
 import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
-import com.evotor.converter.fromjs.NavigationReader
-import com.evotor.converter.tojs.ErrorWriter
+import com.evotor.converter.from.js.NavigationReader
+import com.evotor.converter.to.js.ErrorWriter
 
 import java.util.HashMap
 
@@ -117,7 +117,9 @@ class NavigationModule(private val context: ReactApplicationContext) : ReactCont
         }
     }
 
-    private fun navigate(intent: ReadableMap, starter: (result: Intent, fromActivity: Boolean) -> Unit, callback: Callback) {
+    private fun navigate(intent: ReadableMap,
+                         starter: (result: Intent, fromActivity: Boolean) -> Unit,
+                         callback: Callback) {
         val c: Context?
         var fromActivity = false
         if (intent.getArray("flags").toArrayList().contains(Intent.FLAG_ACTIVITY_NEW_TASK.toDouble())) {
@@ -170,10 +172,10 @@ class NavigationModule(private val context: ReactApplicationContext) : ReactCont
                     IntegrationModule.resultReaders[eventName]?.read(context, result.toHashMap())
             )
             callback.invoke()
-        } catch (e: NullPointerException) {
-            callback.invoke(ErrorWriter.writeError("NoActivityError", e.message))
-        } catch (e: RuntimeException) {
+        }  catch (e: RuntimeException) {
             callback.invoke(ErrorWriter.writeError("IntegrationError", e.message))
+        } catch (e: Exception) {
+            callback.invoke(ErrorWriter.writeError("NoActivityError", e.message))
         }
 
     }

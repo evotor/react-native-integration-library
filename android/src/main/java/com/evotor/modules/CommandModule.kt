@@ -2,9 +2,9 @@ package com.evotor.modules
 
 import android.os.Bundle
 
-import com.evotor.converter.fromjs.ReceiptReader
-import com.evotor.converter.tojs.ErrorWriter
-import com.evotor.converter.tojs.CommandWriter
+import com.evotor.converter.from.js.ReceiptReader
+import com.evotor.converter.to.js.ErrorWriter
+import com.evotor.converter.to.js.CommandWriter
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule

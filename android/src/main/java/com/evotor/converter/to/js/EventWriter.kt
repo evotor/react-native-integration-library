@@ -1,4 +1,4 @@
-package com.evotor.converter.tojs
+package com.evotor.converter.to.js
 
 import android.content.Intent
 import android.os.Bundle

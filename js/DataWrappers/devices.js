@@ -16,7 +16,7 @@ export class PrintableText {
  * @class module:devices.PrintableBarcode
  * @classdesc Класс, содержащий данные штрихкода для печати на принтере чеков.
  * @param {string} barcodeValue - Значение штрихкода
- * @param {module:types#BarcodeType} barcodeType - Тип штрихкода
+ * @param {module:devices#BarcodeType} barcodeType - Тип штрихкода
  */
 export class PrintableBarcode {
     constructor(barcodeValue: string, barcodeType: BarcodeType) {

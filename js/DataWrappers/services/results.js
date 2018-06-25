@@ -7,7 +7,7 @@ import {PaymentPurpose} from "../receipt/payment";
 /**
  * @class module:services.BeforePositionsEditedEventResult
  * @classdesc Класс, содержащий результат события интеграционной службы изменения позиций чека.
- * @param {?module:types#PositionChange[]} changes - Массив изменений позиций
+ * @param {?module:receipt#PositionChange[]} changes - Массив изменений позиций
  * @param {?module:receipt.SetExtra} extra - Дополнительные поля чека
  */
 export class BeforePositionsEditedEventResult extends AbstractBundlable {
@@ -23,7 +23,7 @@ export class BeforePositionsEditedEventResult extends AbstractBundlable {
  * @classdesc Класс, содержащий результат события интеграционной службы начисления скидки на чек.
  * @param {number} discount - Сумма скидки
  * @param {?module:receipt.SetExtra} extra - Дополнительные поля чека
- * @param {module:types#PositionChange[]} changes - Массив изменений позиций
+ * @param {module:receipt#PositionChange[]} changes - Массив изменений позиций
  */
 export class ReceiptDiscountEventResult extends AbstractBundlable {
     constructor(discount: number, extra: SetExtra | null, changes: PositionChange[]) {
@@ -80,7 +80,7 @@ export class PrintExtraRequiredEventResult extends AbstractBundlable {
  * @param {string} rrn - Идентификатор платежа
  * @param {string[]} slip - Текст, который будет напечатан на чеке в двух экземплярах
  * @param {?string} paymentInfo - Поле для хранения статистической информации. Приложение не заполняет это поле.
- * @param {module:types#PaymentType} [paymentType = PaymentType.ELECTRON] - Тип платежа
+ * @param {module:receipt#PaymentType} [paymentType = PaymentType.ELECTRON] - Тип платежа
  */
 export class PaymentSystemPaymentOkResult extends AbstractBundlable {
     constructor(rrn: string, slip: string[], paymentInfo: string | null, paymentType: PaymentType = PaymentType.ELECTRON) {

@@ -37,7 +37,7 @@ export class IntegrationCallback {
     /**
      * Устанавливает результат события интеграционной службы.
      * @function module:services.IntegrationCallback#onResult
-     * @param {module:types#IntegrationServiceEventResult} result - Результат
+     * @param {module:services#IntegrationServiceEventResult} result - Результат
      * @returns {Promise<void>}
      * @throws {module:errors.IntegrationError}
      */
@@ -78,8 +78,8 @@ export class ServiceAPI {
     /**
      * Добавляет слушатель события службы.
      * @function module:services.ServiceAPI.addEventListener
-     * @param {module:types#ServiceEventType} type - Тип события
-     * @param {module:types#ServiceEventListener} listener - Слушатель события
+     * @param {module:services#ServiceEventType} type - Тип события
+     * @param {module:services#ServiceEventListener} listener - Слушатель события
      * @returns {void}
      */
     static addEventListener(type: ServiceEventType, listener: ServiceEventListener): void {
@@ -89,8 +89,8 @@ export class ServiceAPI {
     /**
      * Удаляет слушатель события службы.
      * @function module:services.ServiceAPI.removeEventListener
-     * @param {module:types#ServiceEventType} type - Тип события
-     * @param {module:types#ServiceEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @param {module:services#ServiceEventType} type - Тип события
+     * @param {module:services#ServiceEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
      * @returns {boolean} Удалён ли слушатель
      */
     static removeEventListener(type: ServiceEventType, listener?: ServiceEventListener): boolean {
@@ -109,8 +109,8 @@ export class BroadcastReceiver {
     /**
      * Добавляет слушатель широковещательного сообщения.
      * @function module:services.BroadcastReceiver.addEventListener
-     * @param {module:types#BroadcastEventType} type - Тип события
-     * @param {module:types#BroadcastEventListener} listener - Слушатель события
+     * @param {module:services#BroadcastEventType} type - Тип события
+     * @param {module:services#BroadcastEventListener} listener - Слушатель события
      * @returns {void}
      */
     static addEventListener(type: BroadcastEventType, listener: BroadcastEventListener): void {
@@ -120,8 +120,8 @@ export class BroadcastReceiver {
     /**
      * Удаляет слушатель широковещательного сообщения.
      * @function module:services.BroadcastReceiver.removeEventListener
-     * @param {module:types#BroadcastEventType} type - Тип события
-     * @param {module:types#BroadcastEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @param {module:services#BroadcastEventType} type - Тип события
+     * @param {module:services#BroadcastEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
      * @returns {boolean} Удалён ли слушатель
      */
     static removeEventListener(type: BroadcastEventType, listener?: BroadcastEventListener): boolean {
@@ -140,8 +140,8 @@ export class PushNotificationReceiver {
     /**
      * Добавляет слушатель push-уведомлений.
      * @function module:services.PushNotificationReceiver.addEventListener
-     * @param {module:types#PushNotificationReceiverEventType} type - Тип события
-     * @param {module:types#PushNotificationReceiverEventListener} listener - Слушатель события
+     * @param {module:services#PushNotificationReceiverEventType} type - Тип события
+     * @param {module:services#PushNotificationReceiverEventListener} listener - Слушатель события
      * @returns {void}
      */
     static addEventListener(type: PushNotificationReceiverEventType, listener: PushNotificationReceiverEventListener): void {
@@ -151,8 +151,8 @@ export class PushNotificationReceiver {
     /**
      * Удаляет слушатель push-уведомлений.
      * @function module:services.PushNotificationReceiver.removeEventListener
-     * @param {module:types#PushNotificationReceiverEventType} type - Тип события
-     * @param {module:types#PushNotificationReceiverEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
+     * @param {module:services#PushNotificationReceiverEventType} type - Тип события
+     * @param {module:services#PushNotificationReceiverEventListener} [listener] - Слушатель события. В случае, если он не указан, будут удалены все слушатели указанного типа события.
      * @returns {boolean} Удалён ли слушатель
      */
     static removeEventListener(type: PushNotificationReceiverEventType, listener?: PushNotificationReceiverEventListener): boolean {

@@ -2,7 +2,7 @@ package com.evotor.services
 
 import android.content.Intent
 
-import com.evotor.converter.tojs.NavigationWriter
+import com.evotor.converter.to.js.NavigationWriter
 import com.facebook.react.HeadlessJsTaskService
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.jstasks.HeadlessJsTaskConfig

@@ -1,4 +1,4 @@
-package com.evotor.converter.tojs
+package com.evotor.converter.to.js
 
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableArray
@@ -6,7 +6,6 @@ import com.facebook.react.bridge.WritableMap
 import ru.evotor.framework.inventory.ProductExtra
 import ru.evotor.framework.inventory.ProductItem
 import ru.evotor.framework.inventory.field.Field
-import ru.evotor.query.Cursor
 
 /**
  * Created by a.lunkov on 16.03.2018.
@@ -56,19 +55,6 @@ object InventoryWriter {
         } else if (source is ProductItem.ProductGroup) {
             result.putString("taxNumber", source.taxNumber.name)
 
-        }
-        return result
-    }
-
-    fun writeProductItems(source: Cursor<ProductItem?>?): WritableArray {
-        val result = Arguments.createArray()
-        source?.use {
-            if (it.moveToFirst()) {
-                result.pushMap(it.getValue()?.let { value -> writeProductItem(value) })
-                while (it.moveToNext()) {
-                    result.pushMap(it.getValue()?.let { value -> writeProductItem(value) })
-                }
-            }
         }
         return result
     }
