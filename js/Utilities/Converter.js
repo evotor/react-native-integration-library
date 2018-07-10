@@ -1,4 +1,4 @@
-import {ExtraKey, Position, PrintGroup, Receipt, ReceiptHeader} from "../DataWrappers/receipt/framework";
+import {ExtraKey, Position, PrintGroup, PrintReceipt, Receipt, ReceiptHeader} from "../DataWrappers/receipt/framework";
 import {Intent} from "../DataWrappers/navigation";
 import {PositionAdd, PositionEdit} from "../DataWrappers/receipt/changes";
 import {
@@ -19,6 +19,7 @@ import {
 import {PaymentSystemEvent} from "../DataWrappers/services/events";
 import {Product, ProductGroup} from "../DataWrappers/inventory/framework";
 import {IntegrationCallback} from "../APIs/Services";
+import {Payment} from "../DataWrappers/receipt/payment";
 
 export default class Converter {
 
@@ -50,7 +51,7 @@ export default class Converter {
             return listener => listener(Converter.setPrototypeOf(extras, CashOperationEvent.prototype));
         } else if (type === 'PUSH_NOTIFICATION_RECEIVED') {
             return listener => listener(...extras);
-        } else  if (type === 'ACTIVITY_RESULT') {
+        } else if (type === 'ACTIVITY_RESULT') {
             return Converter.getActivityResultReader(extras);
         }
         return listener => listener(extras)
@@ -80,9 +81,26 @@ export default class Converter {
             if (source) {
                 source.printDocuments.forEach(
                     (item, i) => {
-                        source.printDocuments[i] = Converter.setPrototypeOf(item, PrintGroup.prototype);
-                        source.printDocuments[i].payments = Converter.readPayments(item.payments);
-                        source.printDocuments[i].changes = Converter.readPayments(item.changes);
+                        const positionsResult = [];
+                        item.positions.forEach(
+                            (jtem, j) => positionsResult[j] = Converter.readPosition(jtem)
+                        );
+                        let discountsResult = null;
+                        if (item.discounts) {
+                            discountsResult = new Map();
+                            for (let key in item.discounts) {
+                                if (item.discounts.hasOwnProperty(key)) {
+                                    discountsResult.set(key, item.discounts[key])
+                                }
+                            }
+                        }
+                        source.printDocuments[i] = new PrintReceipt(
+                            item.printGroup ? Converter.setPrototypeOf(item.printGroup, PrintGroup.prototype) : null,
+                            positionsResult,
+                            Converter.readPayments(item.payments),
+                            Converter.readPayments(item.changes),
+                            discountsResult
+                        )
                     }
                 );
                 result = new Receipt(
@@ -148,7 +166,7 @@ export default class Converter {
         let result = new Map();
         for (let key in source) {
             if (source.hasOwnProperty(key)) {
-                result.set(JSON.parse(key), source[key])
+                result.set(Converter.setPrototypeOf(JSON.parse(key), Payment.prototype), source[key])
             }
         }
         return result

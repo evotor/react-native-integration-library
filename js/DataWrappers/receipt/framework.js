@@ -146,6 +146,7 @@ export class PrintGroup {
  * @param {?Map<module:receipt.Payment, number>} discounts - Ассоциативный массив (платёж, сумма скидки)
  */
 export class PrintReceipt {
+
     constructor(printGroup: PrintGroup | null,
                 positions: Position[],
                 payments: Map<Payment, number>,
@@ -157,6 +158,20 @@ export class PrintReceipt {
         this.changes = changes;
         this.discounts = discounts ? discounts : null;
     }
+
+    /**
+     * Получает сумму скидок для текущей группы.
+     * @function module:receipt.PrintReceipt#getDiscount
+     * @return {number} Значение скидки
+     */
+    getDiscount(): number {
+        let discount = 0;
+        if (this.discounts) {
+            this.discounts.forEach((value) => discount += value)
+        }
+        return discount;
+    }
+
 }
 
 /**
@@ -181,7 +196,7 @@ export class Receipt {
     getPositions(): Position[] {
         let positions = [];
         this.printDocuments.forEach(
-            (item) => {
+            item => {
                 positions = positions.concat(item.positions);
             }
         );
@@ -195,8 +210,26 @@ export class Receipt {
      */
     getPayments(): Payment[] {
         let payments = [];
-        this.printDocuments.forEach((item) => item.payments.forEach((value, key) => payments.push(key)));
+        this.printDocuments.forEach(item => item.payments.forEach((value, key) => payments.push(key)));
         return payments;
+    }
+
+    /**
+     * Получает скидку на чек без учета скидок на позиции.
+     * @function module:receipt.Receipt#getDiscount
+     * @return {number} Значение скидки
+     */
+    getDiscount(): number {
+        let discount = 0;
+        this.printDocuments.forEach(
+            item => {
+                if (item.discounts) {
+                    item.discounts.forEach((value) => discount += value)
+
+                }
+            }
+        );
+        return discount;
     }
 
 }

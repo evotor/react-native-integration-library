@@ -118,7 +118,7 @@ object ReceiptWriter {
         result.putMap("header", writeReceiptHeader(source.header))
         val printDocuments = Arguments.createArray()
         for (i in 0 until source.printDocuments.size) {
-            val (printGroup, positions1, payments, changes) = source.printDocuments[i]
+            val (printGroup, positions1, payments, changes, discounts) = source.printDocuments[i]
             val printReceiptResult = Arguments.createMap()
             printReceiptResult.putMap("printGroup", printGroup?.let { writePrintGroup(it) })
             val positions = Arguments.createArray()
@@ -128,6 +128,13 @@ object ReceiptWriter {
             printReceiptResult.putArray("positions", positions)
             printReceiptResult.putMap("payments", writePayments(payments))
             printReceiptResult.putMap("changes", writePayments(changes))
+            discounts?.let {
+                val discountsResult = Arguments.createMap()
+                for(key in discounts.keys) {
+                    discountsResult.putDouble(key, discounts[key]?.toDouble() ?: (0).toDouble())
+                }
+                printReceiptResult.putMap("discounts", discountsResult)
+            }
             printDocuments.pushMap(printReceiptResult)
         }
         result.putArray("printDocuments", printDocuments)
