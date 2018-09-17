@@ -1,14 +1,9 @@
 package com.evotor.modules
 
-import android.util.Log
 import com.evotor.converter.to.js.InventoryWriter
 import com.facebook.react.bridge.*
-import ru.evotor.framework.Utils
 import ru.evotor.framework.inventory.*
 
-import ru.evotor.framework.receipt.TaxNumber
-import ru.evotor.query.Cursor
-import java.math.BigDecimal
 import java.util.*
 
 /**

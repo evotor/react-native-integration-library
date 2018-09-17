@@ -21,11 +21,11 @@ import ru.evotor.framework.payment.PaymentPurpose;
 
 public class PaymentSelectService extends ReactIntegrationService {
 
-    private static final String eventName = "PAYMENT_SELECTED";
+    private static final String EVENT_NAME = "PAYMENT_SELECTED";
 
     public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
-                eventName,
+                EVENT_NAME,
                 new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
@@ -47,7 +47,7 @@ public class PaymentSelectService extends ReactIntegrationService {
 
     @Override
     protected String getEventName() {
-        return eventName;
+        return EVENT_NAME;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class PaymentSelectService extends ReactIntegrationService {
                 if (event == null) {
                     return null;
                 }
-                return ReceiptWriter.INSTANCE.writePaymentSystem(event.getPaymentSystem());
+                return ReceiptWriter.INSTANCE.writePaymentPurpose(event.getPaymentPurpose());
             }
         };
     }

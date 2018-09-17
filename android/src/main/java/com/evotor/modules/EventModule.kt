@@ -57,7 +57,7 @@ class EventModule(private val context: ReactApplicationContext) : ReactContextBa
             return localEmitter != null
         }
 
-        private fun emitGlobal(c: Context, eventName: String, data: Any?) {
+        fun emitGlobal(c: Context, eventName: String, data: Any?) {
             val extras = Bundle()
             NavigationReader.readDefaultIntentExtra(c, "extras", data, extras)
             c.startService(

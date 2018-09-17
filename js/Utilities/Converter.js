@@ -11,15 +11,15 @@ import {
 import {
     CashDrawerEventType,
     CashOperationEventType,
-    IntegrationServiceEventType,
+    IntegrationServiceEventType, NavigationEventType,
     PositionEventType,
-    ProductEventType,
+    ProductEventType, PushNotificationReceiverEventType,
     ReceiptEventType
 } from "../Types/compilable";
 import {PaymentSystemEvent} from "../DataWrappers/services/events";
 import {Product, ProductGroup} from "../DataWrappers/inventory/framework";
 import {IntegrationCallback} from "../APIs/Services";
-import {Payment} from "../DataWrappers/receipt/payment";
+import {Payment, PaymentPurpose} from "../DataWrappers/receipt/payment";
 
 export default class Converter {
 
@@ -49,9 +49,9 @@ export default class Converter {
             return listener => listener(Converter.setPrototypeOf(extras, CashDrawerEvent.prototype));
         } else if (CashOperationEventType.hasOwnProperty(type)) {
             return listener => listener(Converter.setPrototypeOf(extras, CashOperationEvent.prototype));
-        } else if (type === 'PUSH_NOTIFICATION_RECEIVED') {
+        } else if (type === PushNotificationReceiverEventType.PUSH_NOTIFICATION_RECEIVED) {
             return listener => listener(...extras);
-        } else if (type === 'ACTIVITY_RESULT') {
+        } else if (type === NavigationEventType.ACTIVITY_RESULT) {
             return Converter.getActivityResultReader(extras);
         }
         return listener => listener(extras)
@@ -118,9 +118,9 @@ export default class Converter {
     static getIntegrationEventReader(type, eventData) {
         const callback = new IntegrationCallback(type);
         switch (type) {
-            case 'RECEIPT_DISCOUNT':
+            case IntegrationServiceEventType.RECEIPT_DISCOUNT:
                 return listener => listener(...eventData, callback);
-            case 'BEFORE_POSITIONS_EDITED':
+            case IntegrationServiceEventType.BEFORE_POSITIONS_EDITED:
                 eventData.forEach(
                     (item, i) => {
                         switch (item.type) {
@@ -136,10 +136,12 @@ export default class Converter {
                     }
                 );
                 return listener => listener(eventData, callback);
-            case 'PAYMENT_SYSTEM':
+            case IntegrationServiceEventType.PAYMENT_SELECTED:
+                return listener => listener(Converter.setPrototypeOf(eventData, PaymentPurpose.prototype), callback);
+            case IntegrationServiceEventType.PAYMENT_SYSTEM:
                 eventData[1] = Converter.setPrototypeOf(eventData[1], PaymentSystemEvent.prototype);
                 return listener => listener(...eventData, callback);
-            case 'PRINT_EXTRA_REQUIRED':
+            case IntegrationServiceEventType.PRINT_EXTRA_REQUIRED:
                 return listener => listener(callback);
             default:
                 return listener => listener(eventData, callback);
@@ -164,11 +166,9 @@ export default class Converter {
 
     static readPayments(source) {
         let result = new Map();
-        for (let key in source) {
-            if (source.hasOwnProperty(key)) {
-                result.set(Converter.setPrototypeOf(JSON.parse(key), Payment.prototype), source[key])
-            }
-        }
+        source.forEach(
+            item => result.set(item.key, Converter.setPrototypeOf(item.value, Payment.prototype))
+        );
         return result
     }
 
@@ -199,9 +199,12 @@ export default class Converter {
     }
 
     static writePayments(source) {
-        let result = {};
+        let result = [];
         source.forEach(
-            (value, key) => result[JSON.stringify(key)] = value
+            (value, key) => result.push({
+                value: value,
+                key: key
+            })
         );
         return result
     }

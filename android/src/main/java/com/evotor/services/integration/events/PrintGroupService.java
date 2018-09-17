@@ -21,11 +21,11 @@ import ru.evotor.framework.core.action.event.receipt.print_group.PrintGroupRequi
 
 public class PrintGroupService extends ReactIntegrationService {
 
-    private static final String eventName = "PRINT_GROUP_REQUIRED";
+    private static final String EVENT_NAME = "PRINT_GROUP_REQUIRED";
 
     public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
-                eventName,
+                EVENT_NAME,
                 new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
@@ -47,7 +47,7 @@ public class PrintGroupService extends ReactIntegrationService {
 
     @Override
     protected String getEventName() {
-        return eventName;
+        return EVENT_NAME;
     }
 
     @Override

@@ -23,7 +23,7 @@ import {
     ProductEvent,
     ReceiptEvent
 } from "../DataWrappers/services/events";
-import {PaymentSystem} from "../DataWrappers/receipt/payment";
+import {PaymentPerformer, PaymentPurpose, PaymentSystem} from "../DataWrappers/receipt/payment";
 import {IntegrationCallback} from "../APIs/Services";
 import {PrintableBarcode, PrintableImage, PrintableText} from "../DataWrappers/devices";
 import {
@@ -35,7 +35,10 @@ import {
     ReceiptEventType
 } from "./compilable";
 import {
-    BeforePositionsEditedEventResult, PaymentSelectedEventResult, PaymentSystemPaymentErrorResult,
+    BeforePositionsEditedEventResult, PaymentDelegatorCanceledAllEventResult, PaymentDelegatorCanceledEventResult,
+    PaymentDelegatorSelectedEventResult,
+    PaymentSelectedEventResult,
+    PaymentSystemPaymentErrorResult,
     PaymentSystemPaymentOkResult,
     PrintExtraRequiredEventResult,
     PrintGroupRequiredEventResult,
@@ -145,6 +148,16 @@ export type NavigationEventListener = ActivityResultListener | BackPressListener
 export type PaymentSystemEventResult = PaymentSystemPaymentOkResult | PaymentSystemPaymentErrorResult;
 
 /**
+ * Результат события интеграционной службы делегирования сторонними платёжными системами.
+ * @name module:services#PaymentSystemEventResult
+ * @type {type}
+ * @default {@link module:services.PaymentDelegatorSelectedEventResult}
+ * | {@link module:services.PaymentDelegatorCanceledEventResult}
+ * | {@link module:services.PaymentDelegatorCanceledAllEventResult}
+ */
+export type PaymentDelegatorEventResult = PaymentDelegatorSelectedEventResult | PaymentDelegatorCanceledEventResult | PaymentDelegatorCanceledAllEventResult;
+
+/**
  * Результат события интеграционной службы.
  * @name module:services#IntegrationServiceEventResult
  * @type {type}
@@ -160,6 +173,7 @@ export type IntegrationServiceEventResult =
     ReceiptDiscountEventResult |
     PaymentSelectedEventResult |
     PaymentSystemEventResult |
+    PaymentDelegatorEventResult |
     PrintGroupRequiredEventResult |
     PrintExtraRequiredEventResult;
 
@@ -207,9 +221,9 @@ export type ReceiptDiscountEventListener = (discount: number, receiptUuid: strin
  * Слушатель события интеграционной службы службы разделения оплаты чека.
  * @name module:services#PaymentSelectedEventListener
  * @type {type}
- * @default (paymentSystem: {@link module:receipt.PaymentSystem}, callback: {@link module:services.IntegrationCallback}) => void
+ * @default (paymentPurpose: {@link module:receipt.PaymentPurpose}, callback: {@link module:services.IntegrationCallback}) => void
  */
-export type PaymentSelectedEventListener = (paymentSystem: PaymentSystem, callback: IntegrationCallback) => void
+export type PaymentSelectedEventListener = (paymentPurpose: PaymentPurpose, callback: IntegrationCallback) => void
 
 /**
  * Слушатель события интеграционной службы службы использования сторонних платёжных систем.
@@ -218,6 +232,14 @@ export type PaymentSelectedEventListener = (paymentSystem: PaymentSystem, callba
  * @default (operationType: {@link module:services#PaymentSystemOperationType}, event: {@link module:services.PaymentSystemEvent}, callback: {@link module:services.IntegrationCallback}) => void
  */
 export type PaymentSystemEventListener = (operationType: PaymentSystemOperationType, event: PaymentSystemEvent, callback: IntegrationCallback) => void
+
+/**
+ * Слушатель события интеграционной службы службы делегирования сторонними платёжными системами.
+ * @name module:services#PaymentSystemEventListener
+ * @type {type}
+ * @default (receiptUuid: string, callback: {@link module:services.IntegrationCallback}) => void
+ */
+export type PaymentDelegatorEventListener = (receiptUuid: string, callback: IntegrationCallback) => void
 
 /**
  * Слушатель события интеграционной службы службы разделения чека на печатные группы.
@@ -251,6 +273,7 @@ export type IntegrationServiceEventListener =
     ReceiptDiscountEventListener |
     PaymentSelectedEventListener |
     PaymentSystemEventListener |
+    PaymentDelegatorEventListener |
     PrintGroupRequiredEventListener |
     PrintExtraRequiredEventListener;
 

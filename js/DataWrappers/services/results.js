@@ -95,11 +95,51 @@ export class PaymentSystemPaymentOkResult extends AbstractBundlable {
 /**
  * @class module:services.PaymentSystemPaymentErrorResult
  * @classdesc Класс, содержащий ошибку обработки события интеграционной службы использования сторонней платёжной системы.
- * @param {string} [errorDescription] - Описание ошибки
+ * @param {?string} [errorDescription] - Описание ошибки
  */
 export class PaymentSystemPaymentErrorResult extends AbstractBundlable {
-    constructor(errorDescription: ?string) {
+    constructor(errorDescription?: string) {
         super('PaymentSystemPaymentErrorResult');
         this.errorDescription = errorDescription ? errorDescription : null;
+    }
+}
+
+/**
+ * @class module:services.PaymentDelegatorSelectedEventResult
+ * @classdesc Класс, содержащий успешный результат события интеграционной службы делегирования сторонними платёжными системами.
+ * @param {PaymentPurpose} paymentPurpose - Цель платежа
+ * @param {?SetExtra} extra - Дополнительные поля чека
+ */
+export class PaymentDelegatorSelectedEventResult extends AbstractBundlable {
+    constructor(paymentPurpose: PaymentPurpose, extra?: SetExtra) {
+        super('PaymentDelegatorSelectedEventResult');
+        this.paymentPurpose = paymentPurpose;
+        this.extra = extra ? extra : null;
+    }
+}
+
+/**
+ * @class module:services.PaymentDelegatorCanceledEventResult
+ * @classdesc Класс, содержащий данные для отмены плажтежа, произведённого с помощью интеграционной службы делегирования сторонними платёжными системами.
+ * @param {string} paymentUuid - Идентификатор (uuid) платежа
+ * @param {?SetExtra} extra - Дополнительные поля чека
+ */
+export class PaymentDelegatorCanceledEventResult extends AbstractBundlable {
+    constructor(paymentUuid: string, extra?: SetExtra) {
+        super('PaymentDelegatorCanceledEventResult');
+        this.paymentUuid = paymentUuid;
+        this.extra = extra ? extra : null;
+    }
+}
+
+/**
+ * @class module:services.PaymentDelegatorCanceledAllEventResult
+ * @classdesc Класс, содержащий данные для отмены всех платежей, произведённых с помощью интеграционной службы делегирования сторонними платёжными системами.
+ * @param {?SetExtra} extra - Дополнительные поля чека
+ */
+export class PaymentDelegatorCanceledAllEventResult extends AbstractBundlable {
+    constructor(extra?: SetExtra) {
+        super('PaymentDelegatorCanceledAllEventResult');
+        this.extra = extra ? extra : null;
     }
 }

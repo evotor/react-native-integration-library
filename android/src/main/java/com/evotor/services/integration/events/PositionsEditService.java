@@ -20,11 +20,11 @@ import ru.evotor.framework.core.action.event.receipt.before_positions_edited.Bef
 
 public class PositionsEditService extends ReactIntegrationService {
 
-    private static final String eventName = "BEFORE_POSITIONS_EDITED";
+    private static final String EVENT_NAME = "BEFORE_POSITIONS_EDITED";
 
     public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
-                eventName,
+                EVENT_NAME,
                 new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
@@ -41,7 +41,7 @@ public class PositionsEditService extends ReactIntegrationService {
 
     @Override
     protected String getEventName() {
-        return eventName;
+        return EVENT_NAME;
     }
 
     @Override

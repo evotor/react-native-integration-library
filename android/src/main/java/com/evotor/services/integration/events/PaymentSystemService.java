@@ -21,11 +21,11 @@ import ru.evotor.framework.payment.PaymentType;
 
 public class PaymentSystemService extends ReactIntegrationService {
 
-    private static final String eventName = "PAYMENT_SYSTEM";
+    private static final String EVENT_NAME = "PAYMENT_SYSTEM";
 
     public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
-                eventName,
+                EVENT_NAME,
                 new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
@@ -39,14 +39,12 @@ public class PaymentSystemService extends ReactIntegrationService {
                                     return new PaymentSystemPaymentOkResult(
                                             rrn, slip, (String) data.get("paymentInfo"), PaymentType.valueOf(paymentType)
                                     );
-                                } else {
-                                    return null;
                                 }
+                                break;
                             case "PaymentSystemPaymentErrorResult":
                                 return new PaymentSystemPaymentErrorResult((String) data.get("errorDescription"));
-                            default:
-                                return null;
                         }
+                        return null;
                     }
                 }
         );
@@ -54,7 +52,7 @@ public class PaymentSystemService extends ReactIntegrationService {
 
     @Override
     protected String getEventName() {
-        return eventName;
+        return EVENT_NAME;
     }
 
     @Override

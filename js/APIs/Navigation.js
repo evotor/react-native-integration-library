@@ -5,10 +5,15 @@
 import {NavigationModule} from '../NativeModules';
 import {Intent} from '../DataWrappers/navigation';
 import type {IntegrationServiceEventResult, NavigationEventListener} from '../Types/inbuilt';
-import {NavigationEventType} from '../Types/compilable';
+import {IntegrationServiceEventType, NavigationEventType} from '../Types/compilable';
 import {
     BeforePositionsEditedEventResult,
+    PaymentDelegatorCanceledAllEventResult,
+    PaymentDelegatorCanceledEventResult,
+    PaymentDelegatorSelectedEventResult,
     PaymentSelectedEventResult,
+    PaymentSystemPaymentErrorResult,
+    PaymentSystemPaymentOkResult,
     PrintExtraRequiredEventResult,
     PrintGroupRequiredEventResult,
     ReceiptDiscountEventResult
@@ -187,18 +192,31 @@ export default class NavigationAPI {
      */
     static setIntegrationResult(result: IntegrationServiceEventResult): Promise<void> {
         let type;
-        if (result.__name__ === 'BeforePositionsEditedEventResult') {
-            type = 'BEFORE_POSITIONS_EDITED';
-        } else if (result.__name__ === 'ReceiptDiscountEventResult') {
-            type = 'RECEIPT_DISCOUNT';
-        } else if (result.__name__ === 'PaymentSelectedEventResult') {
-            type = 'PAYMENT_SELECTED';
-        } else if (result.__name__ === 'PrintGroupRequiredEventResult') {
-            type = 'PRINT_GROUP_REQUIRED';
-        } else if (result.__name__ === 'PrintExtraRequiredEventResult') {
-            type = 'PRINT_EXTRA_REQUIRED';
-        } else if (result.__name__ === 'PaymentSystemPaymentOkResult' || result.__name__ === 'PaymentSystemPaymentErrorResult') {
-            type = 'PAYMENT_SYSTEM';
+        switch (result.__name__) {
+            case "BeforePositionsEditedEventResult":
+                type = IntegrationServiceEventType.BEFORE_POSITIONS_EDITED;
+                break;
+            case "ReceiptDiscountEventResult":
+                type = IntegrationServiceEventType.RECEIPT_DISCOUNT;
+                break;
+            case "PaymentSelectedEventResult":
+                type = IntegrationServiceEventType.PAYMENT_SELECTED;
+                break;
+            case "PrintGroupRequiredEventResult":
+                type = IntegrationServiceEventType.PRINT_GROUP_REQUIRED;
+                break;
+            case "PrintExtraRequiredEventResult":
+                type = IntegrationServiceEventType.PRINT_EXTRA_REQUIRED;
+                break;
+            case "PaymentSystemPaymentOkResult" :
+            case "PaymentSystemPaymentErrorResult":
+                type = IntegrationServiceEventType.PAYMENT_SYSTEM;
+                break;
+            case "PaymentDelegatorSelectedEventResult":
+            case "PaymentDelegatorCanceledEventResult":
+            case "PaymentDelegatorCanceledAllEventResult":
+                type = IntegrationServiceEventType.PAYMENT_DELEGATOR;
+                break;
         }
         return new Promise(
             (resolve, reject) => {

@@ -16,7 +16,7 @@ object NavigationWriter {
         result.putString("className", source.component?.className)
         result.putString("packageName", source.`package`)
         result.putString("action", source.action)
-        result.putMap("extras", source.extras?.let { writeBundle(it) })
+        result.putMap("extras", source.extras?.let { writeBundle(it) } ?: Arguments.createMap())
         val categories = Arguments.createArray()
         if (source.categories != null) {
             for (item in source.categories) {

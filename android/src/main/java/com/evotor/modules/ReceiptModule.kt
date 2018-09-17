@@ -5,6 +5,7 @@ import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
+import ru.evotor.framework.component.PaymentPerformerApi
 
 import java.util.HashMap
 
@@ -47,6 +48,11 @@ class ReceiptModule(private val context: ReactApplicationContext) : ReactContext
         callback.invoke(ReceiptWriter.writeReceiptHeaders(
                 ReceiptApi.getReceiptHeaders(context, type?.let{Receipt.Type.valueOf(type)})
         ))
+    }
+
+    @ReactMethod
+    fun getAllPaymentPerformers(callback: Callback) {
+        callback.invoke(ReceiptWriter.writePaymentPerformers(PaymentPerformerApi.getAllPaymentPerformers(context.packageManager)))
     }
 
 }

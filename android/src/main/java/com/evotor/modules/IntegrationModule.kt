@@ -1,26 +1,15 @@
 package com.evotor.modules
 
 import com.evotor.services.integration.ReactIntegrationService
-import com.evotor.services.integration.events.PaymentSystemService
-import com.facebook.react.bridge.Callback
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableMap
-import com.evotor.services.integration.events.PaymentSelectService
-import com.evotor.services.integration.events.PositionsEditService
-import com.evotor.services.integration.events.PrintExtraService
-import com.evotor.services.integration.events.PrintGroupService
-import com.evotor.services.integration.events.ReceiptDiscountService
-
-import java.util.Collections
-import java.util.HashMap
+import com.evotor.services.integration.events.*
+import com.facebook.react.bridge.*
+import java.util.*
 
 /**
  * Created by a.lunkov on 25.10.2017.
  */
 
-class IntegrationModule(c: ReactApplicationContext) : ReactContextBaseJavaModule(c) {
+class IntegrationModule(private val context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
 
     override fun getName(): String {
         return "IntegrationModule"
@@ -46,6 +35,7 @@ class IntegrationModule(c: ReactApplicationContext) : ReactContextBaseJavaModule
             ReceiptDiscountService.getResultReader(result)
             PaymentSelectService.getResultReader(result)
             PaymentSystemService.getResultReader(result)
+            PaymentDelegatorService.getResultReader(result)
             PrintGroupService.getResultReader(result)
             PrintExtraService.getResultReader(result)
             return Collections.unmodifiableMap<String, ReactIntegrationService.IntegrationResultReader>(result)

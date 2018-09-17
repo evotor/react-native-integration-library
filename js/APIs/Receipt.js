@@ -14,6 +14,7 @@ import uuidv1 from 'uuid/v1';
 import uuidv3 from 'uuid/v3';
 import uuidv4 from 'uuid/v4';
 import uuidv5 from 'uuid/v5';
+import {PaymentPerformer} from "../DataWrappers/receipt/payment";
 
 const openReceipt = (receiptType, positions, extra) => {
     return new Promise((resolve, reject) => CommandModule.openReceipt(
@@ -167,6 +168,15 @@ export default class ReceiptAPI {
      */
     static getReceiptHeaders(type?: ReceiptType): Promise<ReceiptHeader[] | null> {
         return new Promise(resolve => ReceiptModule.getReceiptHeaders(type ? type : null, Converter.getArrayReader(resolve, ReceiptHeader.prototype)));
+    }
+
+    /**
+     * Получает массив всех приложений, которые производят оплату чека.
+     * @function module:receipt.ReceiptAPI.getAllPaymentPerformers
+     * @returns {Promise<?module:receipt.PaymentPerformer[]>} Promise с массивом приложений
+     */
+    static getAllPaymentPerformers(): Promise<PaymentPerformer[]> {
+        return new Promise(resolve => ReceiptModule.getAllPaymentPerformers(Converter.getArrayReader(resolve, PaymentPerformer.prototype)))
     }
 
 }

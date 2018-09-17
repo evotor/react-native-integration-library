@@ -6,6 +6,7 @@ import org.json.JSONObject
 import ru.evotor.framework.calculator.MoneyCalculator
 import ru.evotor.framework.calculator.PercentCalculator
 import ru.evotor.framework.calculator.QuantityCalculator
+import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.action.event.receipt.changes.position.*
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.print_extra.SetPrintExtra
 import ru.evotor.framework.inventory.ProductType
@@ -78,18 +79,36 @@ object ReceiptReader {
         return result
     }
 
+    private fun readPaymentSystem(source: Map<*, *>): PaymentSystem =
+            PaymentSystem(
+                    PaymentType.valueOf(source["paymentType"] as String),
+                    source["userDescription"] as String,
+                    source["paymentSystemId"] as String
+            )
+
     fun readPaymentParts(source: List<*>): List<PaymentPurpose> =
             source.indices
                     .map { source[it] as Map<*, *> }
-                    .map {
-                        PaymentPurpose(
-                                it["identifier"] as String?,
-                                it["paymentSystemId"] as String?,
-                                MoneyCalculator.toBigDecimal(it["total"] as Double),
-                                it["accountId"] as String?,
-                                it["userMessage"] as String?
-                        )
-                    }
+                    .map { readPaymentPurpose(it) }
+
+    fun readPaymentPurpose(source: Map<*, *>) =
+            PaymentPurpose(
+                    source["identifier"] as String?,
+                    source["paymentSystemId"] as String?,
+                    source["paymentPerformer"]?.let { readPaymentPerformer(it as Map<*, *>) },
+                    MoneyCalculator.toBigDecimal(source["total"] as Double),
+                    source["accountId"] as String?,
+                    source["userMessage"] as String?
+            )
+
+    private fun readPaymentPerformer(source: Map<*, *>) =
+            PaymentPerformer(
+                    source["paymentSystem"]?.let { readPaymentSystem(it as Map<*, *>) },
+                    source["packageName"] as String?,
+                    source["componentName"] as String?,
+                    source["appUuid"] as String?,
+                    source["appName"] as String?
+            )
 
     fun readSetPrintGroups(source: List<*>): List<SetPrintGroup> =
             source.indices.map { readSetPrintGroup(source[it] as Map<*, *>) }
@@ -160,39 +179,29 @@ object ReceiptReader {
             result.add(Receipt.PrintReceipt(
                     item["printGroup"]?.let { readPrintGroup(it as Map<*, *>) },
                     positionsResult,
-                    readPayments(item["payments"] as Map<*, *>),
-                    readPayments(item["changes"] as Map<*, *>),
+                    readPayments(item["payments"] as List<*>),
+                    readPayments(item["changes"] as List<*>),
                     discounts
             ))
         }
         return result
     }
 
-    private fun readPayments(source: Map<*, *>): Map<Payment, BigDecimal> {
+    private fun readPayments(source: List<*>): Map<Payment, BigDecimal> {
         val result = HashMap<Payment, BigDecimal>()
-        for (key in source.keys) {
-            try {
-                val payment = JSONObject(key as String)
-                val paymentSystem = if (payment.isNull("system")) null else payment.getJSONObject("system")
-                result[Payment(
-                        payment.getString("uuid"),
-                        MoneyCalculator.toBigDecimal(payment.getDouble("value")),
-                        paymentSystem?.let {
-                            PaymentSystem(
-                                    PaymentType.valueOf(it.getString("paymentType")),
-                                    it.getString("userDescription"),
-                                    it.getString("paymentSystemId")
-                            )
-                        },
-                        payment.getString("purposeIdentifier"),
-                        payment.getString("accountId"),
-                        payment.getString("accountUserDescription"),
-                        payment.getString("identifier")
-                )] = MoneyCalculator.toBigDecimal(source[key] as Double)
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-
+        source.forEach { it ->
+            it as Map<*, *>
+            val key = it["key"] as Map<*, *>
+            result[Payment(
+                    key["uuid"] as String,
+                    MoneyCalculator.toBigDecimal(key["value"] as Double),
+                    key["system"]?.let { readPaymentSystem(it as Map<*, *>) },
+                    readPaymentPerformer(key["paymentPerformer"] as Map<*, *>),
+                    key["purposeIdentifier"] as String?,
+                    key["accountId"] as String?,
+                    key["accountUserDescription"] as String?,
+                    key["identifier"] as String?
+            )] = MoneyCalculator.toBigDecimal(it["value"] as Double)
         }
         return result
     }

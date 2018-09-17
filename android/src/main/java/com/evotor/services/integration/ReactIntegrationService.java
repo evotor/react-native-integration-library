@@ -93,7 +93,7 @@ public abstract class ReactIntegrationService extends IntegrationService {
                                         @NonNull Callback c) {
                         callback = c;
                         if (bundle != null) {
-                            EventModule.Companion.emit(
+                            EventModule.Companion.emitGlobal(
                                     getApplicationContext(),
                                     getEventName(),
                                     getEventWriter().write(bundle)

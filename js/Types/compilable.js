@@ -51,6 +51,7 @@ var IntegrationServiceEventType;
     IntegrationServiceEventType["RECEIPT_DISCOUNT"] = "RECEIPT_DISCOUNT";
     IntegrationServiceEventType["PAYMENT_SELECTED"] = "PAYMENT_SELECTED";
     IntegrationServiceEventType["PAYMENT_SYSTEM"] = "PAYMENT_SYSTEM";
+    IntegrationServiceEventType["PAYMENT_DELEGATOR"] = "PAYMENT_DELEGATOR";
     IntegrationServiceEventType["PRINT_GROUP_REQUIRED"] = "PRINT_GROUP_REQUIRED";
     IntegrationServiceEventType["PRINT_EXTRA_REQUIRED"] = "PRINT_EXTRA_REQUIRED";
 })(IntegrationServiceEventType = exports.IntegrationServiceEventType || (exports.IntegrationServiceEventType = {}));

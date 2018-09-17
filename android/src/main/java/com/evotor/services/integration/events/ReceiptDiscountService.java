@@ -23,11 +23,11 @@ import ru.evotor.framework.core.action.event.receipt.discount.ReceiptDiscountEve
 
 public class ReceiptDiscountService extends ReactIntegrationService {
 
-    private static final String eventName = "RECEIPT_DISCOUNT";
+    private static final String EVENT_NAME = "RECEIPT_DISCOUNT";
 
     public static void getResultReader(Map<String, IntegrationResultReader> target) {
         target.put(
-                eventName,
+                EVENT_NAME,
                 new IntegrationResultReader() {
                     @Override
                     public IBundlable read(Context context, Map data) {
@@ -52,7 +52,7 @@ public class ReceiptDiscountService extends ReactIntegrationService {
 
     @Override
     protected String getEventName() {
-        return eventName;
+        return EVENT_NAME;
     }
 
     @Override

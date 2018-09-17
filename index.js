@@ -28,7 +28,7 @@ import {
 import {PrintableBarcode, PrintableImage, PrintableText, Weight} from './js/DataWrappers/devices';
 import {Field, ProductExtra} from './js/DataWrappers/inventory/extras';
 import {Intent} from './js/DataWrappers/navigation';
-import {Payment, PaymentPurpose, PaymentSystem} from './js/DataWrappers/receipt/payment';
+import {Payment, PaymentPerformer, PaymentPurpose, PaymentSystem} from './js/DataWrappers/receipt/payment';
 import {
     AbstractBroadcastEvent,
     CashDrawerEvent,
@@ -62,6 +62,8 @@ import {
 import {DeviceError, IntegrationError, NavigationError, NoActivityError} from './js/DataWrappers/errors';
 import {
     ActivityResultListener,
+    BackPressListener,
+    BarcodeReceiveListener,
     BeforePositionsEditedEventListener,
     BroadcastEventListener,
     BroadcastEventType,
@@ -75,6 +77,8 @@ import {
     IntegrationServiceEventResult,
     NavigationEventListener,
     PaymentSelectedEventListener,
+    PaymentDelegatorEventListener,
+    PaymentDelegatorEventResult,
     PaymentSystemEventListener,
     PaymentSystemEventResult,
     PositionChange,
@@ -98,6 +102,9 @@ import {DeviceServiceConnector, Printer, Scales, Scanner} from './js/APIs/Device
 import {BroadcastReceiver, IntegrationCallback, PushNotificationReceiver, ServiceAPI} from './js/APIs/Services';
 import {
     BeforePositionsEditedEventResult,
+    PaymentDelegatorCanceledAllEventResult,
+    PaymentDelegatorCanceledEventResult,
+    PaymentDelegatorSelectedEventResult,
     PaymentSelectedEventResult,
     PaymentSystemPaymentErrorResult,
     PaymentSystemPaymentOkResult,
@@ -158,6 +165,7 @@ export {
 
     Intent,
 
+    PaymentPerformer,
     PaymentPurpose,
     PaymentSystem,
 
@@ -166,6 +174,9 @@ export {
     CashOperationEvent,
     AbstractBroadcastEvent,
     PaymentSelectedEventResult,
+    PaymentDelegatorSelectedEventResult,
+    PaymentDelegatorCanceledEventResult,
+    PaymentDelegatorCanceledAllEventResult,
     PaymentSystemEventResult,
     PrintExtraRequiredEventResult,
     PrintGroupRequiredEventResult,
@@ -210,6 +221,8 @@ export {
     Printable,
     PrintExtraPlace,
     ActivityResultListener,
+    BackPressListener,
+    BarcodeReceiveListener,
     BroadcastEventListener,
     BroadcastEventType,
     Bundle,
@@ -220,6 +233,8 @@ export {
     BeforePositionsEditedEventListener,
     ReceiptDiscountEventListener,
     PaymentSelectedEventListener,
+    PaymentDelegatorEventListener,
+    PaymentDelegatorEventResult,
     PaymentSystemEventListener,
     PositionEventListener,
     PrintGroupRequiredEventListener,

@@ -3,12 +3,12 @@ package com.evotor.converter.to.js
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
-import org.json.JSONException
-import org.json.JSONObject
+import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionEdit
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionRemove
+import ru.evotor.framework.payment.PaymentPurpose
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Position
@@ -113,6 +113,35 @@ object ReceiptWriter {
         return result
     }
 
+    fun writePaymentPurpose(source: PaymentPurpose): WritableMap {
+        val result = Arguments.createMap()
+        result.putString("identifier", source.identifier)
+        result.putString("paymentSystemId", source.paymentSystemId)
+        result.putMap("paymentPerformer", source.paymentPerformer?.let { writePaymentPerformer(it) })
+        result.putDouble("total", source.total.toDouble())
+        result.putString("accountId", source.accountId)
+        result.putString("userMessage", source.userMessage)
+        return result
+    }
+
+    private fun writePaymentPerformer(source: PaymentPerformer): WritableMap {
+        val result = Arguments.createMap()
+        result.putMap("paymentSystem", source.paymentSystem?.let { writePaymentSystem(it) })
+        result.putString("packageName", source.packageName)
+        result.putString("componentName", source.componentName)
+        result.putString("appUuid", source.appUuid)
+        result.putString("appName", source.appName)
+        return result
+    }
+
+    fun writePaymentPerformers(source: List<PaymentPerformer>): WritableArray {
+        val result = Arguments.createArray()
+        source.forEach {
+            result.pushMap(writePaymentPerformer(it))
+        }
+        return result
+    }
+
     fun writeReceipt(source: Receipt): WritableMap {
         val result = Arguments.createMap()
         result.putMap("header", writeReceiptHeader(source.header))
@@ -126,11 +155,11 @@ object ReceiptWriter {
                 positions.pushMap(writePosition(positions1[j]))
             }
             printReceiptResult.putArray("positions", positions)
-            printReceiptResult.putMap("payments", writePayments(payments))
-            printReceiptResult.putMap("changes", writePayments(changes))
+            printReceiptResult.putArray("payments", writePayments(payments))
+            printReceiptResult.putArray("changes", writePayments(changes))
             discounts?.let {
                 val discountsResult = Arguments.createMap()
-                for(key in discounts.keys) {
+                for (key in discounts.keys) {
                     discountsResult.putDouble(key, discounts[key]?.toDouble() ?: (0).toDouble())
                 }
                 printReceiptResult.putMap("discounts", discountsResult)
@@ -178,29 +207,19 @@ object ReceiptWriter {
         return result
     }
 
-    private fun writePayments(source: Map<Payment, BigDecimal>): WritableMap {
-        val result = Arguments.createMap()
-        for (key in source.keys) {
-            val payment = JSONObject()
-            try {
-                payment.put("uuid", key.uuid)
-                payment.put("value", key.value.toDouble())
-                payment.put("system", key.system?.let { writePaymentSystem(it) })
-                payment.put("purposeIdentifier", key.purposeIdentifier)
-                payment.put("accountId", key.accountId)
-                payment.put("accountUserDescription", key.accountUserDescription)
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-            val value = source[key]
-            if (value != null) {
-                result.putDouble(
-                        payment.toString(),
-                        value.toDouble()
-                )
-            } else {
-                result.putNull(payment.toString())
-            }
+    private fun writePayments(source: Map<Payment, BigDecimal>): WritableArray {
+        val result = Arguments.createArray()
+        for (keySource in source.keys) {
+            val payment = Arguments.createMap()
+            val keyResult = Arguments.createMap()
+            keyResult.putString("uuid", keySource.uuid)
+            keyResult.putDouble("value", keySource.value.toDouble())
+            keyResult.putMap("system", keySource.paymentSystem?.let { writePaymentSystem(it) })
+            keyResult.putString("purposeIdentifier", keySource.purposeIdentifier)
+            keyResult.putString("accountId", keySource.accountId)
+            keyResult.putString("accountUserDescription", keySource.accountUserDescription)
+            payment.putMap("key", keyResult)
+            payment.putDouble("value", source[keySource]!!.toDouble())
         }
         return result
     }
