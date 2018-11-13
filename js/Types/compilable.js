@@ -240,3 +240,61 @@ var BarcodeType;
     BarcodeType["EAN13"] = "EAN13";
     BarcodeType["CODE39"] = "CODE39";
 })(BarcodeType = exports.BarcodeType || (exports.BarcodeType = {}));
+/**
+ * Перечисление версий ФФД.
+ * @enum {string} FfdVersion
+ * @memberOf module:kkt#
+ * @property {string} UNKNOWN
+ * @property {string} V_1_0_0
+ * @property {string} V_1_0_5
+ */
+var FfdVersion;
+(function (FfdVersion) {
+    FfdVersion["UNKNOWN"] = "UNKNOWN";
+    FfdVersion["V_1_0_0"] = "V_1_0_0";
+    FfdVersion["V_1_0_5"] = "V_1_0_5";
+})(FfdVersion = exports.FfdVersion || (exports.FfdVersion = {}));
+/**
+ * Перечисление типов контрагентов.
+ * @enum {string} CounterpartyType
+ * @memberOf module:counterparties#
+ * @property {string} LEGAL_ENTITY - Юридическое лицо
+ * @property {string} INDIVIDUAL_ENTREPRENEUR - Индивидуальный предприниматель
+ * @property {string} GOVERNMENT_AGENCY - Государственный орган
+ */
+var CounterpartyType;
+(function (CounterpartyType) {
+    CounterpartyType["LEGAL_ENTITY"] = "LEGAL_ENTITY";
+    CounterpartyType["INDIVIDUAL_ENTREPRENEUR"] = "INDIVIDUAL_ENTREPRENEUR";
+    CounterpartyType["GOVERNMENT_AGENCY"] = "GOVERNMENT_AGENCY";
+})(CounterpartyType = exports.CounterpartyType || (exports.CounterpartyType = {}));
+/**
+ * Перечисление типов агентов.
+ * @enum {string} AgentType
+ * @memberOf module:counterparties#
+ * @property {string} AGENT - Агент
+ * @property {string} COMMISSIONER - Комиссионер
+ * @property {string} ATTORNEY_IN_FACT - Поверенный
+ * @property {string} PAYMENT_AGENT - Платёжный агент
+ * @property {string} BANK_PAYMENT_AGENT - Банковский платёжный агент
+ */
+var AgentType;
+(function (AgentType) {
+    AgentType["AGENT"] = "AGENT";
+    AgentType["COMMISSIONER"] = "COMMISSIONER";
+    AgentType["ATTORNEY_IN_FACT"] = "ATTORNEY_IN_FACT";
+    AgentType["PAYMENT_AGENT"] = "PAYMENT_AGENT";
+    AgentType["BANK_PAYMENT_AGENT"] = "BANK_PAYMENT_AGENT";
+})(AgentType = exports.AgentType || (exports.AgentType = {}));
+/**
+ * Перечисление типов субагентов.
+ * @enum {string} SubagentType
+ * @memberOf module:counterparties#
+ * @property {string} PAYMENT_SUBAGENT - Платёжный субагент
+ * @property {string} BANK_PAYMENT_SUBAGENT - Банковский платёжный субагент
+ */
+var SubagentType;
+(function (SubagentType) {
+    SubagentType["PAYMENT_SUBAGENT"] = "PAYMENT_SUBAGENT";
+    SubagentType["BANK_PAYMENT_SUBAGENT"] = "BANK_PAYMENT_SUBAGENT";
+})(SubagentType = exports.SubagentType || (exports.SubagentType = {}));

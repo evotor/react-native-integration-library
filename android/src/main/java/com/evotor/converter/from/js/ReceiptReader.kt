@@ -9,11 +9,16 @@ import ru.evotor.framework.calculator.QuantityCalculator
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.action.event.receipt.changes.position.*
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.print_extra.SetPrintExtra
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.inventory.ProductType
 import ru.evotor.framework.payment.PaymentPurpose
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.*
+import ru.evotor.framework.receipt.position.AgentRequisites
 import ru.evotor.framework.receipt.print_extras.*
 import java.math.BigDecimal
 import java.util.*
@@ -38,7 +43,7 @@ object ReceiptReader {
         if (subPositionsSource.isNotEmpty()) {
             subPositionsResult.add(readPosition(subPositionsSource[0] as Map<*, *>))
         }
-        return Position(
+        return Position.Builder.copyFrom(Position(
                 source["uuid"] as String?,
                 source["productUuid"] as String?,
                 source["productCode"] as String?,
@@ -57,6 +62,71 @@ object ReceiptReader {
                 source["tareVolume"]?.let { QuantityCalculator.toBigDecimal(it as Double) },
                 extraKeys,
                 subPositionsResult
+        )).apply {
+            this.setAgentRequisites(readAgentRequisites(source["agentRequisites"] as Map<*, *>?))
+        }.build()
+    }
+
+    private fun readAgentRequisites(source: Map<*, *>?): AgentRequisites? = source?.let {
+        AgentRequisites(
+                readAgent(it["agent"] as Map<*, *>?),
+                readSubagent(it["subagent"] as Map<*, *>?),
+                readPrincipal(it["principal"] as Map<*, *>),
+                readTransactionOperator(it["transactionOperator"] as Map<*, *>?),
+                it["operationDescription"] as String?
+        )
+    }
+
+    private fun readAgent(source: Map<*, *>?): Agent? = source?.let {
+        Agent(
+                CounterpartyReader.readUuid(it),
+                (it["type"] as String?)?.let { type -> Agent.Type.valueOf(type) },
+                CounterpartyReader.readCounterpartyType(it),
+                CounterpartyReader.readFullName(it),
+                CounterpartyReader.readShortName(it),
+                CounterpartyReader.readInn(it),
+                CounterpartyReader.readKpp(it),
+                CounterpartyReader.readPhones(it),
+                CounterpartyReader.readAddresses(it)
+        )
+    }
+
+    private fun readSubagent(source: Map<*, *>?): Subagent? = source?.let {
+        Subagent(
+                CounterpartyReader.readUuid(it),
+                Subagent.Type.valueOf(it["type"] as String),
+                CounterpartyReader.readCounterpartyType(it),
+                CounterpartyReader.readFullName(it),
+                CounterpartyReader.readShortName(it),
+                CounterpartyReader.readInn(it),
+                CounterpartyReader.readKpp(it),
+                CounterpartyReader.readPhones(it),
+                CounterpartyReader.readAddresses(it)
+        )
+    }
+
+    private fun readPrincipal(source: Map<*, *>): Principal =
+            Principal(
+                    CounterpartyReader.readUuid(source),
+                    CounterpartyReader.readCounterpartyType(source),
+                    CounterpartyReader.readFullName(source),
+                    CounterpartyReader.readShortName(source),
+                    CounterpartyReader.readInn(source)!!,
+                    CounterpartyReader.readKpp(source),
+                    CounterpartyReader.readPhones(source)!!,
+                    CounterpartyReader.readAddresses(source)
+            )
+
+    private fun readTransactionOperator(source: Map<*, *>?): TransactionOperator? = source?.let {
+        TransactionOperator(
+                CounterpartyReader.readUuid(it),
+                CounterpartyReader.readCounterpartyType(it),
+                CounterpartyReader.readFullName(it),
+                CounterpartyReader.readShortName(it),
+                CounterpartyReader.readInn(it),
+                CounterpartyReader.readKpp(it),
+                CounterpartyReader.readPhones(it),
+                CounterpartyReader.readAddresses(it)
         )
     }
 

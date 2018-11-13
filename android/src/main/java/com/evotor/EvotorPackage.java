@@ -2,6 +2,7 @@ package com.evotor;
 
 import com.evotor.modules.EventModule;
 import com.evotor.modules.CommandModule;
+import com.evotor.modules.KktModule;
 import com.evotor.modules.QueryModule;
 import com.evotor.modules.SessionModule;
 import com.facebook.react.ReactPackage;
@@ -43,6 +44,7 @@ public class EvotorPackage implements ReactPackage {
         modules.add(new DeviceModule(reactContext));
         modules.add(new EventModule(reactContext));
         modules.add(new QueryModule(reactContext));
+        modules.add(new KktModule(reactContext));
         return modules;
     }
 }

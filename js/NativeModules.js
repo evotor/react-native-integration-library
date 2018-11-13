@@ -1,6 +1,7 @@
 import {NativeModules} from 'react-native';
 
 export const [
+    KktModule,
     UserModule,
     EventModule,
     QueryModule,
@@ -12,6 +13,7 @@ export const [
     NavigationModule,
     IntegrationModule,
 ] = [
+    NativeModules.KktModule,
     NativeModules.UserModule,
     NativeModules.EventModule,
     NativeModules.QueryModule,

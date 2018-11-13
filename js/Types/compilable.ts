@@ -240,3 +240,61 @@ export enum BarcodeType {
     EAN13 = "EAN13",
     CODE39 = "CODE39"
 }
+
+/**
+ * Перечисление версий ФФД.
+ * @enum {string} FfdVersion
+ * @memberOf module:kkt#
+ * @property {string} UNKNOWN
+ * @property {string} V_1_0_0
+ * @property {string} V_1_0_5
+ */
+export enum FfdVersion {
+    UNKNOWN = "UNKNOWN",
+    V_1_0_0 = "V_1_0_0",
+    V_1_0_5 = "V_1_0_5"
+}
+
+/**
+ * Перечисление типов контрагентов.
+ * @enum {string} CounterpartyType
+ * @memberOf module:counterparties#
+ * @property {string} LEGAL_ENTITY - Юридическое лицо
+ * @property {string} INDIVIDUAL_ENTREPRENEUR - Индивидуальный предприниматель
+ * @property {string} GOVERNMENT_AGENCY - Государственный орган
+ */
+export enum CounterpartyType {
+    LEGAL_ENTITY = "LEGAL_ENTITY",
+    INDIVIDUAL_ENTREPRENEUR = "INDIVIDUAL_ENTREPRENEUR",
+    GOVERNMENT_AGENCY = "GOVERNMENT_AGENCY",
+}
+
+/**
+ * Перечисление типов агентов.
+ * @enum {string} AgentType
+ * @memberOf module:counterparties#
+ * @property {string} AGENT - Агент
+ * @property {string} COMMISSIONER - Комиссионер
+ * @property {string} ATTORNEY_IN_FACT - Поверенный
+ * @property {string} PAYMENT_AGENT - Платёжный агент
+ * @property {string} BANK_PAYMENT_AGENT - Банковский платёжный агент
+ */
+export enum AgentType {
+    AGENT = "AGENT",
+    COMMISSIONER = "COMMISSIONER",
+    ATTORNEY_IN_FACT = "ATTORNEY_IN_FACT",
+    PAYMENT_AGENT = "PAYMENT_AGENT",
+    BANK_PAYMENT_AGENT = "BANK_PAYMENT_AGENT",
+}
+
+/**
+ * Перечисление типов субагентов.
+ * @enum {string} SubagentType
+ * @memberOf module:counterparties#
+ * @property {string} PAYMENT_SUBAGENT - Платёжный субагент
+ * @property {string} BANK_PAYMENT_SUBAGENT - Банковский платёжный субагент
+ */
+export enum SubagentType {
+    PAYMENT_SUBAGENT = "PAYMENT_SUBAGENT",
+    BANK_PAYMENT_SUBAGENT = "BANK_PAYMENT_SUBAGENT"
+}

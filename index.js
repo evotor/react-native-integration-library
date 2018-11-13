@@ -12,6 +12,13 @@ import {
     Receipt,
     ReceiptHeader
 } from './js/DataWrappers/receipt/framework';
+import AgentRequisites from './js/DataWrappers/receipt/agentRequisites'
+import {
+    Agent,
+    Subagent,
+    Principal,
+    TransactionOperator
+} from './js/DataWrappers/counterparties/agentScheme'
 import {
     PositionAdd,
     PositionEdit,
@@ -57,7 +64,11 @@ import {
     ReceiptType,
     ScannerEventType,
     TaxationSystem,
-    TaxNumber
+    TaxNumber,
+    FfdVersion,
+    CounterpartyType,
+    AgentType,
+    SubagentType
 } from './js/Types/compilable'
 import {DeviceError, IntegrationError, NavigationError, NoActivityError} from './js/DataWrappers/errors';
 import {
@@ -116,6 +127,7 @@ import {OpenReceiptCommandResult, RegisterReceiptCommandResult} from "./js/DataW
 import {Product, ProductGroup} from "./js/DataWrappers/inventory/framework";
 import ProductQuery, {ProductSortOrder} from "./js/APIs/Query/Product";
 import UserQuery, {UserSortOrder, GrantQuery, GrantSortOrder} from "./js/APIs/Query/User";
+import KktAPI from "./js/APIs/Kkt"
 
 export {
     InventoryAPI,
@@ -129,6 +141,11 @@ export {
     ExtraKey,
     Payment,
     Position,
+    AgentRequisites,
+    Agent,
+    Subagent,
+    Principal,
+    TransactionOperator,
     PrintGroup,
     PrintReceipt,
     Receipt,
@@ -212,6 +229,10 @@ export {
     ScannerEventType,
     TaxationSystem,
     TaxNumber,
+    FfdVersion,
+    CounterpartyType,
+    AgentType,
+    SubagentType,
 
     DeviceError,
     IntegrationError,
@@ -260,5 +281,7 @@ export {
     BroadcastReceiver,
     PushNotificationReceiverEventType,
     PushNotificationReceiverEventListener,
-    PushNotificationReceiver
+    PushNotificationReceiver,
+
+    KktAPI
 }

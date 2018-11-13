@@ -47,7 +47,7 @@ export default class ReceiptAPI {
     /**
      * Получает массив позиций чека по значению штрихкода.
      * @function module:receipt.ReceiptAPI.getPositionsByBarcode
-     * @param barcode {string} - Штрихкод
+     * @param {string} barcode - Штрихкод
      * @returns {Promise<module:receipt.Position[]>} Promise с массивом позиций
      */
     static getPositionsByBarcode(barcode: string): Promise<Position[]> {
@@ -163,7 +163,7 @@ export default class ReceiptAPI {
     /**
      * Получает массив всех заголовков чека.
      * @function module:receipt.ReceiptAPI.getReceiptHeaders
-     * @param {module:receipt#ReceiptType} type - Тип чека
+     * @param {module:receipt#ReceiptType} [type] - Тип чека
      * @returns {Promise<?module:receipt.ReceiptHeader[]>} Promise с массивом заголовков чека
      */
     static getReceiptHeaders(type?: ReceiptType): Promise<ReceiptHeader[] | null> {

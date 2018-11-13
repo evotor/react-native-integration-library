@@ -1,5 +1,6 @@
 import {Payment} from './payment';
 import {PrintGroupType, ProductType, ReceiptType, TaxationSystem, TaxNumber} from "../../Types/compilable";
+import AgentRequisites from "./agentRequisites";
 
 /**
  * @class module:receipt.ExtraKey
@@ -56,7 +57,8 @@ export class Position {
                 alcoholProductKindCode: number | null,
                 tareVolume: number | null,
                 extraKeys: ExtraKey[],
-                subPositions: Position[]) {
+                subPositions: Position[],
+                agentRequisites: AgentRequisites | null) {
         this.uuid = uuid;
         this.productUuid = productUuid;
         this.productCode = productCode;
@@ -75,6 +77,7 @@ export class Position {
         this.tareVolume = tareVolume;
         this.extraKeys = extraKeys;
         this.subPositions = subPositions;
+        this.agentRequisites = agentRequisites || null;
     }
 }
 

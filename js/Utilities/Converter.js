@@ -20,6 +20,8 @@ import {PaymentSystemEvent} from "../DataWrappers/services/events";
 import {Product, ProductGroup} from "../DataWrappers/inventory/framework";
 import {IntegrationCallback} from "../APIs/Services";
 import {Payment, PaymentPurpose} from "../DataWrappers/receipt/payment";
+import AgentRequisites from "../DataWrappers/receipt/agentRequisites";
+import {Agent, Subagent, Principal, TransactionOperator} from "../DataWrappers/counterparties/agentScheme";
 
 export default class Converter {
 
@@ -161,6 +163,19 @@ export default class Converter {
         source.subPositions.forEach(
             (item, j) => source.subPositions[j] = Converter.setPrototypeOf(item, Position.prototype)
         );
+        if (source.agentRequisites) {
+            source.agentRequisites = Converter.setPrototypeOf(source.agentRequisites, AgentRequisites.prototype);
+            if (source.agentRequisites.agent) {
+                source.agentRequisites.agent = Converter.setPrototypeOf(source.agentRequisites.agent, Agent.prototype);
+            }
+            if (source.agentRequisites.subagent) {
+                source.agentRequisites.subagent = Converter.setPrototypeOf(source.agentRequisites.subagent, Subagent.prototype);
+            }
+            source.agentRequisites.principal = Converter.setPrototypeOf(source.agentRequisites.principal, Principal.prototype);
+            if (source.agentRequisites.transactionOperator) {
+                source.agentRequisites.transactionOperator = Converter.setPrototypeOf(source.agentRequisites.transactionOperator, TransactionOperator.prototype);
+            }
+        }
         return source
     }
 
@@ -220,6 +235,26 @@ export default class Converter {
             flags: source.flags,
             convertEvotorBundles: JSON.stringify(source.extras).includes("__value__")
         }
+    }
+
+    static convertCounterpartyToNull(counterparty) {
+        if (!counterparty.uuid &&
+            !counterparty.counterpartyType &&
+            !counterparty.fullName &&
+            !counterparty.shortName &&
+            !counterparty.inn &&
+            !counterparty.kpp &&
+            (!counterparty.phones || (counterparty.phones && !counterparty.phones.length)) &&
+            (!counterparty.addresses || (counterparty.addresses && !counterparty.addresses.length))) {
+            if(counterparty.hasOwnProperty("type")) {
+                if(!counterparty.type) {
+                    return null
+                }
+                return counterparty
+            }
+            return null
+        }
+        return counterparty
     }
 
     static setPrototypeOf(source, prototype) {

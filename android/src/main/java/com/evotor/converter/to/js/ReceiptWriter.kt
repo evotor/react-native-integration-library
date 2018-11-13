@@ -8,12 +8,17 @@ import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionC
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionEdit
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionRemove
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.payment.PaymentPurpose
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Position
 import ru.evotor.framework.receipt.PrintGroup
 import ru.evotor.framework.receipt.Receipt
+import ru.evotor.framework.receipt.position.AgentRequisites
 import ru.evotor.query.Cursor
 import java.math.BigDecimal
 
@@ -69,8 +74,34 @@ object ReceiptWriter {
             subPositions.pushMap(writePosition(source.subPositions[0]))
         }
         result.putArray("subPositions", subPositions)
+        result.putMap("agentRequisites", writeAgentRequisites(source.agentRequisites))
         return result
     }
+
+    private fun writeAgentRequisites(source: AgentRequisites?): WritableMap? = source?.let {
+        Arguments.createMap().apply {
+            this.putMap("agent", writeAgent(it.agent))
+            this.putMap("subagent", writeSubagent(it.subagent))
+            this.putMap("principal", writePrincipal(it.principal))
+            this.putMap("transactionOperator", writeTransactionOperator(it.transactionOperator))
+        }
+    }
+
+    private fun writeAgent(source: Agent?): WritableMap? =
+            CounterpartyWriter.writeCounterparty(source)?.apply {
+                this.putString("type", source!!.type?.name)
+            }
+
+    private fun writeSubagent(source: Subagent?): WritableMap? =
+            CounterpartyWriter.writeCounterparty(source)?.apply {
+                this.putString("type", source!!.type.name)
+            }
+
+    private fun writePrincipal(source: Principal): WritableMap =
+            CounterpartyWriter.writeCounterparty(source)!!
+
+    private fun writeTransactionOperator(source: TransactionOperator?): WritableMap? =
+            CounterpartyWriter.writeCounterparty(source)
 
     fun writePositions(source: List<Position>): WritableArray {
         val result = Arguments.createArray()
