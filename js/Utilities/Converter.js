@@ -1,6 +1,6 @@
 import {ExtraKey, Position, PrintGroup, PrintReceipt, Receipt, ReceiptHeader} from "../DataWrappers/receipt/framework";
 import {Intent} from "../DataWrappers/navigation";
-import {PositionAdd, PositionEdit} from "../DataWrappers/receipt/changes";
+import {PositionAdd, PositionEdit, PositionRemove} from "../DataWrappers/receipt/changes";
 import {
     CashDrawerEvent,
     CashOperationEvent,
@@ -133,7 +133,7 @@ export default class Converter {
                                 eventData[i] = new PositionEdit(Converter.readPosition(item.position));
                                 break;
                             case "POSITION_REMOVE":
-                                eventData[i] = new PositionEdit(item.positionUuid);
+                                eventData[i] = new PositionRemove(item.positionUuid);
                         }
                     }
                 );

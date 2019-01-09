@@ -56,12 +56,14 @@ export class Payment {
     constructor(uuid: string,
                 value: number,
                 system: PaymentSystem | null,
+                paymentPerformer: PaymentPerformer,
                 purposeIdentifier: string | null,
                 accountId: string | null,
                 accountUserDescription: string | null) {
         this.uuid = uuid;
         this.value = value;
         this.system = system;
+        this.paymentPerformer = paymentPerformer;
         this.purposeIdentifier = purposeIdentifier;
         this.accountId = accountId;
         this.accountUserDescription = accountUserDescription;
