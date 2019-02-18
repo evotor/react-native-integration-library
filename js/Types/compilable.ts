@@ -298,3 +298,27 @@ export enum SubagentType {
     PAYMENT_SUBAGENT = "PAYMENT_SUBAGENT",
     BANK_PAYMENT_SUBAGENT = "BANK_PAYMENT_SUBAGENT"
 }
+
+/**
+ * Перечисление типов способа расчёта.
+ * @enum {string} SettlementMethodType
+ * @memberOf module:receipt#
+ * @property FULL_PREPAYMENT - Полная предварительная оплата до момента передачи предмета расчета
+ * @property PARTIAL_PREPAYMENT - Частичная предварительная оплата до момента передачи предмета расчета
+ * @property ADVANCE_PAYMENT - Аванс
+ * @property FULL_SETTLEMENT - Полная оплата, в том числе с учетом аванса (предварительной оплаты) в момент передачи
+ * предмета расчета (полный расчёт)
+ * @property PARTIAL_SETTLEMENT - Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит
+ * (частичный расчёт и кредит)
+ * @property LEND - Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит
+ * @property LOAN_PAYMENT - Оплата предмета расчета после его передачи с оплатой в кредит (оплата кредита)
+ */
+export enum SettlementMethodType {
+    FULL_PREPAYMENT = "FULL_PREPAYMENT",
+    PARTIAL_PREPAYMENT = "PARTIAL_PREPAYMENT",
+    ADVANCE_PAYMENT = "ADVANCE_PAYMENT",
+    FULL_SETTLEMENT = "FULL_SETTLEMENT",
+    PARTIAL_SETTLEMENT = "PARTIAL_SETTLEMENT",
+    LEND = "LEND",
+    LOAN_PAYMENT = "LOAN_PAYMENT"
+}

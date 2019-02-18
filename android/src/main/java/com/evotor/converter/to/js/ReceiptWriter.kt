@@ -19,6 +19,7 @@ import ru.evotor.framework.receipt.Position
 import ru.evotor.framework.receipt.PrintGroup
 import ru.evotor.framework.receipt.Receipt
 import ru.evotor.framework.receipt.position.AgentRequisites
+import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.query.Cursor
 import java.math.BigDecimal
 
@@ -75,6 +76,7 @@ object ReceiptWriter {
         }
         result.putArray("subPositions", subPositions)
         result.putMap("agentRequisites", writeAgentRequisites(source.agentRequisites))
+        result.putMap("settlementMethod", writeSettlementMethod(source.settlementMethod))
         return result
     }
 
@@ -84,6 +86,35 @@ object ReceiptWriter {
             this.putMap("subagent", writeSubagent(it.subagent))
             this.putMap("principal", writePrincipal(it.principal))
             this.putMap("transactionOperator", writeTransactionOperator(it.transactionOperator))
+        }
+    }
+
+    private fun writeSettlementMethod(source: SettlementMethod?): WritableMap? = source?.let {
+        Arguments.createMap().apply {
+            when (source) {
+                is SettlementMethod.FullPrepayment -> {
+                    this.putString("type", "FULL_PREPAYMENT")
+                }
+                is SettlementMethod.PartialPrepayment -> {
+                    this.putString("type", "PARTIAL_PREPAYMENT")
+                }
+                is SettlementMethod.AdvancePayment -> {
+                    this.putString("type", "ADVANCE_PAYMENT")
+                }
+                is SettlementMethod.FullSettlement -> {
+                    this.putString("type", "FULL_SETTLEMENT")
+                }
+                is SettlementMethod.PartialSettlement -> {
+                    this.putString("type", "PARTIAL_SETTLEMENT")
+                    this.putDouble("initialPaymentAmount", source.amount.toDouble())
+                }
+                is SettlementMethod.Lend -> {
+                    this.putString("type", "LEND")
+                }
+                is SettlementMethod.LoanPayment -> {
+                    this.putString("type", "LOAN_PAYMENT")
+                }
+            }
         }
     }
 

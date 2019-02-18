@@ -1,4 +1,12 @@
-import {ExtraKey, Position, PrintGroup, PrintReceipt, Receipt, ReceiptHeader} from "../DataWrappers/receipt/framework";
+import {
+    ExtraKey,
+    Position,
+    PrintGroup,
+    PrintReceipt,
+    Receipt,
+    ReceiptHeader,
+    SettlementMethod
+} from "../DataWrappers/receipt/framework";
 import {Intent} from "../DataWrappers/navigation";
 import {PositionAdd, PositionEdit, PositionRemove} from "../DataWrappers/receipt/changes";
 import {
@@ -176,6 +184,9 @@ export default class Converter {
                 source.agentRequisites.transactionOperator = Converter.setPrototypeOf(source.agentRequisites.transactionOperator, TransactionOperator.prototype);
             }
         }
+        if (source.settlementMethod) {
+            source.settlementMethod = Converter.setPrototypeOf(source.settlementMethod, SettlementMethod.prototype)
+        }
         return source
     }
 
@@ -246,8 +257,8 @@ export default class Converter {
             !counterparty.kpp &&
             (!counterparty.phones || (counterparty.phones && !counterparty.phones.length)) &&
             (!counterparty.addresses || (counterparty.addresses && !counterparty.addresses.length))) {
-            if(counterparty.hasOwnProperty("type")) {
-                if(!counterparty.type) {
+            if (counterparty.hasOwnProperty("type")) {
+                if (!counterparty.type) {
                     return null
                 }
                 return counterparty

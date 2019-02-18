@@ -25,7 +25,7 @@ const openReceipt = (receiptType, positions, extra) => {
     ));
 };
 
-const registerReceipt = (receiptType, printReceipts, extra, phone, email, discount) => {
+const registerReceipt = (receiptType, printReceipts, extra, phone, email, discount, sellReceiptUuid) => {
     return new Promise((resolve, reject) => CommandModule.registerReceipt(
         receiptType,
         Converter.writePrintReceipts(printReceipts),
@@ -33,6 +33,7 @@ const registerReceipt = (receiptType, printReceipts, extra, phone, email, discou
         phone,
         email,
         discount ? discount.toString() : "",
+        sellReceiptUuid || null,
         ErrorHandler.getExecutor(Converter.getInstanceReader(resolve, RegisterReceiptCommandResult.prototype), reject)
     ));
 };
@@ -62,7 +63,7 @@ export default class ReceiptAPI {
      * @returns {Promise<module:receipt.OpenReceiptCommandResult>} Promise с результатом команды открытия чека
      * @throws {module:errors.IntegrationError}
      */
-    static openSellReceipt(positions?: Position[], extra?: SetExtra): Promise<OpenReceiptCommandResult> {
+    static openSellReceipt(positions: Position[] | null, extra?: SetExtra): Promise<OpenReceiptCommandResult> {
         return openReceipt(ReceiptType.SELL, ...arguments);
     }
 
@@ -74,7 +75,7 @@ export default class ReceiptAPI {
      * @returns {Promise<module:receipt.OpenReceiptCommandResult>} Promise с результатом команды открытия чека
      * @throws {module:errors.IntegrationError}
      */
-    static openPaybackReceipt(positions?: Position[], extra?: SetExtra): Promise<OpenReceiptCommandResult> {
+    static openPaybackReceipt(positions: Position[] | null, extra?: SetExtra): Promise<OpenReceiptCommandResult> {
         return openReceipt(ReceiptType.PAYBACK, ...arguments);
     }
 
@@ -86,7 +87,7 @@ export default class ReceiptAPI {
      * @returns {Promise<module:receipt.OpenReceiptCommandResult>} Promise с результатом команды открытия чека
      * @throws {module:errors.IntegrationError}
      */
-    static openBuyReceipt(positions?: Position[], extra?: SetExtra): Promise<OpenReceiptCommandResult> {
+    static openBuyReceipt(positions: Position[] | null, extra?: SetExtra): Promise<OpenReceiptCommandResult> {
         return openReceipt(ReceiptType.BUY, ...arguments);
     }
 
@@ -98,7 +99,7 @@ export default class ReceiptAPI {
      * @returns {Promise<module:receipt.OpenReceiptCommandResult>} Promise с результатом команды открытия чека
      * @throws {module:errors.IntegrationError}
      */
-    static openBuybackReceipt(positions?: Position[], extra?: SetExtra): Promise<OpenReceiptCommandResult> {
+    static openBuybackReceipt(positions: Position[] | null, extra?: SetExtra): Promise<OpenReceiptCommandResult> {
         return openReceipt(ReceiptType.BUYBACK, ...arguments);
     }
 
@@ -129,6 +130,7 @@ export default class ReceiptAPI {
      * @param {?string} phone - Телефон получателя
      * @param {?string} email - Email получателя
      * @param {?string} discount - Скидка на чек
+     * @param {?string} sellReceiptUuid - Uuid чека продажи (для возврата на основании)
      * @returns {Promise<module:receipt.OpenReceiptCommandResult>} Promise с результатом команды регистрации чека
      * @throws {module:errors.IntegrationError}
      */
@@ -136,7 +138,8 @@ export default class ReceiptAPI {
                                   extra: SetExtra | null,
                                   phone: string | null,
                                   email: string | null,
-                                  discount?: number): Promise<RegisterReceiptCommandResult> {
+                                  discount: number | null,
+                                  sellReceiptUuid?: string): Promise<RegisterReceiptCommandResult> {
         return registerReceipt(ReceiptType.PAYBACK, ...arguments);
     }
 

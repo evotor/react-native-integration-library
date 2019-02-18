@@ -19,6 +19,7 @@ import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.*
 import ru.evotor.framework.receipt.position.AgentRequisites
+import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.framework.receipt.print_extras.*
 import java.math.BigDecimal
 import java.util.*
@@ -64,6 +65,9 @@ object ReceiptReader {
                 subPositionsResult
         )).apply {
             this.setAgentRequisites(readAgentRequisites(source["agentRequisites"] as Map<*, *>?))
+            readSettlementMethod(source["settlementMethod"] as Map<*, *>?)?.let {
+                this.setSettlementMethod(it)
+            }
         }.build()
     }
 
@@ -75,6 +79,19 @@ object ReceiptReader {
                 readTransactionOperator(it["transactionOperator"] as Map<*, *>?),
                 it["operationDescription"] as String?
         )
+    }
+
+    private fun readSettlementMethod(source: Map<*, *>?): SettlementMethod? = source?.let {
+        when (it["type"] as String) {
+            "FULL_PREPAYMENT" -> SettlementMethod.FullPrepayment()
+            "PARTIAL_PREPAYMENT" -> SettlementMethod.PartialPrepayment()
+            "ADVANCE_PAYMENT" -> SettlementMethod.AdvancePayment()
+            "FULL_SETTLEMENT" -> SettlementMethod.FullSettlement()
+            "PARTIAL_SETTLEMENT" -> SettlementMethod.PartialSettlement(BigDecimal(it["initialPaymentAmount"] as Double))
+            "LEND" -> SettlementMethod.Lend()
+            "LOAN_PAYMENT" -> SettlementMethod.LoanPayment()
+            else -> null
+        }
     }
 
     private fun readAgent(source: Map<*, *>?): Agent? = source?.let {

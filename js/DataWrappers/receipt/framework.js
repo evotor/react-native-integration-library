@@ -1,5 +1,12 @@
 import {Payment} from './payment';
-import {PrintGroupType, ProductType, ReceiptType, TaxationSystem, TaxNumber} from "../../Types/compilable";
+import {
+    PrintGroupType,
+    ProductType,
+    ReceiptType,
+    SettlementMethodType,
+    TaxationSystem,
+    TaxNumber
+} from "../../Types/compilable";
 import AgentRequisites from "./agentRequisites";
 
 /**
@@ -14,6 +21,19 @@ export class ExtraKey {
         this.identity = identity;
         this.appId = appId;
         this.description = description;
+    }
+}
+
+/**
+ * @class module:receipt.SettlementMethod
+ * @classdesc Способ расчёта.
+ * @param {SettlementMethodType} type - Тип способа расчёта
+ * @param {?number} initialPaymentAmount - Первичный взнос (только для типа способа расчёта "PARTIAL_SETTLEMENT")
+ */
+export class SettlementMethod {
+    constructor(type: SettlementMethodType, initialPaymentAmount?: number) {
+        this.type = type;
+        this.initialPaymentAmount = initialPaymentAmount;
     }
 }
 
@@ -58,7 +78,8 @@ export class Position {
                 tareVolume: number | null,
                 extraKeys: ExtraKey[],
                 subPositions: Position[],
-                agentRequisites: AgentRequisites | null) {
+                agentRequisites: AgentRequisites | null,
+                settlementMethod: SettlementMethod | null) {
         this.uuid = uuid;
         this.productUuid = productUuid;
         this.productCode = productCode;
@@ -78,6 +99,7 @@ export class Position {
         this.extraKeys = extraKeys;
         this.subPositions = subPositions;
         this.agentRequisites = agentRequisites || null;
+        this.settlementMethod = settlementMethod || null;
     }
 }
 

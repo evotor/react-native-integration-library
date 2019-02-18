@@ -94,6 +94,7 @@ class CommandModule(c: ReactApplicationContext) : ReactContextBaseJavaModule(c) 
                         phone: String?,
                         email: String?,
                         discount: String,
+                        sellReceiptUuid: String?,
                         resultCallback: Callback) {
         val callback = getIntegrationManagerCallback(
                 { result ->
@@ -118,7 +119,8 @@ class CommandModule(c: ReactApplicationContext) : ReactContextBaseJavaModule(c) 
                         extra?.let { ReceiptReader.readSetExtra(extra.toHashMap()) },
                         phone,
                         email,
-                        if (discount.isEmpty()) null else BigDecimal(discount)
+                        if (discount.isEmpty()) null else BigDecimal(discount),
+                        sellReceiptUuid
                 ).process(currentActivity!!, callback)
             }
         } catch (e: Exception) {
