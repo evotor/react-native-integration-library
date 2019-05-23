@@ -17,7 +17,6 @@ export class AbstractBundlable {
 /**
  * @class module:navigation.Intent
  * @classdesc Класс, который содержит передаваемые при навигации данные, а также направляет маршрутизатор.
- * @see [Подробнее об устройстве навигации]{@link http://developer.evotor.ru/docs/tobipizda}
  */
 export class Intent {
 

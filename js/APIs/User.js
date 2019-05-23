@@ -16,7 +16,7 @@ export default class UserAPI {
     /**
      * Получает список всех пользователей смарт-терминала.
      * @function module:user.UserAPI.getAllUsers
-     * @returns {Promise<module:user.User[]>} Promise с массом пользователей
+     * @returns {Promise<module:user.User[]>} Promise с массивом пользователей
      */
     static getAllUsers(): Promise<User[]> {
         return new Promise(resolve => UserModule.getAllUsers(Converter.getArrayReader(resolve, User.prototype)));

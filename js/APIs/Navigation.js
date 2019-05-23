@@ -27,7 +27,6 @@ import {IntegrationError} from "../DataWrappers/errors";
  * @class module:navigation.NavigationAPI
  * @classdesc С помощью методов класса можно управлять текущей операцией, а также запускать другие операции или службы.
  * @hideconstructor
- * @see [Подробнее об устройстве навигации]{@link http://developer.evotor.ru/docs/tobipizda}
  */
 export default class NavigationAPI {
 

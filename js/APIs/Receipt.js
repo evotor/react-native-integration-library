@@ -279,7 +279,6 @@ export class PositionBuilder {
     }
 
     /**
-     * ХЗ ЧТО ДЕЛАЕТ
      * @function module:receipt.PositionBuilder#toAlcoholMarked
      * @param {string} mark - Алкогольная марка
      * @param {number} alcoholByVolume - Процентное содержание алкоголя
@@ -294,7 +293,6 @@ export class PositionBuilder {
     }
 
     /**
-     * ХЗ ЧТО ДЕЛАЕТ
      * @function module:receipt.PositionBuilder#toAlcoholNotMarked
      * @param {number} alcoholByVolume - Процентное содержание алкоголя
      * @param {number} alcoholProductKindCode - Спиртовой код
@@ -308,7 +306,6 @@ export class PositionBuilder {
     }
 
     /**
-     * ХЗ ЧТО ДЕЛАЕТ
      * @function module:receipt.PositionBuilder#toNormal
      * @returns {module:receipt.PositionBuilder} Редактор текущей позиции
      */
@@ -319,7 +316,6 @@ export class PositionBuilder {
     }
 
     /**
-     * ХЗ ЧТО ДЕЛАЕТ
      * @function module:receipt.PositionBuilder#toService
      * @returns {module:receipt.PositionBuilder} Редактор текущей позиции
      */
